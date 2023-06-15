@@ -1,5 +1,6 @@
 from flask import Flask, jsonify
 import pymongo
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
@@ -18,13 +19,15 @@ current_collection = db["medicalRecords"]
 def hello_world():
 	return 'Hello, World!'
   
-@app.route('/<name>', methods=['GET'])
-def retrieve_data(name):
-  data = current_collection.find_one({"LastName": name})
-  return jsonify({"Age":data['Age'],"Diastolic":data['Diastolic'],"Gender":data['Gender'],
-                  "Height":data['Height'],"LastName":data['LastName'],"Location":data['Location'],
-                  "SelfAssessedHealthStatus":data['SelfAssessedHealthStatus'],"Smoker":data['Smoker'],
-                  "Systolic":data['Systolic'],"Weight":data['Weight']})
+@app.route('/<id>', methods=['GET'])
+def retrieve_data(id):
+  unique_id = str(id)
+  data = current_collection.find_one({ '_id': ObjectId(unique_id) })
+  # return jsonify({"Age":data['Age'],"Diastolic":data['Diastolic'],"Gender":data['Gender'],
+  #                 "Height":data['Height'],"LastName":data['LastName'],"Location":data['Location'],
+  #                 "SelfAssessedHealthStatus":data['SelfAssessedHealthStatus'],"Smoker":data['Smoker'],
+  #                 "Systolic":data['Systolic'],"Weight":data['Weight']})
+  return data
 
 '''
 Data entries:

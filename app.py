@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, session  # Flask libraries fo
 import openai  # OpenAI's Python client library
 from datetime import datetime  # Python's datetime module
 import json  # Python's json module
+from db import retrieve_data
 
 # create Flask app
 app = Flask(__name__)
@@ -12,6 +13,7 @@ app.secret_key = 'xo'
 # set OpenAI API key
 openai.api_key = "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"
 
+user_id = "648aae8b704770e88483c801"
 
 def generate_prompts(name, company, bio, last_conversation):
     # function to generate initial and recurrent prompts
@@ -85,7 +87,21 @@ def chat():
     # define chat endpoint
     # this is the main entry point of the application
     # it handles GET and POST requests 
-
+    
+    data = retrieve_data(user_id)
+    age = data['Age']
+    gender = data['Gender']
+    height = data['Height']
+    weight = data['Weight']
+    name = data['LastName']
+    location = data['Location']
+    self_assessed_health_status = data['SelfAssessedHealthStatus']
+    smoker = data['Smoker']
+    systolic = data['Systolic']
+    diastolic = data['Diastolic']
+    
+    print(age,gender,height,weight,name,location,self_assessed_health_status,smoker,systolic,diastolic)
+    
     # hardcoding conversation context information (replace these with actual data)
     name = 'Jai Desai'
     company = 'RediMinds, Inc.'
