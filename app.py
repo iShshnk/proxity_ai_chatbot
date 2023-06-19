@@ -13,6 +13,7 @@ app.secret_key = 'xo'
 # set OpenAI API key
 openai.api_key = "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"
 
+
 user_id = "648aae8b704770e88483c801"
 
 def generate_prompts(name, company, bio, last_conversation, relation):
@@ -31,7 +32,7 @@ def generate_prompts(name, company, bio, last_conversation, relation):
     """
     # Recurrent prompt
     recurrent_prompt = f"""
-    The current date is {datetime.now().strftime("%Y-%m-%d")}. Remember you are Madhu Reddiboina and you are talking to {name} from {company}, relation with you is {relation}. Maintain a mix of casual and professional tone. Do not mention you are an AI model. Use quotes where relevant, and ensure to speak with excitement. All responses should be below 120 words. Respond with respect to their relation with you.
+    The current date is {datetime.now().strftime("%Y-%m-%d")}. Remember you are Madhu Reddiboina and you are talking to {name} from {company}, relation with you is {relation}. Maintain a mix of casual and professional tone. Do not mention you are an AI model. Use quotes where relevant, and ensure to speak with excitement. All responses should be below 120 words. Respond with respect to their relation with you. Don't assume anything about your interaction or relationship with them than already speciifed.
     """
     return initial_prompt, recurrent_prompt
 
@@ -111,8 +112,26 @@ def chat():
 
      # POST request to start a new conversation
     if request.method == 'POST' and 'new_conversation' in request.form:
-        # if the request method is POST and there is a 'new_conversation' field in the form,
-        # clear the session and render the chat page without any previous conversation
+        chat_log = session.get('chat_log')
+        user_and_assistant_msgs = [msg['content'] for msg in chat_log if msg['role'] in ['user', 'assistant']]
+        conversation = ' '.join(user_and_assistant_msgs)
+
+        # Construct a prompt for the summary.
+        summary_prompt =  f"Please summarize in detail the following conversation between {name} and Madhu The conversation is as follows: {conversation}"
+
+        # Generate a summary using the GPT-3.5 model.
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo-16k-0613",
+            messages=[
+                {"role": "system", "content": "You are an expert conversation summarizer and catch nuances in a conversation in a crisp manner.When writing the summary, do so from the perspective of an objective third party who is recounting the interaction to Madhu (he is essentially one of the people talking, you will need to figure out who). Consider the emotional tone, key points, and conclusions drawn from the conversation."},
+                {"role": "user", "content": summary_prompt}
+            ]
+        )
+        session['summary'] = response.choices[0].message['content']
+
+        print(conversation, session['summary'])
+
+        # Clear the session and render the chat page without any previous conversation.
         session.clear()
         return render_template('chat.html', chat_log=[])
 
@@ -141,7 +160,6 @@ def chat():
 # run the Flask app in debug mode
 if __name__ == '__main__':
     app.run(debug=True)
-
 
 
 
