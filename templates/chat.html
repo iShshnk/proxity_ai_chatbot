@@ -35,7 +35,33 @@
             border-color: #ff7f7f;
             color: white;
         }
+        /* Add this for the loading spinner */
+        #loading {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            z-index: 1;
+            width: 150px;
+            height: 150px;
+            margin: -75px 0 0 -75px;
+            border: 16px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 16px solid #ff7f7f;
+            -webkit-animation: spin 2s linear infinite; /* Safari */
+            animation: spin 2s linear infinite;
+        }
+        /* Safari */
+        @-webkit-keyframes spin {
+            0% { -webkit-transform: rotate(0deg); }
+            100% { -webkit-transform: rotate(360deg); }
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
+    <!-- Include jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 
 <body>
@@ -59,7 +85,6 @@
                 <div class="p-3 me-3 border" style="border-radius: 15px; background-color: #fecbcb;">
                     <p class="small mb-0">You: {{ message['content'] }}</p>
                 </div>
-                
             </div>
             {% elif message['role'] == 'assistant' %}
             <div class="d-flex flex-row justify-content-start mb-4">
@@ -76,10 +101,26 @@
                     <label class="form-label" for="user_msg">Type your message</label>
                 </div>
                 <button type="submit" class="btn btn-dark-orange">Send</button>
-                <button type="submit" name="new_conversation" value="true" class="btn btn-dark-orange">Start New Conversation</button>
+                <button type="submit" name="new_conversation" value="true" class="btn btn-dark-orange" id="new_conversation">Start New Conversation</button>
             </form>
         </div>
     </div>
+    <!-- Add this for the loading spinner -->
+    <div id="loading" style="display: none;"></div>
+    <!-- Include this JavaScript -->
+    <script>
+        $(document).ready(function() {
+            $('#new_conversation').click(function() {
+                $('#loading').show();
+                $('#chat1').css('opacity', '0.5');  // Reduce the opacity of the chat box
+            });
+        
+            $(window).on('load', function() {
+                $('#loading').hide();
+                $('#chat1').css('opacity', '1');   // Restore the opacity of the chat box
+            });
+        });
+        </script>
 </body>
 
-</html> 
+</html>
