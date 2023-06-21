@@ -22,7 +22,7 @@ Session(app)
 # set OpenAI API key
 openai.api_key = "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"
 
-user_id = "648aae8b704770e88483c801"
+user_id = "6492f18c2e14ba068117f624"
 
 # This section is needed for url_for("foo", _external=True) to automatically
 # generate http scheme when this sample is running on localhost,
@@ -105,18 +105,17 @@ def chat():
     # it handles GET and POST requests 
     
     data = retrieve_data(user_id)
+    email = data['Email']
+    name = data['Name']
     age = data['Age']
     gender = data['Gender']
-    height = data['Height']
-    weight = data['Weight']
-    name = data['LastName']
-    location = data['Location']
-    self_assessed_health_status = data['SelfAssessedHealthStatus']
-    smoker = data['Smoker']
-    systolic = data['Systolic']
-    diastolic = data['Diastolic']
+    job_role = data['Job Role']
+    about = data['About']
+    fun_story = data['Fun Story']
+    educational_qualification = data['Educational Qualification']
+    skills = data['Skills']
     
-    print(age,gender,height,weight,name,location,self_assessed_health_status,smoker,systolic,diastolic)
+    print(email, name, age, gender, job_role, about, fun_story, educational_qualification, skills)
     
     # hardcoding conversation context information (replace these with actual data)
     name = 'Jai Desai'
