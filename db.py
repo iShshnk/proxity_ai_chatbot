@@ -20,10 +20,9 @@ def hello_world():
 	return 'Hello, World!'
   
 @app.route('/<id>', methods=['GET'])
-def retrieve_data(id):
-  unique_id = str(id)
-  print(unique_id)
-  data = current_collection.find_one({ '_id': ObjectId(unique_id) })
+def retrieve_data(email_id):
+  email = email_id
+  data = current_collection.find_one({ 'Email': email })
   # return jsonify({"email":data['Email'],"Name":data['Name'],"Gender":data['Gender'],
   #                 "age":data['Age'],"job_role":data['Job Role'],"about":data['About'],
   #                 "fun_story":data['Fun Story'],"educational_qualification":data['Educational Qualification'],

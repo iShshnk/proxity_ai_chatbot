@@ -22,7 +22,7 @@ Session(app)
 # set OpenAI API key
 openai.api_key = "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"
 
-user_id = "6492f18c2e14ba068117f624"
+# user_id = "6492f18c2e14ba068117f624"
 
 # This section is needed for url_for("foo", _external=True) to automatically
 # generate http scheme when this sample is running on localhost,
@@ -104,7 +104,9 @@ def chat():
     # this is the main entry point of the application
     # it handles GET and POST requests 
     
-    data = retrieve_data(user_id)
+    current_email = session["user"]["preferred_username"]
+    
+    data = retrieve_data(current_email)
     email = data['Email']
     name = data['Name']
     age = data['Age']
