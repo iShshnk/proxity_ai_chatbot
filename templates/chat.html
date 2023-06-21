@@ -1,126 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat with Madhu!</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet">
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css"
+      rel="stylesheet"
+    />
     <style>
-        body, html {
-            height: 100%;
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #eee;
-        }
-        .card {
-            width: 80%;
-            max-width: 800px;
-            overflow-y: scroll; 
-            max-height: 80vh;  
-        }
-        .form-outline textarea {
-            resize: none;
-        }
-        .btn-dark-blue {
-            background-color: #00b7ee;
-            border-color: #00b7ee;
-            color: white;
-        }
-        
-        .btn-dark-orange {
-            background-color: #ff7f7f;
-            border-color: #ff7f7f;
-            color: white;
-        }
-        /* Add this for the loading spinner */
-        #loading {
-            position: fixed;
-            left: 50%;
-            top: 50%;
-            z-index: 1;
-            width: 150px;
-            height: 150px;
-            margin: -75px 0 0 -75px;
-            border: 16px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 16px solid #ff7f7f;
-            -webkit-animation: spin 2s linear infinite; /* Safari */
-            animation: spin 2s linear infinite;
-        }
-        /* Safari */
-        @-webkit-keyframes spin {
-            0% { -webkit-transform: rotate(0deg); }
-            100% { -webkit-transform: rotate(360deg); }
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+      body,
+      html {
+        height: 100%;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #eee;
+      }
+      .card {
+        width: 80%;
+        max-width: 800px;
+        overflow-y: scroll;
+        max-height: 80vh;
+      }
+      .form-outline textarea {
+        resize: none;
+      }
+      .btn-dark-blue {
+        background-color: #00b7ee;
+        border-color: #00b7ee;
+        color: white;
+      }
+
+      .btn-dark-orange {
+        background-color: #ff7f7f;
+        border-color: #ff7f7f;
+        color: white;
+      }
     </style>
-    <!-- Include jQuery -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-</head>
+  </head>
 
-<body>
-    <div class="card" id="chat1" style="border-radius: 15px;">
-        <div class="card-header d-flex justify-content-between align-items-center p-3 text-white border-bottom-0" style="border-top-left-radius: 15px; border-top-right-radius: 15px; background-color: #FF7F7F;">
-            <i class="fas fa-angle-left"></i>
-            <p class="mb-0 fw-bold">Chat with Madhu!</p>
-            <i class="fas fa-times"></i>
+  <body>
+    <div class="card" id="chat1" style="border-radius: 15px">
+      <div
+        class="card-header d-flex justify-content-between align-items-center p-3 text-white border-bottom-0"
+        style="
+          border-top-left-radius: 15px;
+          border-top-right-radius: 15px;
+          background-color: #ff7f7f;
+        "
+      >
+        <i class="fas fa-angle-left"></i>
+        <p class="mb-0 fw-bold">Chat with Madhu!</p>
+        <i class="fas fa-times"></i>
+      </div>
+      <div class="card-body">
+        <div class="d-flex flex-row justify-content-start mb-4">
+          <img
+            src="{{ url_for('static', filename='img/madhu.jpg') }}"
+            alt="Madhu Avatar"
+            style="width: 45px; height: 45px"
+          />
+          <div
+            class="p-3 ms-3"
+            style="border-radius: 15px; background-color: #ff7f7f"
+          >
+            <p class="small mb-0">Madhu: Hi there! I'm Madhu. Ready to chat?</p>
+          </div>
         </div>
-        <div class="card-body">
-            <div class="d-flex flex-row justify-content-start mb-4">
-                <img src="{{ url_for('static', filename='img/madhu.jpg') }}" alt="Madhu Avatar" style="width: 45px; height: 45px;">
-                <div class="p-3 ms-3" style="border-radius: 15px; background-color: #ff7f7f;">
-                    <p class="small mb-0">Madhu: Hi there! I'm Madhu. Ready to chat?</p>
-                </div>
-            </div>
-            {% for message in session['chat_log'] %}
-            {% if message['role'] == 'user' %}
-            <div class="d-flex flex-row justify-content-end mb-4">
-                <img src="{{ url_for('static', filename='img/your_avatar.png') }}" alt="Your Avatar" style="width: 45px; height: 45px;">
-                <div class="p-3 me-3 border" style="border-radius: 15px; background-color: #fecbcb;">
-                    <p class="small mb-0">You: {{ message['content'] }}</p>
-                </div>
-            </div>
-            {% elif message['role'] == 'assistant' %}
-            <div class="d-flex flex-row justify-content-start mb-4">
-                <img src="{{ url_for('static', filename='img/madhu.jpg') }}" alt="Madhu Avatar" style="width: 45px; height: 45px;">
-                <div class="p-3 ms-3" style="border-radius: 15px; background-color: #ff7f7f;">
-                    <p class="small mb-0">Madhu: {{ message['content'] }}</p>
-                </div>
-            </div>
-            {% endif %}
-            {% endfor %}
-            <form method="POST">
-                <div class="form-outline">
-                    <textarea class="form-control" id="user_msg" name="user_msg" rows="4"></textarea>
-                    <label class="form-label" for="user_msg">Type your message</label>
-                </div>
-                <button type="submit" class="btn btn-dark-orange">Send</button>
-                <button type="submit" name="new_conversation" value="true" class="btn btn-dark-orange" id="new_conversation">Start New Conversation</button>
-            </form>
+        {% for message in session['chat_log'] %} {% if message['role'] == 'user'
+        %}
+        <div class="d-flex flex-row justify-content-end mb-4">
+          <img
+            src="{{ url_for('static', filename='img/user.png') }}"
+            alt="Your Avatar"
+            style="width: 45px; height: 45px"
+          />
+          <div
+            class="p-3 me-3 border"
+            style="border-radius: 15px; background-color: #fecbcb"
+          >
+            <p class="small mb-0">You: {{ message['content'] }}</p>
+          </div>
         </div>
+        {% elif message['role'] == 'assistant' %}
+        <div class="d-flex flex-row justify-content-start mb-4">
+          <img
+            src="{{ url_for('static', filename='img/madhu.jpg') }}"
+            alt="Madhu Avatar"
+            style="width: 45px; height: 45px"
+          />
+          <div
+            class="p-3 ms-3"
+            style="border-radius: 15px; background-color: #ff7f7f"
+          >
+            <p class="small mb-0">Madhu: {{ message['content'] }}</p>
+          </div>
+        </div>
+        {% endif %} {% endfor %}
+        <form method="POST">
+          <div class="form-outline">
+            <textarea
+              class="form-control"
+              id="user_msg"
+              name="user_msg"
+              rows="4"
+            ></textarea>
+            <label class="form-label" for="user_msg">Type your message</label>
+          </div>
+          <button type="submit" class="btn btn-dark-orange">Send</button>
+          <button
+            type="submit"
+            name="new_conversation"
+            value="true"
+            class="btn btn-dark-orange"
+          >
+            Start New Conversation
+          </button>
+        </form>
+      </div>
     </div>
-    <!-- Add this for the loading spinner -->
-    <div id="loading" style="display: none;"></div>
-    <!-- Include this JavaScript -->
-    <script>
-        $(document).ready(function() {
-            $('#new_conversation').click(function() {
-                $('#loading').show();
-                $('#chat1').css('opacity', '0.5');  // Reduce the opacity of the chat box
-            });
-        
-            $(window).on('load', function() {
-                $('#loading').hide();
-                $('#chat1').css('opacity', '1');   // Restore the opacity of the chat box
-            });
-        });
-        </script>
-</body>
-
+  </body>
 </html>
