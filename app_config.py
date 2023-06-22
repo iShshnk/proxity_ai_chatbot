@@ -1,5 +1,7 @@
 import os
 
+OPENAI_KEY = "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" #OpenAI API key
+
 CLIENT_ID = "e00963f2-823f-4827-9033-ddefc0109d86" # Application (client) ID of app registration
 
 CLIENT_SECRET = "XuD8Q~ZwVvmXCO0kg6oVvXUSGXkJXl7P-nRq2dr9" # Placeholder - for use ONLY during testing.
