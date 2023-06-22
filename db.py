@@ -29,5 +29,14 @@ def retrieve_data(email_id):
   #                 "skills":data['Skills']})
   return data
 
+@app.route('/update/<id>', methods=['POST'])
+def update_summary(email_id, summary):
+    email = email_id
+    query = {'Email': email}
+    new_values = {"$set": {"Last Conversation Summary": summary}}
+    current_collection.update_one(query, new_values)
+    return 'Summary Updated!'
+
+
 if __name__ == '__main__':
 	app.run()

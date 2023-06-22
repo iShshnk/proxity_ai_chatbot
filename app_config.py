@@ -1,6 +1,6 @@
 import os
 
-OPENAI_KEY = "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" #OpenAI API key
+OPENAI_KEY = "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" #OpenAI API key
 
 CLIENT_ID = "e00963f2-823f-4827-9033-ddefc0109d86" # Application (client) ID of app registration
 
