@@ -251,5 +251,5 @@ app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)  # Use
 
 # run the Flask app in debug mode
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(ssl_context=('cert.pem', 'key.pem'),debug=True)
 
