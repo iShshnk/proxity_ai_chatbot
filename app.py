@@ -99,10 +99,12 @@ def chat():
     # this is the main entry point of the application
     # it handles GET and POST requests 
     
+    if not session.get("user"):
+        return redirect(url_for("login"))
+    
     current_email = session["user"]["preferred_username"]
     
     data = retrieve_data(current_email)
-    email = data['Email']
     name = data['Name']
     age = data['Age']
     gender = data['Gender']
@@ -201,9 +203,10 @@ def authorized():
 @app.route("/logout")
 def logout():
     session.clear()  # Wipe out user and its token cache from session
-    return redirect(  # Also logout from your tenant's web session
-        app_config.AUTHORITY + "/oauth2/v2.0/logout" +
-        "?post_logout_redirect_uri=" + url_for("index", _external=True))
+    return redirect(url_for("index", _external=True))
+    # return redirect(  # Also logout from your tenant's web session
+    #     app_config.AUTHORITY + "/oauth2/v2.0/logout" +
+    #     "?post_logout_redirect_uri=" + url_for("index", _external=True))
 
 @app.route("/graphcall")
 def graphcall():
