@@ -20,7 +20,7 @@ Session(app)
 
 
 # set OpenAI API key
-openai.api_key = "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"
+openai.api_key = app_config.OPENAI_KEY
 
 
 from werkzeug.middleware.proxy_fix import ProxyFix
