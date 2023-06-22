@@ -8,7 +8,7 @@ from flask_session import Session
 import openai  # OpenAI's Python client library
 from datetime import datetime  # Python's datetime module
 import json  # Python's json module
-from db import retrieve_data
+from db import retrieve_data, update_summary
 
 # create Flask app
 app = Flask(__name__)
@@ -111,6 +111,7 @@ def chat():
     job_role = data['Job Role']
     bio = data['About']
     fun_story = data['Fun Story']
+    last_conversation = data.get('Last Conversation Summary', 'No prior conversation')
     educational_qualification = data['Educational Qualification']
     skills = data['Skills']
     company = "RediMinds"
@@ -121,8 +122,8 @@ def chat():
     # name = 'Jai Desai'
     # company = 'RediMinds, Inc.'
     # bio = 'Jai Desai is currently an intern at RediMinds, Inc. He completed his Bachelor’s degree in Economics and Finance from Ashoka University, with a minor in CS. His academic journey was marked by a keen interest in Artificial Intelligence and Machine Learning, leading him to engage in various projects and workshops in these domains. Along with his technical skills, he is known for his problem-solving abilities and effective teamwork, which have been instrumental in his current role at RediMinds. Jai is continuously learning and adapting, with a focus on applying his knowledge in real-world scenarios.'
-    last_conversation = f"In your last conversation with {name}, you discussed the possibility of developing a chatbot that emulates medical professionals. The chatbot would provide a personalized conversational experience for a large number of patients, offering guidance and information related to various medical conditions. You explored different approaches and finalized the idea of using prompt engineering techniques along with the GPT-4 API to develop the chatbot. This combination would leverage the power of advanced language models and allow for dynamic and context-aware interactions with patients. The goal was to enhance patient care and improve accessibility to medical information through the use of state-of-the-art AI technology."
-    relation = "Intern working under you"
+    
+    relation = f"{job_role} at your Company"
 
      # POST request to start a new conversation
     if request.method == 'POST' and 'new_conversation' in request.form:
@@ -131,19 +132,23 @@ def chat():
         conversation = ' '.join(user_and_assistant_msgs)
 
         # Construct a prompt for the summary.
-        summary_prompt =  f"Please summarize in detail the following conversation between {name} and Madhu The conversation is as follows: {conversation}"
+        summary_prompt =  f"Please summarize in detail the following conversation between {name} and Madhu The conversation occured at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} and is as follows: {conversation} - make sure this is the priority and comes first in the summary.  Also, provide a succinct summary of a previous conversation: '{last_conversation}', ensuring to timestamp it correctly (should be in the summmary) and highlight that it was discussed prior to the current conversation. Keep the total word count about 400 words."
 
         # Generate a summary using the GPT-3.5 model.
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo-16k-0613",
+            max_tokens=700,
             messages=[
                 {"role": "system", "content": "You are an expert conversation summarizer and catch nuances in a conversation in a crisp manner.When writing the summary, do so from the perspective of an objective third party who is recounting the interaction to Madhu (he is essentially one of the people talking, you will need to figure out who). Consider the emotional tone, key points, and conclusions drawn from the conversation."},
                 {"role": "user", "content": summary_prompt}
+            
             ]
         )
         session['summary'] = response.choices[0].message['content']
 
-        print(conversation, session['summary'])
+        update_summary(current_email, session['summary'])
+        print(last_conversation)
+
 
         # Clear the session and render the chat page without any previous conversation.
         session.clear()
@@ -254,5 +259,5 @@ app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)  # Use
 
 # run the Flask app in debug mode
 if __name__ == '__main__':
-    app.run(debug=True, host = '0.0.0.0', port = 5000)
+    app.run(ssl_context=('cert.pem', 'key.pem'),debug=True)
 
