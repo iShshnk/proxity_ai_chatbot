@@ -19,7 +19,7 @@ current_collection = db["EmpDataset"]
 def hello_world():
 	return 'Hello, World!'
   
-@app.route('/<id>', methods=['GET'])
+@app.route('/<email_id>', methods=['GET'])
 def retrieve_data(email_id):
   email = email_id
   data = current_collection.find_one({ 'Email': email })
