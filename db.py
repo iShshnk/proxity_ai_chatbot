@@ -19,7 +19,7 @@ current_collection = db["EmpDataset"]
 def hello_world():
 	return 'Hello, World!'
   
-@app.route('/<id>', methods=['GET'])
+@app.route('/<email_id>', methods=['GET'])
 def retrieve_data(email_id):
   email = email_id
   data = current_collection.find_one({ 'Email': email })
@@ -28,6 +28,15 @@ def retrieve_data(email_id):
   #                 "fun_story":data['Fun Story'],"educational_qualification":data['Educational Qualification'],
   #                 "skills":data['Skills']})
   return data
+
+@app.route('/update/<id>', methods=['POST'])
+def update_summary(email_id, summary):
+    email = email_id
+    query = {'Email': email}
+    new_values = {"$set": {"Last Conversation Summary": summary}}
+    current_collection.update_one(query, new_values)
+    return 'Summary Updated!'
+
 
 if __name__ == '__main__':
 	app.run()
