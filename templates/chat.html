@@ -121,5 +121,15 @@
         </form>
       </div>
     </div>
+    <script>
+      // Wait for the entire HTML document to load
+      document.addEventListener("DOMContentLoaded", function() {
+        // Select your chat1 div
+        var chatDiv = document.getElementById("chat1");
+        
+        // Scroll to bottom of chat div
+        chatDiv.scrollTop = chatDiv.scrollHeight;
+      });
+    </script>
   </body>
 </html>
