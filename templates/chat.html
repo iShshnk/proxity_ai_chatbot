@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link 
+      rel="stylesheet" 
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
     <title>Chat with Madhu!</title>
     <link
       href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css"
@@ -51,9 +55,7 @@
           background-color: #ff7f7f;
         "
       >
-        <i class="fas fa-angle-left"></i>
         <p class="mb-0 fw-bold">Chat with Madhu!</p>
-        <i class="fas fa-times"></i>
       </div>
       <div class="card-body">
         <div class="d-flex flex-row justify-content-start mb-4">
@@ -100,21 +102,23 @@
         </div>
         {% endif %} {% endfor %}
         <form method="POST">
-          <div class="form-outline">
+          <div class="form-outline mb-3">
             <textarea
               class="form-control"
               id="user_msg"
               name="user_msg"
               rows="4"
             ></textarea>
-            <label class="form-label" for="user_msg">Type your message</label>
           </div>
-          <button type="submit" class="btn btn-dark-orange">Send</button>
+          <button type="button" id="start-btn" class="btn btn-dark-orange mb-3">
+            <i class="fas fa-microphone"></i>
+          </button>
+          <button type="submit" class="btn btn-dark-orange mb-3">Send</button>
           <button
             type="submit"
             name="new_conversation"
             value="true"
-            class="btn btn-dark-orange"
+            class="btn btn-dark-orange mb-3"
           >
             Start New Conversation
           </button>
@@ -129,6 +133,37 @@
         
         // Scroll to bottom of chat div
         chatDiv.scrollTop = chatDiv.scrollHeight;
+      });
+    </script>
+    <script>
+      // Get elements
+      const startButton = document.getElementById("start-btn");
+      const userMsg = document.getElementById("user_msg");
+      
+      // Create a new SpeechRecognition object
+      window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.interimResults = true;
+      
+      recognition.addEventListener('result', e => {
+        const transcript = Array.from(e.results)
+          .map(result => result[0])
+          .map(result => result.transcript)
+          .join('')
+        
+        userMsg.value = transcript;
+        
+        if (e.results[0].isFinal) {
+          recognition.stop();
+          startButton.disabled = false;
+        }
+      });
+    
+      recognition.addEventListener('end', recognition.start);
+    
+      startButton.addEventListener('click', () => {
+        recognition.start();
+        startButton.disabled = true;
       });
     </script>
   </body>
