@@ -113,7 +113,7 @@
           <button type="button" id="start-btn" class="btn btn-dark-orange mb-3">
             <i class="fas fa-microphone"></i>
           </button>
-          <button type="submit" class="btn btn-dark-orange mb-3">Send</button>
+          <button type="submit" id="send-button" class="btn btn-dark-orange mb-3">Send</button>
           <button
             type="submit"
             name="new_conversation"
@@ -138,31 +138,51 @@
     <script>
       // Get elements
       const startButton = document.getElementById("start-btn");
+      const sendButton = document.getElementById("send-button");
       const userMsg = document.getElementById("user_msg");
-      
+
       // Create a new SpeechRecognition object
       window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
       const recognition = new SpeechRecognition();
       recognition.interimResults = true;
-      
+
+      let silenceTimer;
+
+      const startTimer = () => {
+        clearTimeout(silenceTimer);
+        silenceTimer = setTimeout(() => {
+          if (userMsg.value !== '') {
+            sendButton.click();
+          }
+        }, 5000); 
+      };
+
+      let finalTranscript = '';
+
       recognition.addEventListener('result', e => {
-        const transcript = Array.from(e.results)
-          .map(result => result[0])
-          .map(result => result.transcript)
-          .join('')
+        let interimTranscript = ' ';
         
-        userMsg.value = transcript;
-        
-        if (e.results[0].isFinal) {
-          recognition.stop();
-          startButton.disabled = false;
+        for (let i = e.resultIndex; i < e.results.length; i++) {
+          const transcript = e.results[i][0].transcript;
+          
+          if (e.results[i].isFinal) {
+            finalTranscript += transcript;
+          } else {
+            interimTranscript += transcript;
+          }
         }
+        
+        userMsg.value = finalTranscript + interimTranscript;
+        startTimer();
       });
-    
+
       recognition.addEventListener('end', recognition.start);
-    
+
+      userMsg.addEventListener('input', startTimer);
+
       startButton.addEventListener('click', () => {
         recognition.start();
+        userMsg.value = '';
         startButton.disabled = true;
       });
     </script>
