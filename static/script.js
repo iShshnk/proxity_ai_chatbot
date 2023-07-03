@@ -126,17 +126,6 @@ async function startSession() {
   }
 };
 
-const destroyButton = document.getElementById('destroy-button');
-destroyButton.onclick = async () => {
-  await fetch(`${DID_API.url}/talks/streams/${streamId}`, {
-    method: 'DELETE',
-    headers: {
-      Authorization: `Basic ${DID_API.key}`,
-    },
-  });
-  closePC();
-};
-
 
 function onIceGatheringStateChange() {
   console.log("ICE gathering status: " + peerConnection.iceGatheringState);
