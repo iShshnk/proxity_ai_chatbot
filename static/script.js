@@ -46,11 +46,6 @@ let lastBytesReceived;
 
 const talkVideo = document.getElementById('talk-video');
 talkVideo.setAttribute('playsinline', '');
-const peerStatusLabel = document.getElementById('peer-status-label');
-const iceStatusLabel = document.getElementById('ice-status-label');
-const iceGatheringStatusLabel = document.getElementById('ice-gathering-status-label');
-const signalingStatusLabel = document.getElementById('signaling-status-label');
-const streamingStatusLabel = document.getElementById('streaming-status-label');
 
 
 sendButton.onclick = async () => {
@@ -144,8 +139,7 @@ destroyButton.onclick = async () => {
 
 
 function onIceGatheringStateChange() {
-  iceGatheringStatusLabel.innerText = peerConnection.iceGatheringState;
-  iceGatheringStatusLabel.className = 'iceGatheringState-' + peerConnection.iceGatheringState;
+  console.log("ICE gathering status: " + peerConnection.iceGatheringState);
 }
 function onIceCandidate(event) {
   console.log('onIceCandidate', event);
@@ -168,8 +162,7 @@ function onIceCandidate(event) {
   }
 }
 function onIceConnectionStateChange() {
-  iceStatusLabel.innerText = peerConnection.iceConnectionState;
-  iceStatusLabel.className = 'iceConnectionState-' + peerConnection.iceConnectionState;
+  console.log("ICE status: " + peerConnection.iceConnectionState);
   if (peerConnection.iceConnectionState === 'failed' || peerConnection.iceConnectionState === 'closed') {
     stopAllStreams();
     closePC();
@@ -177,12 +170,10 @@ function onIceConnectionStateChange() {
 }
 function onConnectionStateChange() {
   // not supported in firefox
-  peerStatusLabel.innerText = peerConnection.connectionState;
-  peerStatusLabel.className = 'peerConnectionState-' + peerConnection.connectionState;
+  console.log("Peer connection status: " + peerConnection.connectionState);
 }
 function onSignalingStateChange() {
-  signalingStatusLabel.innerText = peerConnection.signalingState;
-  signalingStatusLabel.className = 'signalingState-' + peerConnection.signalingState;
+  console.log("Signaling status: " + peerConnection.signalingState);
 }
 
 function onVideoStatusChange(videoIsPlaying, stream) {
@@ -195,8 +186,7 @@ function onVideoStatusChange(videoIsPlaying, stream) {
     status = 'empty';
     playIdleVideo();
   }
-  streamingStatusLabel.innerText = status;
-  streamingStatusLabel.className = 'streamingState-' + status;
+  console.log("Streaming status: " + status);
 }
 
 function onTrack(event) {
