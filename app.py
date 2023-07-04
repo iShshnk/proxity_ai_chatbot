@@ -1,5 +1,4 @@
 # import all required libraries
-import uuid
 import requests
 import msal
 import app_config
@@ -7,8 +6,6 @@ from flask import Flask, render_template, request, session, redirect, url_for, s
 from flask_session import Session 
 import openai  # OpenAI's Python client library
 from datetime import datetime  # Python's datetime module
-import json  # Python's json module
-import os  
 from db import retrieve_data, update_summary
 
 # create Flask app
@@ -128,14 +125,6 @@ def chat():
     skills = data['Skills']
     company = "RediMinds"
     
-    # print(email, name, age, gender, job_role, bio, fun_story, educational_qualification, skills)
-    
-    # hardcoding conversation context information (replace these with actual data)
-    # name = 'Jai Desai'
-    # company = 'RediMinds, Inc.'
-    # bio = 'Jai Desai is currently an intern at RediMinds, Inc. He completed his Bachelor’s degree in Economics and Finance from Ashoka University, with a minor in CS. His academic journey was marked by a keen interest in Artificial Intelligence and Machine Learning, leading him to engage in various projects and workshops in these domains. Along with his technical skills, he is known for his problem-solving abilities and effective teamwork, which have been instrumental in his current role at RediMinds. Jai is continuously learning and adapting, with a focus on applying his knowledge in real-world scenarios.'
-    
-    relation = f"{job_role} at your Company"
 
      # POST request to start a new conversation
     if request.method == 'POST' and 'new_conversation' in request.form:
@@ -166,7 +155,7 @@ def chat():
         session.clear()
         return render_template('chat.html', chat_log=[])
 
-    if 'chat_log' not in session:
+    elif 'chat_log' not in session:
         # Initialize the chat log with the system message for some edge cases.
         initial_prompt, _ = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation)
         # initial_prompt, _ = generate_prompts(name, company, bio, last_conversation)
@@ -176,7 +165,7 @@ def chat():
         }]
     
     # POST request to continue the conversation
-    if request.method == 'POST' and 'user_msg' in request.form:
+    elif request.method == 'POST' and 'user_msg' in request.form:
         # if the request method is POST and there is a 'user_msg' field in the form,
         # get the user's question, generate a response from the assistant,
         # and add the response to the session's chat log.

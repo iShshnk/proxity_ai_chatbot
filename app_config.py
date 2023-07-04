@@ -2,6 +2,8 @@ import os
 
 OPENAI_KEY = "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" #OpenAI API key
 
+ELEVENLABS_API_KEY = "6d59a0bd0edad9ac964ae88a8d4ea537" #ElevenLabs API key
+
 CLIENT_ID = "e00963f2-823f-4827-9033-ddefc0109d86" # Application (client) ID of app registration
 
 CLIENT_SECRET = "XuD8Q~ZwVvmXCO0kg6oVvXUSGXkJXl7P-nRq2dr9" # Placeholder - for use ONLY during testing.
