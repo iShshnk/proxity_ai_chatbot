@@ -30,3 +30,6 @@ ENDPOINT = 'https://graph.microsoft.com/v1.0/users'  # This resource requires no
 SCOPE = ["User.ReadBasic.All"]
 
 SESSION_TYPE = "filesystem"  # Specifies the token cache should be stored in server-side session
+
+API_KEY = "ZGVlcHBpbXBhbGU2N0BnbWFpbC5jb20:trNJr4N4sbtDaOPDYWtfn" #Please change this to your own API key
+API_URL = "https://api.d-id.com"
