@@ -7,6 +7,7 @@ from flask_session import Session
 import openai  # OpenAI's Python client library
 from datetime import datetime  # Python's datetime module
 from db import retrieve_data, update_summary
+import os
 
 # create Flask app
 app = Flask(__name__)
