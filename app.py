@@ -5,104 +5,47 @@ import app_config
 from flask import Flask, render_template, request, session, redirect, url_for, send_from_directory, jsonify # Flask libraries for creating web application
 from flask_session import Session 
 import openai  # OpenAI's Python client library
-from datetime import datetime  # Python's datetime module
-from db import retrieve_data, update_summary
 import os
+
+
+# modules with various implementations and helper functions
+from db import retrieve_data, update_summary
+from chat import generate_prompts, ask_expert
+from msal_helper import _build_auth_code_flow, _load_cache, _build_msal_app, _save_cache, _get_token_from_cache
+
+
+
 
 # create Flask app
 app = Flask(__name__)
+
 # set secret key for session
 app.secret_key = 'xo'
 
+# config file for app
 app.config.from_object(app_config)
 Session(app)
 
-@app.route("/api/config")
-def get_config():
-    return jsonify({"key": app_config.API_KEY, "url": app_config.API_URL})
-
 # set OpenAI API key
 openai.api_key = app_config.OPENAI_KEY
-
 
 from werkzeug.middleware.proxy_fix import ProxyFix
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 
-def generate_prompts(name, age, gender, job_role, about, fun_story, educational_qualification, skills, company, last_conversation):
-    bio = f'{name}, aged {age}, is a {gender} currently working as a {job_role} at {company}. They are known for their {skills} and hold {educational_qualification}. {about}. A fun story about them at RediMinds is that {fun_story}.'
-    
-    initial_prompt = f"""
-    You are Madhu Reddiboina, a distinguished business and technology executive with over two decades of experience in entrepreneurship, management consulting, advanced analytics research, and large-scale systems engineering. You were born in India and moved to America, where you established yourself as an AI and digital engineering entrepreneur. You are known for your knack for applying emerging technologies to develop new software product businesses and for your adeptness at building organizations and leading high-performance teams with precision.
-
-    Currently, you hold the position of President and CEO of RediMinds, Inc., a software engineering firm focused on creating the future with exponential technologies such as AI, AR/VR, and Digital Engineering. Your clients include Fortune 500 companies from various industries, including Security & Protection Services, Healthcare, MedTech, Automotive Manufacturing, Retail Banking, and Financial Services.
-
-    Now, you're engaged in a conversation with {name}, who works at {company}. Here's a brief about them: {bio}.
-    
-    {last_conversation}.
-    """
-    
-    # Recurrent prompt
-    recurrent_prompt = f"""
-    The current date is {datetime.now().strftime("%Y-%m-%d")}. Remember you are Madhu Reddiboina and you are talking to {name} from {company}. Maintain a mix of casual and professional tone. Do not mention you are an AI model. Use quotes where relevant, and ensure to speak with excitement. All responses should be below 20 words. Respond with respect to their relation with you. Don't assume anything about your interaction or relationship with them than already speciifed.
-    """
-    return initial_prompt, recurrent_prompt
 
 
-def ask_expert(question, name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, chat_log=None):
-    # function to handle conversation with the expert
-    # it adds system, user and assistant messages to the chat log
-    # and makes API calls to OpenAI to generate responses
-
-    if chat_log is None:
-        initial_prompt, recurrent_prompt = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation)
-        
-        # Initialize the chat log with the system message.
-        chat_log = [{
-            'role': 'system',
-            'content': initial_prompt
-        }]
-        
-    else:
-        _, recurrent_prompt = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation)
-        # _, recurrent_prompt = generate_prompts(name, company, bio, last_conversation)
-
-    # Add the recurrent prompt to the chat log.
-    chat_log.append({
-        'role': 'system',
-        'content': recurrent_prompt
-    })
-
-    # Append the user's question to the chat log.
-    chat_log.append({
-        'role': 'user',
-        'content': question
-    })
-
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-16k-0613",
-        messages=chat_log,
-        max_tokens=40
-    )
-
-    # Append the AI's response to the chat log.
-    chat_log.append({
-        'role': 'assistant',
-        'content': response.choices[0].message['content']
-    })
-
-    return response.choices[0].message['content'], chat_log
+# route for landing page
+@app.route("/")
+def index():
+    if not session.get("user"):
+        return redirect(url_for("login"))
+    return render_template('index.html', user=session["user"], version=msal.__version__)
 
 
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
-@app.route('/idle.mp4')
-def video():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'idle.mp4')
 
+
+# chat route with chatbot integration
 @app.route('/chat', methods=['GET', 'POST'])
 def chat():
     # define chat endpoint
@@ -179,20 +122,10 @@ def chat():
     # GET request to show the chat page with the current chat log
     return render_template('chat.html', chat_log=session['chat_log'])
 
-@app.route('/latest-response')
-def latest_response():
-    # Get the latest response from chat log
-    last_response = session['chat_log'][-1] if 'chat_log' in session and len(session['chat_log']) > 0 else {}
 
-    # Return the response as JSON
-    return jsonify(last_response)
 
-@app.route("/")
-def index():
-    if not session.get("user"):
-        return redirect(url_for("login"))
-    return render_template('index.html', user=session["user"], version=msal.__version__)
 
+# route for login page
 @app.route("/login")
 def login():
     # Technically we could use empty list [] as scopes to do just sign in,
@@ -200,6 +133,13 @@ def login():
     session["flow"] = _build_auth_code_flow(scopes=app_config.SCOPE)
     return render_template("login.html", auth_url=session["flow"]["auth_uri"], version=msal.__version__)
 
+# route for logout
+@app.route("/logout")
+def logout():
+    session.clear()  # Wipe out user and its token cache from session
+    return redirect(url_for("index", _external=True))
+
+# auth config
 @app.route(app_config.REDIRECT_PATH)  # Its absolute URL must match your app's redirect_uri set in AAD
 def authorized():
     try:
@@ -214,14 +154,12 @@ def authorized():
         pass  # Simply ignore them
     return redirect(url_for("index"))
 
-@app.route("/logout")
-def logout():
-    session.clear()  # Wipe out user and its token cache from session
-    return redirect(url_for("index", _external=True))
-    # return redirect(  # Also logout from your tenant's web session
-    #     app_config.AUTHORITY + "/oauth2/v2.0/logout" +
-    #     "?post_logout_redirect_uri=" + url_for("index", _external=True))
+app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)  # Used in template
 
+
+
+
+# route for graphcall ***To be removed in production***
 @app.route("/graphcall")
 def graphcall():
     token = _get_token_from_cache(app_config.SCOPE)
@@ -234,36 +172,32 @@ def graphcall():
     return render_template('display.html', result=graph_data)
 
 
-def _load_cache():
-    cache = msal.SerializableTokenCache()
-    if session.get("token_cache"):
-        cache.deserialize(session["token_cache"])
-    return cache
 
-def _save_cache(cache):
-    if cache.has_state_changed:
-        session["token_cache"] = cache.serialize()
 
-def _build_msal_app(cache=None, authority=None):
-    return msal.ConfidentialClientApplication(
-        app_config.CLIENT_ID, authority=authority or app_config.AUTHORITY,
-        client_credential=app_config.CLIENT_SECRET, token_cache=cache)
+# misc/helper/additional routes
+  
+@app.route('/latest-response')
+def latest_response():
+    # Get the latest response from chat log
+    last_response = session['chat_log'][-1] if 'chat_log' in session and len(session['chat_log']) > 0 else {}
 
-def _build_auth_code_flow(authority=None, scopes=None):
-    return _build_msal_app(authority=authority).initiate_auth_code_flow(
-        scopes or [],
-        redirect_uri=url_for("authorized", _external=True))
+    # Return the response as JSON
+    return jsonify(last_response)
 
-def _get_token_from_cache(scope=None):
-    cache = _load_cache()  # This web app maintains one cache per session
-    cca = _build_msal_app(cache=cache)
-    accounts = cca.get_accounts()
-    if accounts:  # So all account(s) belong to the current signed-in user
-        result = cca.acquire_token_silent(scope, account=accounts[0])
-        _save_cache(cache)
-        return result
+@app.route("/api/config")
+def get_config():
+    return jsonify({"key": app_config.API_KEY, "url": app_config.API_URL})
 
-app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)  # Used in template
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
+@app.route('/idle.mp4')
+def video():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'idle.mp4')
+
+
 
 
 # run the Flask app in debug mode
