@@ -55,7 +55,6 @@ def ask_expert(question, name, age, gender, job_role, bio, fun_story, educationa
     # function to handle conversation with the expert
     # it adds system, user and assistant messages to the chat log
     # and makes API calls to OpenAI to generate responses
-
     if chat_log is None:
         initial_prompt, recurrent_prompt = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation)
         
@@ -138,33 +137,35 @@ def chat():
     relation = f"{job_role} at your Company"
 
      # POST request to start a new conversation
-    if request.method == 'POST' and 'new_conversation' in request.form:
-        chat_log = session.get('chat_log')
-        user_and_assistant_msgs = [msg['content'] for msg in chat_log if msg['role'] in ['user', 'assistant']]
-        conversation = ' '.join(user_and_assistant_msgs)
+    if request.method == 'POST' and request.is_json:
+        req = request.get_json()
+        if 'new_conversation' in req and req['new_conversation']:
+            chat_log = session.get('chat_log')
+            user_and_assistant_msgs = [msg['content'] for msg in chat_log if msg['role'] in ['user', 'assistant']]
+            conversation = ' '.join(user_and_assistant_msgs)
 
-        # Construct a prompt for the summary.
-        summary_prompt =  f"Please summarize in detail the following conversation between {name} and Madhu The conversation occured at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} and is as follows: {conversation} - make sure this is the priority and comes first in the summary.  Also, provide a succinct summary of a previous conversation: '{last_conversation}', ensuring to timestamp it correctly (should be in the summmary) and highlight that it was discussed prior to the current conversation. The format should be: 'summary of conversation at 'timestamp'- 'summary''. Keep the total word count about 400 words."
+            # Construct a prompt for the summary.
+            summary_prompt =  f"Please summarize in detail the following conversation between {name} and Madhu The conversation occured at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} and is as follows: {conversation} - make sure this is the priority and comes first in the summary.  Also, provide a succinct summary of a previous conversation: '{last_conversation}', ensuring to timestamp it correctly (should be in the summmary) and highlight that it was discussed prior to the current conversation. The format should be: 'summary of conversation at 'timestamp'- 'summary''. Keep the total word count about 400 words."
 
-        # Generate a summary using the GPT-3.5 model.
-        response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo-16k-0613",
-            max_tokens=700,
-            messages=[
-                {"role": "system", "content": "You are an expert conversation summarizer and catch nuances in a conversation in a crisp manner.When writing the summary, do so from the perspective of an objective third party who is recounting the interaction to Madhu (he is essentially one of the people talking, you will need to figure out who). Consider the emotional tone, key points, and conclusions drawn from the conversation."},
-                {"role": "user", "content": summary_prompt}
-            
-            ]
-        )
-        session['summary'] = response.choices[0].message['content']
+            # Generate a summary using the GPT-3.5 model.
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo-16k-0613",
+                max_tokens=700,
+                messages=[
+                    {"role": "system", "content": "You are an expert conversation summarizer and catch nuances in a conversation in a crisp manner.When writing the summary, do so from the perspective of an objective third party who is recounting the interaction to Madhu (he is essentially one of the people talking, you will need to figure out who). Consider the emotional tone, key points, and conclusions drawn from the conversation."},
+                    {"role": "user", "content": summary_prompt}
+                
+                ]
+            )
+            session['summary'] = response.choices[0].message['content']
 
-        update_summary(current_email, session['summary'])
-        print(last_conversation)
+            update_summary(current_email, session['summary'])
+            print(last_conversation)
 
 
-        # Clear the session and render the chat page without any previous conversation.
-        session.clear()
-        return render_template('chat.html', chat_log=[])
+            # Clear the session and render the chat page without any previous conversation.
+            session.clear()
+            return render_template('chat.html', chat_log=[])
 
     if 'chat_log' not in session:
         # Initialize the chat log with the system message for some edge cases.
@@ -184,6 +185,7 @@ def chat():
         question = request.form.get('user_msg')
         response, chat_log = ask_expert(question, name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, session.get('chat_log'))
         session['chat_log'] = chat_log
+        print(chat_log)
         return render_template('chat.html', response=response, chat_log=session['chat_log'])
 
     # GET request to show the chat page with the current chat log
@@ -193,7 +195,7 @@ def chat():
 def latest_response():
     # Get the latest response from chat log
     last_response = session['chat_log'][-1] if 'chat_log' in session and len(session['chat_log']) > 0 else {}
-
+    
     # Return the response as JSON
     return jsonify(last_response)
 
@@ -278,5 +280,5 @@ app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)  # Use
 
 # run the Flask app in debug mode
 if __name__ == '__main__':
-    app.run(port=5000, ssl_context=('cert.pem', 'key.pem'),debug=True)
+    app.run(port=5006, ssl_context=('cert.pem', 'key.pem'),debug=True)
 

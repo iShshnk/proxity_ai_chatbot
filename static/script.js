@@ -1,33 +1,6 @@
 'use strict';
 let DID_API;
 
-let latestResponse = '';
-fetch('/latest-response')
-    .then(response => response.json())
-    .then(data => {
-        // data is the last response from chat log
-        // assign the content to latestResponse
-        latestResponse = data.content || '';
-    });
-
-fetch('/api/config')
-  .then(response => response.json())
-  .then(config => {
-    if (config.key === '🤫') 
-      alert('Please put your api key inside app_config.py and restart..');
-    
-    DID_API = config;
-
-    // Check for the flag at the start and if present, clear the flag and start new session
-    if (window.localStorage.getItem('startOnLoad') === 'true') {
-      // Clear the flag
-      window.localStorage.setItem('startOnLoad', 'false');
-
-      // Start new session
-      startSession();
-    }
-  });
-
 
 const RTCPeerConnection = (
   window.RTCPeerConnection ||
@@ -47,14 +20,20 @@ let lastBytesReceived;
 const talkVideo = document.getElementById('talk-video');
 talkVideo.setAttribute('playsinline', '');
 
+(async function autoConnect() {
 
-sendButton.onclick = async () => {
-  // Set a flag in localStorage and then refresh the page
-  window.localStorage.setItem('startOnLoad', 'true');
-  window.location.reload();
-};
+  // Fetch the config before executing rest of the function
+  const configResponse = await fetch('/api/config');
+  const config = await configResponse.json();
 
-async function startSession() {
+  if (config.key === '🤫') {
+    alert('Please put your api key inside app_config.py and restart..');
+    return; // End execution if API key is not set
+  }
+
+  // Assign the fetched config to DID_API
+  DID_API = config;
+
   if (peerConnection && peerConnection.connectionState === 'connected') {
     return;
   }
@@ -97,6 +76,20 @@ async function startSession() {
       session_id: sessionId,
     }),
   });
+})();
+
+vidButton.onclick = async () => {
+  // Set a flag in localStorage and then refresh the page
+  startSession();
+};
+
+async function startSession() {
+  
+  let latestResponse = '';
+  // Fetch the latest response from chat log
+  const response = await fetch('/latest-response');
+  const data = await response.json();
+  latestResponse = data.content || '';
 
   // connectionState not supported in firefox
   if (peerConnection?.signalingState === 'stable' || peerConnection?.iceConnectionState === 'connected') {
@@ -124,7 +117,7 @@ async function startSession() {
       }),
     });
   }
-};
+}
 
 
 function onIceGatheringStateChange() {
@@ -160,6 +153,10 @@ function onIceConnectionStateChange() {
 function onConnectionStateChange() {
   // not supported in firefox
   console.log("Peer connection status: " + peerConnection.connectionState);
+
+  if(peerConnection.connectionState === 'failed' || peerConnection.connectionState === 'disconnected') {
+    location.reload(); // Reload the page if connection state is 'failed'
+  }
 }
 function onSignalingStateChange() {
   console.log("Signaling status: " + peerConnection.signalingState);
@@ -187,6 +184,7 @@ function onTrack(event) {
    */
 
   if (!event.track) return;
+
 
   statsIntervalId = setInterval(async () => {
     const stats = await peerConnection.getStats(event.track);
@@ -266,10 +264,6 @@ function closePC(pc = peerConnection) {
   pc.removeEventListener('signalingstatechange', onSignalingStateChange, true);
   pc.removeEventListener('track', onTrack, true);
   clearInterval(statsIntervalId);
-  iceGatheringStatusLabel.innerText = '';
-  signalingStatusLabel.innerText = '';
-  iceStatusLabel.innerText = '';
-  peerStatusLabel.innerText = '';
   console.log('stopped peer connection');
   if (pc === peerConnection) {
     peerConnection = null;

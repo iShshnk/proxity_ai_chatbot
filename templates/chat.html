@@ -35,7 +35,7 @@
                     Your browser does not support the video tag.</video>
                 </div>
             </div>
-                <div class="card-body chat-card-body" style="overflow-y: auto; height: 55vh;">
+            <div class="card-body chat-card-body" id="chat-container" style="overflow-y: auto; height: 55vh;">
                     <div class="d-flex justify-content-start mb-4">
                         <div class="img_cont_msg">
                             <img src="{{ url_for('static', filename='img/Madhu.png') }}" class="rounded-circle user_img_msg">
@@ -67,7 +67,7 @@
                 {% endfor %}
                 </div>
                 <div class="card-footer chat-card-footer" style="border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
-                    <form method="POST" class="d-flex flex-column">
+                    <form method="POST" id="chat-form" class="d-flex flex-column">
                         <div class="d-flex justify-content-between align-items-center mb-3">
                             <textarea
                             class="form-control mr-2 textarea-chat"
@@ -82,13 +82,22 @@
                         <div class="d-flex justify-content-between align-items-center">
                             <button type="submit" id="send-button" class="btn btn-dark-orange mb-3">Send</button>
                             <button
-                                type="submit"
+                                type="button"
                                 name="new_conversation"
+                                id="new-conversation-button" 
                                 value="true"
                                 class="btn btn-dark-orange mb-3"
                             >
                                 Start New Conversation
                             </button>
+                            <button
+                            type="button"
+                            id="hidden-button"
+                            class="btn btn-dark-orange mb-3"
+                            hidden
+                        >
+                            Hidden Button
+                        </button>
                         </div>
                     </form>
                 </div>
