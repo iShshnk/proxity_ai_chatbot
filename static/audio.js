@@ -1,6 +1,6 @@
 //Using elevenlabs api to generate audio for the latest response
-const fetch = require("node-fetch");
-const fs = require("fs");
+//const fetch = require("node-fetch");
+//const fs = require("fs");
 
 const url =
   "https://api.elevenlabs.io/v1/text-to-speech/pTL1YWXSHGzMbeBqSp5z/stream";
@@ -12,7 +12,7 @@ const headers = {
 };
 
 const data = {
-  text: "hi how are you",
+  text: "I'm doing great, Jai! It's always a pleasure to connect with you. How can I assist you today?",
   model_id: "eleven_monolingual_v1",
   voice_settings: {
     stability: 0.5,

@@ -2,11 +2,14 @@
 import requests
 import msal
 import app_config
-from flask import Flask, render_template, request, session, redirect, url_for, send_from_directory, jsonify # Flask libraries for creating web application
+from flask import Flask, render_template, request, session, redirect, url_for, send_from_directory, jsonify, send_file, Response # Flask libraries for creating web application
 from flask_session import Session 
 import openai  # OpenAI's Python client library
 import os
-import datetime
+from datetime import datetime
+import requests
+import json
+import time
 
 
 # modules with various implementations and helper functions
@@ -14,6 +17,11 @@ from db import retrieve_data, update_summary
 from chat import generate_prompts, ask_expert
 from msal_helper import _build_auth_code_flow, _load_cache, _build_msal_app, _save_cache, _get_token_from_cache
 
+import boto3
+from botocore.exceptions import NoCredentialsError
+
+s3 = boto3.client('s3', aws_access_key_id=app_config.aws_access_key_id,
+                  aws_secret_access_key=app_config.aws_secret_access_key)
 
 # create Flask app
 app = Flask(__name__)
@@ -116,7 +124,6 @@ def chat():
         question = request.form.get('user_msg')
         response, chat_log = ask_expert(question, name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, session.get('chat_log'))
         session['chat_log'] = chat_log
-        print(chat_log)
         return render_template('chat.html', response=response, chat_log=session['chat_log'])
 
     # GET request to show the chat page with the current chat log
@@ -154,7 +161,6 @@ def authorized():
 app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)  # Used in template
 
 
-
 # route for graphcall ***To be removed in production***
 @app.route("/graphcall")
 def graphcall():
@@ -168,16 +174,46 @@ def graphcall():
     return render_template('display.html', result=graph_data)
 
 
+@app.route('/get_audio')
+def get_audio():
+    url = "https://api.elevenlabs.io/v1/text-to-speech/pTL1YWXSHGzMbeBqSp5z/stream"
+    headers = {
+        "Accept": "audio/mpeg",
+        "Content-Type": "application/json",
+        "xi-api-key": "f847bcf3852b9864940d67cdb2ff7ccc",
+    }
+    data = {
+        "text": session['chat_log'][-1]['content'] if 'chat_log' in session and len(session['chat_log']) > 0 else '',
+        "model_id": "eleven_monolingual_v1",
+        "voice_settings": {
+            "stability": 0.5,
+            "similarity_boost": 0.7,
+        },
+    }
 
-# misc/helper/additional routes
-  
-@app.route('/latest-response')
+    response = requests.post(url, headers=headers, json=data)
+
+    # Generate a unique filename based on the current time
+    filename = f"audio.mp3"
+
+    # Upload to S3
+    try:
+        s3.put_object(Body=response.content, Bucket='digital-me-rediminds', Key=filename)
+    except NoCredentialsError:
+        return {"error": "S3 credentials not found"}
+
+    # Return the URL to the audio file
+    public_url = f"https://digital-me-rediminds.s3.amazonaws.com/{filename}"
+    return {"audio_url": public_url}
+
+
+"""@app.route('/latest-response')
 def latest_response():
     # Get the latest response from chat log
     last_response = session['chat_log'][-1] if 'chat_log' in session and len(session['chat_log']) > 0 else {}
 
     # Return the response as JSON
-    return jsonify(last_response)
+    return jsonify(last_response)"""
 
 @app.route("/api/config")
 def get_config():

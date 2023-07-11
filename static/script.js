@@ -85,11 +85,9 @@ vidButton.onclick = async () => {
 
 async function startSession() {
   
-  let latestResponse = '';
-  // Fetch the latest response from chat log
-  const response = await fetch('/latest-response');
-  const data = await response.json();
-  latestResponse = data.content || '';
+  const audioResponse = await fetch('/get_audio');
+  const audioData = await audioResponse.json();
+  const audioUrl = audioData.audio_url;
 
   // connectionState not supported in firefox
   if (peerConnection?.signalingState === 'stable' || peerConnection?.iceConnectionState === 'connected') {
@@ -101,16 +99,11 @@ async function startSession() {
       },
       body: JSON.stringify({
         script: {
-          type: 'text',
-          subtitles: 'false',
-          provider: {type: 'microsoft', voice_id: 'en-GB-RyanNeural'},
-          ssml: 'false',
-          input: latestResponse
+          type: 'audio',
+          audio_url: audioUrl,
         },
         driver_url: 'bank://lively/',
         config: {
-          fluent: 'false', 
-          pad_audio: '0.0',
           stitch: true,
         },
         session_id: sessionId,

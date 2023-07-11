@@ -33,3 +33,6 @@ SESSION_TYPE = "filesystem"  # Specifies the token cache should be stored in ser
 
 API_KEY = "bXJlZGRpYm9pbmFAZ21haWwuY29t:yPYpJrAXDVKxFT4K-KYHB" #Please change this to your own API key
 API_URL = "https://api.d-id.com"
+
+aws_access_key_id='AKIAQHA26W4T6P4OEAWH',
+aws_secret_access_key='tQ23TIQr5lSO9PrJ2KZD7ovknn3QJIvVRRU0DUi6'
