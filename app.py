@@ -6,6 +6,7 @@ from flask import Flask, render_template, request, session, redirect, url_for, s
 from flask_session import Session 
 import openai  # OpenAI's Python client library
 import os
+from datetime import datetime  # Python's datetime module
 
 
 # modules with various implementations and helper functions
