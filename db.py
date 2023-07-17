@@ -4,12 +4,7 @@ from bson.objectid import ObjectId
 
 app = Flask(__name__)
 
-try:
-  client = pymongo.MongoClient("mongodb+srv://mayank:digital-me@cluster0.a1zgw44.mongodb.net/?retryWrites=true&w=majority")
-  
-# return a friendly error if a URI error is thrown 
-except pymongo.errors.ConfigurationError:
-  print("An Invalid URI host error was received. Is your Atlas host name correct in your connection string?")
+client = pymongo.MongoClient("mongodb+srv://mayank:digital-me@cluster0.a1zgw44.mongodb.net/?retryWrites=true&w=majority")
   
 db = client["RediMinds-Employees-Database"]
 current_collection = db["EmpDataset"]
