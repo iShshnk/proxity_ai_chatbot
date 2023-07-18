@@ -48,7 +48,20 @@ def index():
         return redirect(url_for("login"))
     return render_template('index.html', user=session["user"], version=msal.__version__)
 
-
+# This is defining a route for '/admin_panel' in the Flask web application.
+@app.route('/admin_panel')
+def admin_panel():
+    # The 'if' condition checks two things:
+    # 1. If there is no 'user' key in the session object, it means no user is currently logged in, so it redirects to the login page.
+    # 2. If there is a 'user' key in the session but the role of the user is not 'admin', it again redirects to the login page.
+    # 'session' is a special object that Flask provides for storing user-specific data across requests. 
+    # if not session.get("user") or session.get("role") != "admin":
+        # 'redirect' is a function provided by Flask that redirects the user to a different page.
+        # 'url_for' is another Flask function that generates the URL for a given endpoint. In this case, the 'login' endpoint.
+        # return redirect(url_for("login"))  # or redirect to a "not authorized" page
+    # If the 'if' condition fails, it means the user is logged in and is an admin. 
+    # In this case, it continues to the line below and returns the 'admin_panel.html' page.
+    return render_template('admin_panel.html')
 
 # chat route with chatbot integration
 @app.route('/chat', methods=['GET', 'POST'])
@@ -135,7 +148,16 @@ def login():
     # Technically we could use empty list [] as scopes to do just sign in,
     # here we choose to also collect end user consent upfront
     session["flow"] = _build_auth_code_flow(scopes=app_config.SCOPE)
-    return render_template("login.html", auth_url=session["flow"]["auth_uri"], version=msal.__version__)
+    session["role"] = "user"
+    return render_template("login.html", auth_url=session["flow"]["auth_uri"],admin_dashboard="admin_login", version=msal.__version__)
+
+@app.route("/admin_login")
+def admin_login():
+    # Technically we could use empty list [] as scopes to do just sign in,
+    # here we choose to also collect end user consent upfront
+    session["flow"] = _build_auth_code_flow(scopes=app_config.SCOPE)
+    session["role"] = "admin"
+    return render_template("admin_login.html", auth_url=session["flow"]["auth_uri"], version=msal.__version__)
 
 # route for logout
 @app.route("/logout")
@@ -156,7 +178,9 @@ def authorized():
         _save_cache(cache)
     except ValueError:  # Usually caused by CSRF
         pass  # Simply ignore them
-    return redirect(url_for("index"))
+    if session.get("role") == 'user':
+        return redirect(url_for("index"))
+    return redirect(url_for("admin_panel"))
 
 app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)  # Used in template
 
