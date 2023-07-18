@@ -109,9 +109,12 @@ async function startSession() {
         session_id: sessionId,
       }),
     });
+  } else {
+    // Play the audio automatically if peerConnection is not stable or connected
+    const audio = new Audio(audioUrl);
+    audio.play();
   }
 }
-
 
 function onIceGatheringStateChange() {
   console.log("ICE gathering status: " + peerConnection.iceGatheringState);
