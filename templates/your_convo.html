@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <title>Your Conversations</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Sidebar Styles */
+        /* ... (Include your sidebar styles here) ... */
+
+        /* Content Styles */
+        #content {
+            padding: 20px;
+        }
+
+        .head-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .left {
+            flex: 1;
+        }
+
+        .left h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .breadcrumb {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .breadcrumb li {
+            display: inline;
+            color: #999;
+        }
+
+        .breadcrumb li i {
+            margin: 0 5px;
+        }
+
+        .breadcrumb li a {
+            color: #555;
+            text-decoration: none;
+        }
+
+        .breadcrumb li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Conversation List Styles */
+        .conversation-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .conversation {
+            border-bottom: 1px solid #ccc;
+            padding: 20px 0;
+            display: flex;
+        }
+
+        .avatar img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        .content h2 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .content p {
+            margin: 5px 0;
+            color: #777;
+        }
+
+        .timestamp {
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <!-- ... (Include your sidebar code here) ... -->
+    <!-- SIDEBAR -->
+
+    <!-- CONTENT -->
+    <section id="content">
+        <!-- NAVBAR -->
+        <!-- ... (Include your navbar code here) ... -->
+        <!-- NAVBAR -->
+
+        <!-- MAIN -->
+        <main>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Your Conversations</h1>
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="#">Your Conversations</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right' ></i></li>
+                        <li>
+                            <a class="active" href="#">Home</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- List of Conversations -->
+            <div class="conversation-list">
+                <!-- Dummy Conversation 1 -->
+                <div class="conversation">
+                    <div class="avatar">
+                        <img src="{{ url_for('static', filename='img/Madhu.png') }}" alt="User Avatar">
+                    </div>
+                    <div class="content">
+                        <h2>Loren Impum</h2>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac odio eget.</p>
+                        <span class="timestamp">3 hours ago</span>
+                    </div>
+                </div>
+
+                <!-- Dummy Conversation 2 -->
+                <div class="conversation">
+                    <div class="avatar">
+                        <img src="{{ url_for('static', filename='img/Madhu.png') }}" alt="User Avatar">
+                    </div>
+                    <div class="content">
+                        <h2>Loren Impum</h2>
+                        <p>Sed ac odio eget, ullamcorper risus. Fusce pulvinar feugiat.</p>
+                        <span class="timestamp">Yesterday</span>
+                    </div>
+                </div>
+
+                <!-- Dummy Conversation 3 -->
+                <div class="conversation">
+                    <div class="avatar">
+                        <img src="{{ url_for('static', filename='img/Madhu.png') }}" alt="User Avatar">
+                    </div>
+                    <div class="content">
+                        <h2>Loren Impum</h2>
+                        <p>Quisque convallis erat nec placerat iaculis. Nam sit amet.</p>
+                        <span class="timestamp">2 days ago</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- MAIN -->
+    </section>
+    <!-- CONTENT -->
+
+    <!-- ... (Include your script tags here) ... -->
+</body>
+</html>
