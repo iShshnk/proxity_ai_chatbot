@@ -13,9 +13,10 @@ import time
 
 
 # modules with various implementations and helper functions
-from db import retrieve_data, update_summary
+from db import retrieve_data, update_summary, save_media
 from chat import generate_prompts, ask_expert
 from msal_helper import _build_auth_code_flow, _load_cache, _build_msal_app, _save_cache, _get_token_from_cache
+from removebg import remove_bg
 
 import boto3
 from botocore.exceptions import NoCredentialsError
@@ -37,6 +38,7 @@ Session(app)
 openai.api_key = app_config.OPENAI_KEY
 
 from werkzeug.middleware.proxy_fix import ProxyFix
+from werkzeug.utils import secure_filename
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 
@@ -44,7 +46,7 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 # route for landing page
 @app.route("/")
 def index():
-    if not session.get("user"):
+    if not session.get("user") or session.get("role")!="user":
         return redirect(url_for("login"))
     return render_template('index.html', user=session["user"], version=msal.__version__)
 
@@ -55,13 +57,51 @@ def admin_panel():
     # 1. If there is no 'user' key in the session object, it means no user is currently logged in, so it redirects to the login page.
     # 2. If there is a 'user' key in the session but the role of the user is not 'admin', it again redirects to the login page.
     # 'session' is a special object that Flask provides for storing user-specific data across requests. 
-    # if not session.get("user") or session.get("role") != "admin":
+    if not session.get("user") or session.get("role") != "admin":
         # 'redirect' is a function provided by Flask that redirects the user to a different page.
         # 'url_for' is another Flask function that generates the URL for a given endpoint. In this case, the 'login' endpoint.
-        # return redirect(url_for("login"))  # or redirect to a "not authorized" page
+        return redirect(url_for("login"))  # or redirect to a "not authorized" page
     # If the 'if' condition fails, it means the user is logged in and is an admin. 
     # In this case, it continues to the line below and returns the 'admin_panel.html' page.
     return render_template('admin_panel.html')
+
+@app.route('/my_avatar', methods=['GET','POST'])
+def my_avatar():
+    if not session.get("user") or session.get("role") != "admin":
+        return redirect(url_for("login"))
+    
+    if request.method == "POST":
+        image_file = request.files['image']
+        audio_files = request.files.getlist('audio')
+
+        if image_file and allowed_img_file(image_file.filename):
+            filename = secure_filename(image_file.filename)
+            image_path = os.path.join(app.root_path, 'static/img', filename)
+            image_file.save(image_path)
+            image_file = remove_bg(image_path)
+            image_file.save(image_path)
+
+            # Save image_path to MongoDB
+            save_media({'type': 'image', 'path': image_path}, session["user"]["preferred_username"])
+
+        for audio_file in audio_files:
+            if audio_file and allowed_audio_file(audio_file.filename):
+                filename = secure_filename(audio_file.filename)
+                audio_path = os.path.join(app.root_path, 'static/img', filename)
+                audio_file.save(audio_path)
+
+                # Save audio_path to MongoDB
+                save_media({'type': 'audio', 'path': audio_path}, session["user"]["preferred_username"])
+
+
+    return render_template('my_avatar.html')
+
+def allowed_img_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['jpg', 'png', 'jpeg']
+
+def allowed_audio_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['mp3']
+
 
 # chat route with chatbot integration
 @app.route('/chat', methods=['GET', 'POST'])
@@ -70,7 +110,7 @@ def chat():
     # this is the main entry point of the application
     # it handles GET and POST requests 
     
-    if not session.get("user"):
+    if not session.get("user") or session.get("role")!="user":
         return redirect(url_for("login"))
     
     current_email = session["user"]["preferred_username"]
