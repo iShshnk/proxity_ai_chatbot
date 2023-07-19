@@ -137,6 +137,7 @@ def chat():
         question = request.form.get('user_msg')
         response, chat_log = ask_expert(question, name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, session.get('chat_log'))
         session['chat_log'] = chat_log
+        print(session['chat_log'])
         return render_template('chat.html', response=response, chat_log=session['chat_log'])
 
     # GET request to show the chat page with the current chat log
