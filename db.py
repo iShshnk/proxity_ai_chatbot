@@ -31,6 +31,14 @@ def update_summary(email_id, summary):
     new_values = {"$set": {"Last Conversation Summary": summary}}
     current_collection.update_one(query, new_values)
     return 'Summary Updated!'
+  
+def save_media(data, email_id):
+  email = email_id
+  collection_name = db["AdminDataset"]
+  current_data = collection_name.find_one({ 'Email': email })
+  current_data.setdefault('data', [])
+  current_data['data'].append(data)
+  collection_name.update_one({'Email': email}, {'$set': current_data}, upsert=True)
 
 
 if __name__ == '__main__':
