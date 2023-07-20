@@ -196,6 +196,7 @@ def chat():
                 'timestamp': datetime.now().isoformat(),  # Current timestamp
                 'user_email': current_email,  # User email
                 'bot_email': 'madhu.reddiboina@rediminds.com',  # Bot email
+                'summary': session['summary'], #pushing the summary
                 'messages': extracted_messages  # Extracted messages
             }
             current_collection2.insert_one(document)
