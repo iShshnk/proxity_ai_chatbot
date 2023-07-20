@@ -13,10 +13,11 @@ import time
 
 
 # modules with various implementations and helper functions
-from db import retrieve_data, update_summary, save_media
+from db import retrieve_data, update_summary, save_media, save_voice_id
 from chat import generate_prompts, ask_expert
 from msal_helper import _build_auth_code_flow, _load_cache, _build_msal_app, _save_cache, _get_token_from_cache
 from removebg import remove_bg
+from voice_clone import get_voice_clone
 
 import boto3
 from botocore.exceptions import NoCredentialsError
@@ -83,16 +84,23 @@ def my_avatar():
 
             # Save image_path to MongoDB
             save_media({'type': 'image', 'path': image_path}, session["user"]["preferred_username"])
+            
+        audio_samples_path = []
 
         for audio_file in audio_files:
             if audio_file and allowed_audio_file(audio_file.filename):
                 filename = secure_filename(audio_file.filename)
                 audio_path = os.path.join(app.root_path, 'static/img', filename)
                 audio_file.save(audio_path)
+                audio_samples_path.append(audio_path)
 
                 # Save audio_path to MongoDB
                 save_media({'type': 'audio', 'path': audio_path}, session["user"]["preferred_username"])
-
+        
+        voice_id = get_voice_clone(session["user"]["preferred_username"], audio_samples_path)
+        save_voice_id(session["user"]["preferred_username"], voice_id)
+        
+        return jsonify({'success': True, 'message': 'Avatar created successfully!'})
 
     return render_template('my_avatar.html')
 

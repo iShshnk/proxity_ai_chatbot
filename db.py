@@ -39,6 +39,10 @@ def save_media(data, email_id):
   current_data.setdefault('data', [])
   current_data['data'].append(data)
   collection_name.update_one({'Email': email}, {'$set': current_data}, upsert=True)
+  
+def save_voice_id(email_id, voice_id):
+  collection_name = db["AdminDataset"]
+  collection_name.update_one({'Email': email_id}, {'$set': {'voice_id': voice_id}}, upsert=True)
 
 
 if __name__ == '__main__':
