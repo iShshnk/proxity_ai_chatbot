@@ -39,28 +39,4 @@ def download_video_from_uri(uri, local_file_path):
                 file.write(chunk)
         print(f"Video downloaded successfully to {local_file_path}")
     else:
-        print(f"Failed to download the video. Status code: {response.status_code}")
-        
-        
-import boto3
-from botocore.exceptions import NoCredentialsError
-
-
-s3 = boto3.client('s3', aws_access_key_id=app_config.aws_access_key_id,
-                  aws_secret_access_key=app_config.aws_secret_access_key)
-
-filename = "your_avatar.png"
-filepath = "static/img/your_avatar.png"
-
-try:
-    with open(filepath, 'rb') as image_file:
-        s3.put_object(Body=image_file, Bucket='digital-me-rediminds', Key=filename)
-except NoCredentialsError:
-    print({"error": "S3 credentials not found"})
-
-
-# Return the URL to the audio file
-public_url = f"https://digital-me-rediminds.s3.amazonaws.com/{filename}"
-        
-video_id = create_holder_video(public_url)
-get_holder_video(video_id)
+        print(f"Failed to download the video. Status code: {response.status_code}") 

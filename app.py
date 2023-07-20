@@ -8,8 +8,6 @@ import openai  # OpenAI's Python client library
 import os
 from datetime import datetime
 import requests
-import json
-import time
 
 
 # modules with various implementations and helper functions
@@ -82,12 +80,13 @@ def my_avatar():
             image_file.save(image_path)
             image_file = remove_bg(image_path)
             image_file.save(image_path)
-            
+                      
             try:
-                s3.put_object(Body=image_file, Bucket='digital-me-rediminds', Key=filename)
+                with open(image_path, 'rb') as image_file:
+                    s3.put_object(Body=image_file, Bucket='digital-me-rediminds', Key=filename)
 
             except NoCredentialsError:
-                return {"error": "S3 credentials not found"}
+                print ({"error": "S3 credentials not found"})
 
             # Return the URL to the audio file
             public_url = f"https://digital-me-rediminds.s3.amazonaws.com/{filename}"
