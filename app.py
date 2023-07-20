@@ -103,6 +103,22 @@ def allowed_audio_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['mp3']
 
 
+@app.route('/your_convo', methods=['GET'])
+def your_convo():
+    if not session.get("user") or session.get("role") != "admin":
+        return redirect(url_for("login"))
+    
+    return render_template('your_convo.html')
+
+
+@app.route('/interact_avatar', methods=['GET'])
+def interact_avatar():
+    if not session.get("user") or session.get("role") != "admin":
+        return redirect(url_for("login"))
+    
+    return render_template('interact_avatar.html')
+
+
 # chat route with chatbot integration
 @app.route('/chat', methods=['GET', 'POST'])
 def chat():
