@@ -93,9 +93,6 @@ def my_avatar():
                 audio_path = os.path.join(app.root_path, 'static/img', filename)
                 audio_file.save(audio_path)
                 audio_samples_path.append(audio_path)
-
-                # Save audio_path to MongoDB
-                save_media({'type': 'audio', 'path': audio_path}, session["user"]["preferred_username"])
         
         voice_id = get_voice_clone(session["user"]["preferred_username"], audio_samples_path)
         save_voice_id(session["user"]["preferred_username"], voice_id)
