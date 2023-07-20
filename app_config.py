@@ -31,7 +31,7 @@ SCOPE = ["User.ReadBasic.All"]
 
 SESSION_TYPE = "filesystem"  # Specifies the token cache should be stored in server-side session
 
-API_KEY = "amFpLmRlc2FpQHJlZGltaW5kcy5jb20:II47ldYHpObSzSAuWbhjq" #Please change this to your own API key
+API_KEY = "bXJlZGRpYm9pbmFAZ21haWwuY29t:yPYpJrAXDVKxFT4K-KYHB" #Please change this to your own API key
 API_URL = "https://api.d-id.com"
 
 aws_access_key_id='AKIAQHA26W4T6P4OEAWH'
