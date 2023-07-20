@@ -7,27 +7,23 @@
 	<!-- Boxicons -->
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<!-- My CSS -->
-
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 
+	<title>Interact with Avatar</title>
 
-	<title>DigitalMe</title>
 </head>
 <body>
 
 
 	<!-- SIDEBAR -->
 	<section id="sidebar">
-
 		<a href="admin_panel" class="brand">
 			<i class='bx bxs-smile'></i>
 			<span class="text">DigitalMe</span>
 		</a>
 		<ul class="side-menu top">
 			<li class="active">
-
 				<a href="admin_panel">
-
 					<i class='bx bxs-dashboard' ></i>
 					<span class="text">Dashboard</span>
 				</a>
@@ -74,8 +70,6 @@
 	</section>
 	<!-- SIDEBAR -->
 
-
-
 	<!-- CONTENT -->
 	<section id="content">
 		<!-- NAVBAR -->
@@ -104,7 +98,7 @@
 		<main>
 			<div class="head-title">
 				<div class="left">
-					<h1>Dashboard</h1>
+					<h1>Interact with Avatar</h1>
 					<ul class="breadcrumb">
 						<li>
 							<a href="#">Dashboard</a>
@@ -120,8 +114,22 @@
 		<!-- MAIN -->
 	</section>
 	<!-- CONTENT -->
-	
 
+	<script>
+		// JavaScript code to handle the sidebar link clicks
+		const dashboardLink = document.getElementById("dashboard-link");
+		const avatarLink = document.getElementById("avatar-link");
+		const sharableLink = document.getElementById("sharable-link");
+		const conversationsLink = document.getElementById("conversations-link");
+		const interactAvatarLink = document.getElementById("interact-avatar-link");
+
+		// Function to handle the click event for the "Interact with Avatar" link
+		interactAvatarLink.addEventListener("click", function(event) {
+			event.preventDefault(); // Prevent the default link behavior
+			document.title = "Interact with Avatar"; // Update the page title
+			document.querySelector("h1").textContent = "Interact with Avatar"; // Update the heading text
+		});
+	</script>
 	<script src="script.js"></script>
 	<script src="{{ url_for('static', filename='admin_script.js') }}"></script>
 </body>

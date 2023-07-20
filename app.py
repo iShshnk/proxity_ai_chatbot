@@ -8,14 +8,15 @@ import openai  # OpenAI's Python client library
 import os
 from datetime import datetime
 import requests
-import json
-import time
 
 
 # modules with various implementations and helper functions
-from db import retrieve_data, update_summary
+from db import retrieve_data, update_summary, save_media, save_voice_id
 from chat import generate_prompts, ask_expert
 from msal_helper import _build_auth_code_flow, _load_cache, _build_msal_app, _save_cache, _get_token_from_cache
+from removebg import remove_bg
+from voice_clone import get_voice_clone
+from did import create_holder_video, get_holder_video
 
 import boto3
 from botocore.exceptions import NoCredentialsError
@@ -37,6 +38,7 @@ Session(app)
 openai.api_key = app_config.OPENAI_KEY
 
 from werkzeug.middleware.proxy_fix import ProxyFix
+from werkzeug.utils import secure_filename
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 
@@ -44,13 +46,13 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 # route for landing page
 @app.route("/")
 def index():
-    if not session.get("user"):
+    if not session.get("user") or session.get("role")!="user":
         return redirect(url_for("login"))
     return render_template('index.html', user=session["user"], version=msal.__version__)
 
 # This is defining a route for '/admin_panel' in the Flask web application.
 @app.route('/admin_panel')
-def admin_dashboard():
+def admin_panel():
     # The 'if' condition checks two things:
     # 1. If there is no 'user' key in the session object, it means no user is currently logged in, so it redirects to the login page.
     # 2. If there is a 'user' key in the session but the role of the user is not 'admin', it again redirects to the login page.
@@ -63,6 +65,77 @@ def admin_dashboard():
     # In this case, it continues to the line below and returns the 'admin_panel.html' page.
     return render_template('admin_panel.html')
 
+@app.route('/my_avatar', methods=['GET','POST'])
+def my_avatar():
+    if not session.get("user") or session.get("role") != "admin":
+        return redirect(url_for("login"))
+    
+    if request.method == "POST":
+        image_file = request.files['image']
+        audio_files = request.files.getlist('audio')
+
+        if image_file and allowed_img_file(image_file.filename):
+            filename = secure_filename(image_file.filename)
+            image_path = os.path.join(app.root_path, 'static/img', filename)
+            image_file.save(image_path)
+            image_file = remove_bg(image_path)
+            image_file.save(image_path)
+                      
+            try:
+                with open(image_path, 'rb') as image_file:
+                    s3.put_object(Body=image_file, Bucket='digital-me-rediminds', Key=filename)
+
+            except NoCredentialsError:
+                print ({"error": "S3 credentials not found"})
+
+            # Return the URL to the audio file
+            public_url = f"https://digital-me-rediminds.s3.amazonaws.com/{filename}"
+
+            # Save image_path to MongoDB
+            save_media({'type': 'image', 'path': image_path}, session["user"]["preferred_username"])
+            
+            video_id = create_holder_video(public_url)
+            get_holder_video(video_id)
+            
+            
+        audio_samples_path = []
+
+        for audio_file in audio_files:
+            if audio_file and allowed_audio_file(audio_file.filename):
+                filename = secure_filename(audio_file.filename)
+                audio_path = os.path.join(app.root_path, 'static/img', filename)
+                audio_file.save(audio_path)
+                audio_samples_path.append(audio_path)
+        
+        voice_id = get_voice_clone(session["user"]["preferred_username"], audio_samples_path)
+        save_voice_id(session["user"]["preferred_username"], voice_id)
+                
+        return jsonify({'success': True, 'message': 'Avatar created successfully!'})
+
+    return render_template('my_avatar.html')
+
+def allowed_img_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['jpg', 'png', 'jpeg']
+
+def allowed_audio_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['mp3']
+
+
+@app.route('/your_convo', methods=['GET'])
+def your_convo():
+    if not session.get("user") or session.get("role") != "admin":
+        return redirect(url_for("login"))
+    
+    return render_template('your_convo.html')
+
+
+@app.route('/interact_avatar', methods=['GET'])
+def interact_avatar():
+    if not session.get("user") or session.get("role") != "admin":
+        return redirect(url_for("login"))
+    
+    return render_template('interact_avatar.html')
+
 # chat route with chatbot integration
 @app.route('/chat', methods=['GET', 'POST'])
 def chat():
@@ -70,7 +143,7 @@ def chat():
     # this is the main entry point of the application
     # it handles GET and POST requests 
     
-    if not session.get("user"):
+    if not session.get("user") or session.get("role")!="user":
         return redirect(url_for("login"))
     
     current_email = session["user"]["preferred_username"]
@@ -137,6 +210,7 @@ def chat():
         question = request.form.get('user_msg')
         response, chat_log = ask_expert(question, name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, session.get('chat_log'))
         session['chat_log'] = chat_log
+        print(session['chat_log'])
         return render_template('chat.html', response=response, chat_log=session['chat_log'])
 
     # GET request to show the chat page with the current chat log
@@ -148,7 +222,16 @@ def login():
     # Technically we could use empty list [] as scopes to do just sign in,
     # here we choose to also collect end user consent upfront
     session["flow"] = _build_auth_code_flow(scopes=app_config.SCOPE)
-    return render_template("login.html", auth_url=session["flow"]["auth_uri"], version=msal.__version__)
+    session["role"] = "user"
+    return render_template("login.html", auth_url=session["flow"]["auth_uri"],admin_dashboard="admin_login", version=msal.__version__)
+
+@app.route("/admin_login")
+def admin_login():
+    # Technically we could use empty list [] as scopes to do just sign in,
+    # here we choose to also collect end user consent upfront
+    session["flow"] = _build_auth_code_flow(scopes=app_config.SCOPE)
+    session["role"] = "admin"
+    return render_template("admin_login.html", auth_url=session["flow"]["auth_uri"], version=msal.__version__)
 
 # route for logout
 @app.route("/logout")
@@ -169,7 +252,9 @@ def authorized():
         _save_cache(cache)
     except ValueError:  # Usually caused by CSRF
         pass  # Simply ignore them
-    return redirect(url_for("index"))
+    if session.get("role") == 'user':
+        return redirect(url_for("index"))
+    return redirect(url_for("admin_panel"))
 
 app.jinja_env.globals.update(_build_auth_code_flow=_build_auth_code_flow)  # Used in template
 
@@ -193,7 +278,7 @@ def get_audio():
     headers = {
         "Accept": "audio/mpeg",
         "Content-Type": "application/json",
-        "xi-api-key": "f847bcf3852b9864940d67cdb2ff7ccc",
+        "xi-api-key": app_config.ELEVENLABS_API_KEY,
     }
     data = {
         "text": session['chat_log'][-1]['content'] if 'chat_log' in session and len(session['chat_log']) > 0 else '',
