@@ -206,7 +206,6 @@ def interact_avatar():
     
     return render_template('interact_avatar1.html', image_file_name=image_file_name)
 
-
 # chat route with chatbot integration
 @app.route('/chat', methods=['GET', 'POST'])
 def chat():
