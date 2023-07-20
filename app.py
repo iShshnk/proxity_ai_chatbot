@@ -11,7 +11,7 @@ import requests
 
 
 # modules with various implementations and helper functions
-from db import retrieve_data, update_summary, save_media, save_voice_id, retrieve_admin_data
+from db import retrieve_data, update_summary, save_media, save_voice_id, retrieve_admin_data, current_collection2
 from chat import generate_prompts, ask_expert
 from msal_helper import _build_auth_code_flow, _load_cache, _build_msal_app, _save_cache, _get_token_from_cache
 from removebg import remove_bg
@@ -240,7 +240,7 @@ def chat():
             conversation = ' '.join(user_and_assistant_msgs)
 
             # Construct a prompt for the summary.
-            summary_prompt =  f"Please summarize in detail the following conversation between {name} and Madhu The conversation occured at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} and is as follows: {conversation} - make sure this is the priority and comes first in the summary.  Also, provide a succinct summary of a previous conversation: '{last_conversation}', ensuring to timestamp it correctly (should be in the summmary) and highlight that it was discussed prior to the current conversation. The format should be: 'summary of conversation at 'timestamp'- 'summary''. Keep the total word count about 400 words."
+            summary_prompt =  f"Please summarize in detail the following conversation between {name} and Madhu The conversation occured at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} and is as follows: {conversation}. Keep the total word count about 100 words."
 
             # Generate a summary using the GPT-3.5 model.
             response = openai.ChatCompletion.create(
@@ -255,8 +255,21 @@ def chat():
             session['summary'] = response.choices[0].message['content']
 
             update_summary(current_email, session['summary'])
-            print(last_conversation)
+            # Extract only user and assistant messages from the chat_log
+            extracted_messages = [
+                {'role': msg['role'], 'content': msg['content']} 
+                for msg in chat_log if msg['role'] in ['user', 'assistant']
+            ]
 
+            # Create a MongoDB document
+            document = {
+                'timestamp': datetime.now().isoformat(),  # Current timestamp
+                'user_email': current_email,  # User email
+                'bot_email': 'madhu.reddiboina@rediminds.com',  # Bot email
+                'summary': session['summary'], #pushing the summary
+                'messages': extracted_messages  # Extracted messages
+            }
+            current_collection2.insert_one(document)
 
             # Clear the session and render the chat page without any previous conversation.
             session.clear()
