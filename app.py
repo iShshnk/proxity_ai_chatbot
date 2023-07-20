@@ -266,7 +266,7 @@ def get_audio():
     headers = {
         "Accept": "audio/mpeg",
         "Content-Type": "application/json",
-        "xi-api-key": "f847bcf3852b9864940d67cdb2ff7ccc",
+        "xi-api-key": app_config.ELEVENLABS_API_KEY,
     }
     data = {
         "text": session['chat_log'][-1]['content'] if 'chat_log' in session and len(session['chat_log']) > 0 else '',
