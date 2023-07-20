@@ -8,6 +8,7 @@ client = pymongo.MongoClient("mongodb+srv://mayank:digital-me@cluster0.a1zgw44.m
   
 db = client["RediMinds-Employees-Database"]
 current_collection = db["EmpDataset"]
+current_collection2 = db["ChatDataset"]
 
 # root route
 @app.route('/')

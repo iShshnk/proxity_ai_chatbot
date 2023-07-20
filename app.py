@@ -13,7 +13,7 @@ import time
 
 
 # modules with various implementations and helper functions
-from db import retrieve_data, update_summary
+from db import retrieve_data, update_summary, current_collection2
 from chat import generate_prompts, ask_expert
 from msal_helper import _build_auth_code_flow, _load_cache, _build_msal_app, _save_cache, _get_token_from_cache
 
@@ -112,8 +112,20 @@ def chat():
             session['summary'] = response.choices[0].message['content']
 
             update_summary(current_email, session['summary'])
-            print(last_conversation)
+            # Extract only user and assistant messages from the chat_log
+            extracted_messages = [
+                {'role': msg['role'], 'content': msg['content']} 
+                for msg in chat_log if msg['role'] in ['user', 'assistant']
+            ]
 
+            # Create a MongoDB document
+            document = {
+                'timestamp': datetime.now().isoformat(),  # Current timestamp
+                'user_email': current_email,  # User email
+                'bot_email': 'madhu.reddiboina@rediminds.com',  # Bot email
+                'messages': extracted_messages  # Extracted messages
+            }
+            current_collection2.insert_one(document)
 
             # Clear the session and render the chat page without any previous conversation.
             session.clear()
