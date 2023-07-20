@@ -47,15 +47,7 @@
             margin: 0;
             display: flex;
             align-items: center;
-        }
-
-        .breadcrumb li {
-            display: inline;
             color: #999;
-        }
-
-        .breadcrumb li i {
-            margin: 0 5px;
         }
 
         .breadcrumb li a {
@@ -71,12 +63,14 @@
         .conversation-list {
             display: flex;
             flex-direction: column;
+            margin-top: 30px;
         }
 
         .conversation {
             border-bottom: 1px solid #ccc;
             padding: 20px 0;
             display: flex;
+            align-items: center;
         }
 
         .avatar img {
@@ -105,6 +99,48 @@
             font-size: 12px;
             color: #999;
         }
+
+        /* Additional Styles to Match Interact_with_avatar Design */
+        nav {
+            background-color: #007BFF;
+            padding: 10px;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        nav .nav-link {
+            margin-left: 20px;
+            color: white;
+            text-decoration: none;
+        }
+
+        nav form {
+            margin-left: auto;
+        }
+
+        nav .search-btn {
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+        }
+
+        nav .search-btn i {
+            color: white;
+        }
+
+        nav .profile {
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        nav .profile img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
     </style>
 </head>
 <body>
@@ -116,7 +152,25 @@
     <!-- CONTENT -->
     <section id="content">
         <!-- NAVBAR -->
-        <!-- ... (Include your navbar code here) ... -->
+        <nav>
+            <i class='bx bx-menu' ></i>
+            <a href="#" class="nav-link">Categories</a>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search...">
+                    <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+                </div>
+            </form>
+            <input type="checkbox" id="switch-mode" hidden>
+            <label for="switch-mode" class="switch-mode"></label>
+            <a href="#" class="notification">
+                <i class='bx bxs-bell' ></i>
+                <span class="num">8</span>
+            </a>
+            <a href="#" class="profile">
+                <img src="{{ url_for('static', filename='img/Madhu.png') }}" class="rounded-circle user_img_msg">
+            </a>
+        </nav>
         <!-- NAVBAR -->
 
         <!-- MAIN -->
@@ -126,11 +180,11 @@
                     <h1>Your Conversations</h1>
                     <ul class="breadcrumb">
                         <li>
-                            <a href="#">Your Conversations</a>
+                            <a href="#" class="active">Your Conversations</a>
                         </li>
                         <li><i class='bx bx-chevron-right' ></i></li>
                         <li>
-                            <a class="active" href="#">Home</a>
+                            <a href="#">Home</a>
                         </li>
                     </ul>
                 </div>
