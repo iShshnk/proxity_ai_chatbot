@@ -3,13 +3,14 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+	<!-- Bootstrap CSS -->
+	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
 	<!-- Boxicons -->
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<!-- My CSS -->
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
-	<title>DigitalMe</title>
+	
+    <title>DigitalMe</title>
 </head>
 <body>
 
@@ -29,14 +30,14 @@
 			</li>
 			<li>
 				<a href="my_avatar">
-					<i class='bx bxs-shopping-bag-alt' ></i>
+					<i class='bx bxs-face' ></i>
 					<span class="text">Your Avatar</span>
 				</a>
 			</li>
 			<li>
 				<a href="#">
-					<i class='bx bxs-doughnut-chart' ></i>
-					<span class="text">Generate Sharable Link</span>
+					<i class='bx bx-mail-send' ></i>
+					<span class="text">Send Invite Link</span>
 				</a>
 			</li>
 			<li>
@@ -96,31 +97,34 @@
 		<!-- NAVBAR -->
 
 		<!-- MAIN -->
-		<!DOCTYPE html>
-<html>
-<head>
-    <title>Upload Image and Audio</title>
-</head>
-<body>
-    <h1>Upload Images and Audio</h1>
-    <form action="/my_avatar" method="post" enctype="multipart/form-data">
-        <label for="image">Image:</label>
-        <input type="file" id="image" name="image">
-        <br>
-        <label for="audio">Audio:</label>
-        <input type="file" id="audio" name="audio" multiple>
-        <br>
-        <input type="submit" value="Upload">
-    </form>
-</body>
-</html>
+		
 
-		<!-- MAIN -->
-	</section>
-	<!-- CONTENT -->
-	
-
-	<script src="script.js"></script>
+        <main>
+			<div class="content">
+				<h1>Upload Images and Audio</h1>
+				<form action="/my_avatar" method="post" enctype="multipart/form-data" class="form-horizontal">
+					<div class="form-group">
+						<label class="control-label col-sm-2" for="image">Upload Image:</label>
+						<div class="col-sm-10">
+							<input type="file" class="form-control" id="image" name="image">
+						</div>
+					</div>
+					<div class="form-group">
+						<label class="control-label col-sm-2" for="audio">Upload Audio:</label>
+						<div class="col-sm-10">
+							<input type="file" class="form-control" id="audio" name="audio" multiple>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<button type="submit" class="btn btn-primary">Create</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</main>
+    </section>
+    <script src="script.js"></script>
 	<script src="{{ url_for('static', filename='admin_script.js') }}"></script>
 </body>
 </html>
