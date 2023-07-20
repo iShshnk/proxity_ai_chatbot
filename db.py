@@ -43,6 +43,16 @@ def save_media(data, email_id):
 def save_voice_id(email_id, voice_id):
   collection_name = db["AdminDataset"]
   collection_name.update_one({'Email': email_id}, {'$set': {'voice_id': voice_id}}, upsert=True)
+  
+def add_permission(admin_email, user_email):
+  admin_collection = db["AdminDataset"]
+  user_collection = db["EmpDataset"]
+  
+  current_admin = admin_collection.find_one({ 'Email': admin_email })
+  current_user = user_collection.find_one({ 'Email': user_email })
+  
+  current_admin.update_one({ 'Email': admin_email }, {'$push': {'permission': user_email}})
+  current_user.update_one({ 'Email':  user_email}, {'$push': {'bot_availabel': admin_email}})
 
 
 if __name__ == '__main__':

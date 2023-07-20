@@ -8,8 +8,6 @@ import openai  # OpenAI's Python client library
 import os
 from datetime import datetime
 import requests
-import json
-import time
 
 
 # modules with various implementations and helper functions
@@ -18,6 +16,7 @@ from chat import generate_prompts, ask_expert
 from msal_helper import _build_auth_code_flow, _load_cache, _build_msal_app, _save_cache, _get_token_from_cache
 from removebg import remove_bg
 from voice_clone import get_voice_clone
+from did import create_holder_video, get_holder_video
 
 import boto3
 from botocore.exceptions import NoCredentialsError
@@ -81,9 +80,23 @@ def my_avatar():
             image_file.save(image_path)
             image_file = remove_bg(image_path)
             image_file.save(image_path)
+                      
+            try:
+                with open(image_path, 'rb') as image_file:
+                    s3.put_object(Body=image_file, Bucket='digital-me-rediminds', Key=filename)
+
+            except NoCredentialsError:
+                print ({"error": "S3 credentials not found"})
+
+            # Return the URL to the audio file
+            public_url = f"https://digital-me-rediminds.s3.amazonaws.com/{filename}"
 
             # Save image_path to MongoDB
             save_media({'type': 'image', 'path': image_path}, session["user"]["preferred_username"])
+            
+            video_id = create_holder_video(public_url)
+            get_holder_video(video_id)
+            
             
         audio_samples_path = []
 
@@ -96,7 +109,7 @@ def my_avatar():
         
         voice_id = get_voice_clone(session["user"]["preferred_username"], audio_samples_path)
         save_voice_id(session["user"]["preferred_username"], voice_id)
-        
+                
         return jsonify({'success': True, 'message': 'Avatar created successfully!'})
 
     return render_template('my_avatar.html')
@@ -122,7 +135,6 @@ def interact_avatar():
         return redirect(url_for("login"))
     
     return render_template('interact_avatar.html')
-
 
 # chat route with chatbot integration
 @app.route('/chat', methods=['GET', 'POST'])
@@ -266,7 +278,7 @@ def get_audio():
     headers = {
         "Accept": "audio/mpeg",
         "Content-Type": "application/json",
-        "xi-api-key": "f847bcf3852b9864940d67cdb2ff7ccc",
+        "xi-api-key": app_config.ELEVENLABS_API_KEY,
     }
     data = {
         "text": session['chat_log'][-1]['content'] if 'chat_log' in session and len(session['chat_log']) > 0 else '',
