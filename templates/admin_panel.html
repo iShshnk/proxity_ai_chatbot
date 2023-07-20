@@ -7,9 +7,7 @@
 	<!-- Boxicons -->
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<!-- My CSS -->
-
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
 
 	<title>DigitalMe</title>
 </head>
@@ -18,30 +16,27 @@
 
 	<!-- SIDEBAR -->
 	<section id="sidebar">
-
 		<a href="admin_panel" class="brand">
 			<i class='bx bxs-smile'></i>
 			<span class="text">DigitalMe</span>
 		</a>
 		<ul class="side-menu top">
 			<li class="active">
-
 				<a href="admin_panel">
-
 					<i class='bx bxs-dashboard' ></i>
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
 			<li>
 				<a href="my_avatar">
-					<i class='bx bxs-shopping-bag-alt' ></i>
+					<i class='bx bxs-face' ></i>
 					<span class="text">Your Avatar</span>
 				</a>
 			</li>
 			<li>
 				<a href="#">
-					<i class='bx bxs-doughnut-chart' ></i>
-					<span class="text">Generate Sharable Link</span>
+					<i class='bx bx-mail-send' ></i>
+					<span class="text">Send Invite Link</span>
 				</a>
 			</li>
 			<li>
@@ -101,25 +96,55 @@
 		<!-- NAVBAR -->
 
 		<!-- MAIN -->
-		<main>
-			<div class="head-title">
-				<div class="left">
-					<h1>Dashboard</h1>
-					<ul class="breadcrumb">
-						<li>
-							<a href="#">Dashboard</a>
-						</li>
-						<li><i class='bx bx-chevron-right' ></i></li>
-						<li>
-							<a class="active" href="#">Home</a>
-						</li>
-					</ul>
-				</div>
+	<main>
+		<div class="head-title">
+			<div class="left">
+				<h1>Home</h1>
+				<ul class="breadcrumb">
+					<li>
+						<a href="#">Dashboard</a>
+					</li>
+					<li><i class='bx bx-chevron-right' ></i></li>
+					<li>
+						<a class="active" href="#">User Management</a>
+					</li>
+				</ul>
 			</div>
-		</main>
-		<!-- MAIN -->
-	</section>
-	<!-- CONTENT -->
+		</div>
+
+		<style>
+			table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			th, td {
+				padding: 10px;
+				text-align: left;
+				border-bottom: 1px solid #ddd;
+			}
+			th {
+				background-color: #f2f2f2;
+			}
+		</style>
+
+		<table>
+			<thead>
+				<tr>
+					<th>User ID</th>
+					<th>Username</th>
+					<th>Email</th>
+					<th>Role</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!-- User data would be populated here -->
+			</tbody>
+		</table>
+	</main>
+	<!-- MAIN -->
+</section>
+<!-- CONTENT -->
 	
 
 	<script src="script.js"></script>
