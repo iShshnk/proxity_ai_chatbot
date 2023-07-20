@@ -24,6 +24,11 @@ def retrieve_data(email_id):
   #                 "skills":data['Skills']})
   return data
 
+def retrieve_admin_data(email_id):
+  collection_name = db["AdminDataset"]
+  data = collection_name.find_one({ 'Email': email_id })
+  return data
+
 @app.route('/update/<id>', methods=['POST'])
 def update_summary(email_id, summary):
     email = email_id
@@ -52,8 +57,7 @@ def add_permission(admin_email, user_email):
   current_user = user_collection.find_one({ 'Email': user_email })
   
   current_admin.update_one({ 'Email': admin_email }, {'$push': {'permission': user_email}})
-  current_user.update_one({ 'Email':  user_email}, {'$push': {'bot_availabel': admin_email}})
-
+  current_user.update_one({ 'Email':  user_email}, {'$push': {'bot_available': admin_email}})
 
 if __name__ == '__main__':
 	app.run()

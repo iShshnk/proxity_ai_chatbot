@@ -48,7 +48,7 @@ talkVideo.setAttribute('playsinline', '');
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      source_url: 'https://i.ibb.co/Fsp3GcZ/Madhu-2-1.jpg',
+      source_url: "https://digital-me-rediminds.s3.amazonaws.com/me.png",
     }),
   });
 

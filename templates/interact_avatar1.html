@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
+    <title>Chat with Your Avatar!</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet"/>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+  </head>
+  <body>
+    <div class="container">
+        <div class="justify-content-center"> <!-- Adjusted alignment -->
+
+          <!-- Chat Section -->
+          <div class="card" id="chat1" style="border-radius: 15px; height: 100vh; width: 1000px;">
+            <div
+                class="card-header d-flex justify-content-between align-items-center p-3 text-white border-bottom-0"
+                style="
+                    border-top-left-radius: 15px;
+                    border-top-right-radius: 15px;
+                    background-color: #3d96c5;
+                "
+            >
+                <h2 class="mb-0 fw-bold">Chat with Your Avatar!</h2>
+            </div>
+            <!-- Video Section -->
+            <div id="video-wrapper" >
+                <div>
+                    <video id="talk-video" autoplay loop>  <source src="{{ url_for('static', filename='idle.mp4') }}" type="video/mp4">
+                    Your browser does not support the video tag.</video>
+                </div>
+            </div>
+            <div class="card-body chat-card-body" id="chat-container" style="overflow-y: auto; height: 55vh;">
+                    <div class="d-flex justify-content-start mb-4">
+                        <div class="img_cont_msg">
+                            <img src="{{ url_for('static', filename='img/' + image_file_name) }}" alt="Admin_Image" class="rounded-circle user_img_msg">
+                        </div>
+                        <div class="msg_cotainer">
+                            Hi, I am your avatar!
+                        </div>
+                    </div>
+                    {% for message in session['chat_log'] %} 
+                    {% if message['role'] == 'user' %}
+                        <div class="d-flex justify-content-end mb-4">
+                            <div class="msg_cotainer_send">
+                                {{ message['content'] }}
+                            </div>
+                            <div class="img_cont_msg">
+                                <img src="{{ url_for('static', filename='img/' + image_file_name) }}" alt="Admin_Image" class="rounded-circle user_img_msg">
+                            </div>
+                        </div>
+                    {% elif message['role'] == 'assistant' %}
+                        <div class="d-flex justify-content-start mb-4">
+                            <div class="img_cont_msg">
+                                <img src="{{ url_for('static', filename='img/' + image_file_name) }}" alt="Admin_Image" class="rounded-circle user_img_msg">
+                            </div>
+                            <div class="msg_cotainer">
+                                {{ message['content'] }}
+                            </div>
+                        </div>
+                    {% endif %} 
+                {% endfor %}
+                </div>
+                <div class="card-footer chat-card-footer" style="border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
+                    <form method="POST" id="chat-form" class="d-flex flex-column">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <textarea
+                            class="form-control mr-2 textarea-chat"
+                            id="user_msg"
+                            name="user_msg"
+                            rows="2"
+                            ></textarea>
+                            <button type="button" id="start-btn" class="btn btn-dark-orange button-chat">
+                                <i class="fas fa-microphone"></i>
+                            </button>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <button type="submit" id="send-button" class="btn btn-dark-orange mb-3">Send</button>
+							<button
+                                type="button"
+                                name="new_conversation"
+                                id="new-conversation-button" 
+                                value="true"
+                                class="btn btn-dark-orange mb-3"
+                            >
+                                Start New Conversation
+                            </button>
+                            <button
+                            type="button"
+                            id="hidden-button"
+                            class="btn btn-dark-orange mb-3"
+                            hidden
+                        >
+                            Hidden Button
+                        </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <!-- [omitted] -->
+          </div>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='admin_chatbox.js') }}"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+  </body>
+</html>

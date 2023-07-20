@@ -22,7 +22,19 @@ def get_holder_video(video_id):
     response_data = response.json()
 
     if(response_data['status']!='done'):
-        time.sleep(30)
+        time.sleep(10)
+        
+    response = requests.get(url, headers=headers)
+    response_data = response.json()
+    
+    if(response_data['status']!='done'):
+        time.sleep(10)
+        
+    response = requests.get(url, headers=headers)
+    response_data = response.json()
+    
+    if(response_data['status']!='done'):
+        time.sleep(10)
         
     response = requests.get(url, headers=headers)
     response_data = response.json()
