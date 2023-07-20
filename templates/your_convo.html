@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <title>Your Conversations</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Sidebar Styles */
+        /* ... (Include your sidebar styles here) ... */
+
+        /* Content Styles */
+        #content {
+            padding: 20px;
+        }
+
+        .head-title {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .left {
+            flex: 1;
+        }
+
+        .left h1 {
+            margin: 0;
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .breadcrumb {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            color: #999;
+        }
+
+        .breadcrumb li a {
+            color: #555;
+            text-decoration: none;
+        }
+
+        .breadcrumb li a:hover {
+            text-decoration: underline;
+        }
+
+        /* Conversation List Styles */
+        .conversation-list {
+            display: flex;
+            flex-direction: column;
+            margin-top: 30px;
+        }
+
+        .conversation {
+            border-bottom: 1px solid #ccc;
+            padding: 20px 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .avatar img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        .content {
+            flex: 1;
+        }
+
+        .content h2 {
+            margin: 0;
+            font-size: 18px;
+            color: #333;
+        }
+
+        .content p {
+            margin: 5px 0;
+            color: #777;
+        }
+
+        .timestamp {
+            font-size: 12px;
+            color: #999;
+        }
+
+        /* Additional Styles to Match Interact_with_avatar Design */
+        nav {
+            background-color: #007BFF;
+            padding: 10px;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+
+        nav .nav-link {
+            margin-left: 20px;
+            color: white;
+            text-decoration: none;
+        }
+
+        nav form {
+            margin-left: auto;
+        }
+
+        nav .search-btn {
+            border: none;
+            background-color: transparent;
+            cursor: pointer;
+        }
+
+        nav .search-btn i {
+            color: white;
+        }
+
+        nav .profile {
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        nav .profile img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <!-- ... (Include your sidebar code here) ... -->
+    <!-- SIDEBAR -->
+
+    <!-- CONTENT -->
+    <section id="content">
+        <!-- NAVBAR -->
+        <nav>
+            <i class='bx bx-menu' ></i>
+            <a href="#" class="nav-link">Categories</a>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search...">
+                    <button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
+                </div>
+            </form>
+            <input type="checkbox" id="switch-mode" hidden>
+            <label for="switch-mode" class="switch-mode"></label>
+            <a href="#" class="notification">
+                <i class='bx bxs-bell' ></i>
+                <span class="num">8</span>
+            </a>
+            <a href="#" class="profile">
+                <img src="{{ url_for('static', filename='img/Madhu.png') }}" class="rounded-circle user_img_msg">
+            </a>
+        </nav>
+        <!-- NAVBAR -->
+
+        <!-- MAIN -->
+        <main>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Your Conversations</h1>
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="#" class="active">Your Conversations</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right' ></i></li>
+                        <li>
+                            <a href="#">Home</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- List of Conversations -->
+            <div class="conversation-list">
+                <!-- Dummy Conversation 1 -->
+                <div class="conversation">
+                    <div class="avatar">
+                        <img src="{{ url_for('static', filename='img/Madhu.png') }}" alt="User Avatar">
+                    </div>
+                    <div class="content">
+                        <h2>Loren Impum</h2>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac odio eget.</p>
+                        <span class="timestamp">3 hours ago</span>
+                    </div>
+                </div>
+
+                <!-- Dummy Conversation 2 -->
+                <div class="conversation">
+                    <div class="avatar">
+                        <img src="{{ url_for('static', filename='img/Madhu.png') }}" alt="User Avatar">
+                    </div>
+                    <div class="content">
+                        <h2>Loren Impum</h2>
+                        <p>Sed ac odio eget, ullamcorper risus. Fusce pulvinar feugiat.</p>
+                        <span class="timestamp">Yesterday</span>
+                    </div>
+                </div>
+
+                <!-- Dummy Conversation 3 -->
+                <div class="conversation">
+                    <div class="avatar">
+                        <img src="{{ url_for('static', filename='img/Madhu.png') }}" alt="User Avatar">
+                    </div>
+                    <div class="content">
+                        <h2>Loren Impum</h2>
+                        <p>Quisque convallis erat nec placerat iaculis. Nam sit amet.</p>
+                        <span class="timestamp">2 days ago</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <!-- MAIN -->
+    </section>
+    <!-- CONTENT -->
+
+    <script src="script.js"></script>
+	<script src="{{ url_for('static', filename='admin_script.js') }}"></script>
+</body>
+</html>

@@ -7,9 +7,7 @@
 	<!-- Boxicons -->
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<!-- My CSS -->
-
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-
 
 	<title>DigitalMe</title>
 </head>
@@ -18,16 +16,13 @@
 
 	<!-- SIDEBAR -->
 	<section id="sidebar">
-
 		<a href="admin_panel" class="brand">
 			<i class='bx bxs-smile'></i>
 			<span class="text">DigitalMe</span>
 		</a>
 		<ul class="side-menu top">
 			<li class="active">
-
 				<a href="admin_panel">
-
 					<i class='bx bxs-dashboard' ></i>
 					<span class="text">Dashboard</span>
 				</a>
@@ -101,22 +96,25 @@
 		<!-- NAVBAR -->
 
 		<!-- MAIN -->
-		<main>
-			<div class="head-title">
-				<div class="left">
-					<h1>Dashboard</h1>
-					<ul class="breadcrumb">
-						<li>
-							<a href="#">Dashboard</a>
-						</li>
-						<li><i class='bx bx-chevron-right' ></i></li>
-						<li>
-							<a class="active" href="#">Home</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-		</main>
+		<!DOCTYPE html>
+<html>
+<head>
+    <title>Upload Image and Audio</title>
+</head>
+<body>
+    <h1>Upload Images and Audio</h1>
+    <form action="/my_avatar" method="post" enctype="multipart/form-data">
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image">
+        <br>
+        <label for="audio">Audio:</label>
+        <input type="file" id="audio" name="audio" multiple>
+        <br>
+        <input type="submit" value="Upload">
+    </form>
+</body>
+</html>
+
 		<!-- MAIN -->
 	</section>
 	<!-- CONTENT -->

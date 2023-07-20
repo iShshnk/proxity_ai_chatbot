@@ -2,7 +2,7 @@ import os
 
 OPENAI_KEY = "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" #OpenAI API key
 
-ELEVENLABS_API_KEY = "6d59a0bd0edad9ac964ae88a8d4ea537" #ElevenLabs API key
+ELEVENLABS_API_KEY = "f847bcf3852b9864940d67cdb2ff7ccc" #ElevenLabs API key
 
 CLIENT_ID = "e00963f2-823f-4827-9033-ddefc0109d86" # Application (client) ID of app registration
 
@@ -31,7 +31,7 @@ SCOPE = ["User.ReadBasic.All"]
 
 SESSION_TYPE = "filesystem"  # Specifies the token cache should be stored in server-side session
 
-API_KEY = "amFpLmRlc2FpQHJlZGltaW5kcy5jb20:II47ldYHpObSzSAuWbhjq" #Please change this to your own API key
+API_KEY = "bXJlZGRpYm9pbmFAZ21haWwuY29t:yPYpJrAXDVKxFT4K-KYHB" #Please change this to your own API key
 API_URL = "https://api.d-id.com"
 
 aws_access_key_id='AKIAQHA26W4T6P4OEAWH'
