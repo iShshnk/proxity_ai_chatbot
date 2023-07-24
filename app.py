@@ -65,6 +65,7 @@ def admin_panel():
     # In this case, it continues to the line below and returns the 'admin_panel.html' page.
     return render_template('admin_panel.html')
 
+
 @app.route('/my_avatar', methods=['GET','POST'])
 def my_avatar():
     if not session.get("user") or session.get("role") != "admin":
@@ -354,6 +355,11 @@ def graphcall():
         ).json()
     return render_template('display.html', result=graph_data)
 
+@app.route("/api/config")
+def get_config():
+    if not session.get("user") or session.get("role") != "admin":
+        return jsonify({"key": app_config.API_KEY, "url": app_config.API_URL})
+    return jsonify({"key": app_config.API_KEY, "url": app_config.API_URL, "img_url": session['public_url']})
 
 @app.route('/get_audio')
 def get_audio():
@@ -396,10 +402,6 @@ def latest_response():
 
     # Return the response as JSON
     return jsonify(last_response)"""
-
-@app.route("/api/config")
-def get_config():
-    return jsonify({"key": app_config.API_KEY, "url": app_config.API_URL, "img_url": session['public_url']})
 
 @app.route('/favicon.ico')
 def favicon():
