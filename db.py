@@ -8,6 +8,8 @@ client = pymongo.MongoClient("mongodb+srv://mayank:digital-me@cluster0.a1zgw44.m
   
 db = client["RediMinds-Employees-Database"]
 current_collection = db["EmpDataset"]
+current_collection2 = db["ChatDataset"]
+avatar_info_collection = db["AvatarInfo"]  # New collection
 
 # root route
 @app.route('/')
@@ -23,6 +25,28 @@ def retrieve_data(email_id):
   #                 "fun_story":data['Fun Story'],"educational_qualification":data['Educational Qualification'],
   #                 "skills":data['Skills']})
   return data
+
+@app.route('/avatarinfo/<email_id>', methods=['GET'])
+def get_avatar_info(email_id):
+    data = avatar_info_collection.find_one({ 'Email': email_id })
+    return data if data else "No data found for this email."
+
+@app.route('/avatarinfo', methods=['POST'])
+def insert_avatar_info():
+    data = request.json
+    avatar_info_collection.insert_one(data)
+    return 'Avatar information added!'
+
+@app.route('/avatarinfo/<email_id>', methods=['PUT'])
+def update_avatar_info(email_id):
+    new_data = request.json
+    avatar_info_collection.update_one({'Email': email_id}, {"$set": new_data})
+    return 'Avatar information updated!'
+
+@app.route('/avatarinfo/<email_id>', methods=['DELETE'])
+def delete_avatar_info(email_id):
+    avatar_info_collection.delete_one({'Email': email_id})
+    return 'Avatar information deleted!'
 
 @app.route('/update/<id>', methods=['POST'])
 def update_summary(email_id, summary):
