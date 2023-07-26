@@ -29,7 +29,17 @@ def retrieve_data(email_id):
 @app.route('/avatarinfo/<email_id>', methods=['GET'])
 def get_avatar_info(email_id):
     data = avatar_info_collection.find_one({ 'Email': email_id })
-    return data if data else "No data found for this email."
+    if data:
+        response = {
+            "Email": data.get('Email', ''),
+            "Name": data.get('Name', ''),
+            "Personality": data.get('Personality', ''),
+            "Personal life": data.get('Personal life', ''),
+            "Profession": data.get('Profession', '')
+        }
+        return jsonify(response)
+    else:
+        return jsonify({"error": "No data found for this email."})
 
 @app.route('/avatarinfo', methods=['POST'])
 def insert_avatar_info():
