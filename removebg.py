@@ -1,4 +1,4 @@
-from rembg import remove
+"""from rembg import remove
 from PIL import Image
 import numpy as np
 import io
@@ -25,7 +25,7 @@ def remove_bg(input_img_path):
     # Save the output image (change output path as needed)
     bg.save("output_image.png")
 
-"""from rembg import remove
+from rembg import remove
 from PIL import Image
 import cv2
 
