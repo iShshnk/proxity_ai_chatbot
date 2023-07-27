@@ -8,4 +8,4 @@ msal==1.22.0
 requests==2.27.1
 opencv-python==4.8.0.74
 Pillow==9.0.0
-rembg==1.1.0
+rembg
