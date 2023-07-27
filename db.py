@@ -1,11 +1,17 @@
+from flask import Flask, render_template, request, session, redirect, url_for, send_from_directory, jsonify, send_file, Response # Flask libraries for creating web application
+from flask_session import Session 
 import pymongo
 from bson.objectid import ObjectId
+
+# create Flask app
+app = Flask(__name__)
 
 client = pymongo.MongoClient("mongodb+srv://mayank:digital-me@cluster0.a1zgw44.mongodb.net/?retryWrites=true&w=majority")
   
 db = client["RediMinds-Employees-Database"]
 current_collection = db["EmpDataset"]
 current_collection2 = db["ChatDataset"]
+avatar_info_collection = db["AvatarInfo"]  # New collection
 
 def retrieve_data(email_id):
   data = current_collection.find_one({ 'Email': email_id })
@@ -16,6 +22,39 @@ def retrieve_admin_data(email_id):
   data = collection_name.find_one({ 'Email': email_id })
   return data
 
+@app.route('/avatarinfo/<email_id>', methods=['GET'])
+def get_avatar_info(email_id):
+    data = avatar_info_collection.find_one({ 'Email': email_id })
+    if data:
+        response = {
+            "Email": data.get('Email', ''),
+            "Name": data.get('Name', ''),
+            "Personality": data.get('Personality', ''),
+            "Personal life": data.get('Personal life', ''),
+            "Profession": data.get('Profession', '')
+        }
+        return jsonify(response)
+    else:
+        return jsonify({"error": "No data found for this email."})
+
+@app.route('/avatarinfo', methods=['POST'])
+def insert_avatar_info():
+    data = request.json
+    avatar_info_collection.insert_one(data)
+    return 'Avatar information added!'
+
+@app.route('/avatarinfo/<email_id>', methods=['PUT'])
+def update_avatar_info(email_id):
+    new_data = request.json
+    avatar_info_collection.update_one({'Email': email_id}, {"$set": new_data})
+    return 'Avatar information updated!'
+
+@app.route('/avatarinfo/<email_id>', methods=['DELETE'])
+def delete_avatar_info(email_id):
+    avatar_info_collection.delete_one({'Email': email_id})
+    return 'Avatar information deleted!'
+
+@app.route('/update/<id>', methods=['POST'])
 def update_summary(email_id, summary):
     query = {'Email': email_id}
     new_values = {"$set": {"Last Conversation Summary": summary}}
@@ -40,5 +79,9 @@ def add_permission(admin_email, user_email):
   current_admin = admin_collection.find_one({ 'Email': admin_email })
   current_user = user_collection.find_one({ 'Email': user_email })
   
-  admin_collection.update_one({ 'Email': admin_email }, {'$push': {'permission': user_email}})
-  user_collection.update_one({ 'Email':  user_email}, {'$push': {'bot_available': admin_email}})
+  current_admin.update_one({ 'Email': admin_email }, {'$push': {'permission': user_email}})
+  current_user.update_one({ 'Email':  user_email}, {'$push': {'bot_availabel': admin_email}})
+
+
+if __name__ == '__main__':
+	app.run()
