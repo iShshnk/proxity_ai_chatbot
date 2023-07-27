@@ -1,4 +1,4 @@
-from rembg import remove
+"""from rembg import remove
 from PIL import Image
 import cv2
 
@@ -43,4 +43,4 @@ def remove_bg(input_img_path):
     bg.paste(output, mask=output)
 
     # Save the output image
-    return bg
+    return bg"""
