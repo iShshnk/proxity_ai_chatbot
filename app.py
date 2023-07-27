@@ -363,9 +363,9 @@ def get_config():
 
 @app.route('/get_audio')
 def get_audio():
-    voice_id = retrieve_admin_data(session["user"]["preferred_username"])['voice_id'] 
-    if not session.get("user") or session.get("role") != "admin":
-        voice_id = "CJvZrj2XERlpMhE9ezgv"
+    voice_id = "CJvZrj2XERlpMhE9ezgv" 
+    if session.get("role") == "admin":
+        voice_id = retrieve_admin_data(session["user"]["preferred_username"])['voice_id']
     url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream"
     headers = {
         "Accept": "audio/mpeg",
