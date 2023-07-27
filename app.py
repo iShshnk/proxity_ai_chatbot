@@ -14,7 +14,7 @@ import requests
 from db import retrieve_data, update_summary, save_media, save_voice_id, retrieve_admin_data, current_collection2
 from chat import generate_prompts, ask_expert
 from msal_helper import _build_auth_code_flow, _load_cache, _build_msal_app, _save_cache, _get_token_from_cache
-#from removebg import remove_bg
+from removebg import remove_bg
 from voice_clone import get_voice_clone
 from did import create_holder_video, get_holder_video
 
@@ -79,8 +79,8 @@ def my_avatar():
             filename = secure_filename(image_file.filename)
             image_path = os.path.join(app.root_path, 'static/img', filename)
             image_file.save(image_path)
-            """image_file = remove_bg(image_path)
-            image_file.save(image_path)"""
+            image_file = remove_bg(image_path)
+            image_file.save(image_path)
                       
             try:
                 with open(image_path, 'rb') as image_file:
@@ -363,7 +363,9 @@ def get_config():
 
 @app.route('/get_audio')
 def get_audio():
-    voice_id = retrieve_admin_data(session["user"]["preferred_username"])['voice_id']
+    voice_id = retrieve_admin_data(session["user"]["preferred_username"])['voice_id'] 
+    if not session.get("user") or session.get("role") != "admin":
+        voice_id = "CJvZrj2XERlpMhE9ezgv"
     url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream"
     headers = {
         "Accept": "audio/mpeg",
