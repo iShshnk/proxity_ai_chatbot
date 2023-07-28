@@ -155,69 +155,64 @@ video {
     width: 220px;
     object-fit: cover; /* To keep aspect ratio while filling the container */
 }
-
-img, video, canvas {
-    overflow: hidden;
-}
-
-.peerConnectionState-new {
-    color: cornflowerblue;
+@media (max-width: 576px) { 
+    /* Styles for mobile devices */
+    .card {
+        width: 100%;
+        height: auto;
     }
-.peerConnectionState-connecting {
-color: orange;
-}
-.peerConnectionState-connected {
-color: green;
-}
-.peerConnectionState-disconnected,
-.peerConnectionState-closed,
-.peerConnectionState-failed {
-color: red;
-}
+  
+    .chat-card-body {
+        height: auto;
+    }
+    
+    #video-wrapper div {
+      height: auto;
+    }
+  }
+  
+@media (min-width: 577px) and (max-width: 992px) {
+    /* Styles for tablets and small desktops */
+    .card {
+        width: 100%;
+        height: auto;
+    }
+    
+    .chat-card-body {
+        height: auto;
+    }
+  
+    #video-wrapper div {
+      height: auto;
+    }
+  }
+  
+@media (min-width: 993px) {
+    /* Styles for large desktops */
+    .card {
+        width: 90%;
+        height: 90%;
+    }
+  }
+  
+.btn-dark-orange {
+    background-color: #3d96c5;
+    border-color: #3d96c5;
+    transition: background-color 0.3s ease;
+  }
+  
+.btn-dark-orange:hover {
+    background-color: #82ccdd;
+    border-color: #82ccdd;
+    cursor: pointer;
+  }
+  
+body * {
+    font-family: 'Mulish', sans-serif;
+    text-align: center;
+    line-height: 1.5;
+  }
 
-.iceConnectionState-new {
-color: cornflowerblue;
-}
-.iceConnectionState-checking {
-color: orange;
-}
-.iceConnectionState-connected,
-.iceConnectionState-completed {
-color: green;
-}
-.peerConnectionState-disconnected,
-.peerConnectionState-closed,
-.peerConnectionState-failed {
-color: red;
-}
-
-.iceGatheringState-new {
-color: cornflowerblue;
-}
-.iceGatheringState-gathering {
-color: orange;
-}
-.iceGatheringState-complete {
-color: black;
-}
-
-.signalingState-stable {
-color: green;
-}
-.signalingState-have-local-offer,
-.signalingState-have-remote-offer,
-.signalingState-have-local-pranswer,
-.signalingState-have-remote-pranswer {
-color: cornflowerblue;
-}
-.signalingState-closed {
-color: red;
-}
-
-.streamingState-streaming {
-color: green;
-}
-
-.streamingState-empty {
-color: grey;
+  img, video, canvas {
+    overflow: hidden;
 }

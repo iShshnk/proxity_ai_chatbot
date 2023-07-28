@@ -11,7 +11,7 @@ import requests
 
 
 # modules with various implementations and helper functions
-from db import retrieve_data, update_summary, save_media, save_voice_id, retrieve_admin_data, current_collection2, get_chat_messages
+from db import update_summary, save_media, save_voice_id, retrieve_admin_data, current_collection, current_collection2, get_chat_messages, get_avatar_info
 from chat import generate_prompts, ask_expert
 from msal_helper import _build_auth_code_flow, _load_cache, _build_msal_app, _save_cache, _get_token_from_cache
 from remove_bg import remove_bg
@@ -139,14 +139,39 @@ def get_chat_api():
     return get_chat_messages("madhu.reddiboina@rediminds.com")
 
 
+@app.route('/user_form', methods=['GET', 'POST'])
+def user_form():
+    if request.method == 'POST':
+        data = {
+            'Name': request.form.get('Name'),
+            'Age': request.form.get('Age'),
+            'Gender': request.form.get('Gender'),
+            'Job Role': request.form.get('Job Role'),
+            'About': request.form.get('About'),
+            'Fun Story': request.form.get('Fun Story'),
+            'Educational Qualification': request.form.get('Educational Qualification'),
+            'Skills': request.form.get('Skills'),
+            'Email': session["user"]["preferred_username"]
+        }
+        current_collection.insert_one(data)
+        return redirect(url_for('chat'))
+    return render_template('user_form.html')
+
+
+def retrieve_data(email_id):
+    data = current_collection.find_one({ 'Email': email_id })
+    return data
+
 @app.route('/interact_avatar', methods=['GET', 'POST'])
 def interact_avatar():
     if not session.get("user") or session.get("role") != "admin":
         return redirect(url_for("login"))
     
     current_email = session["user"]["preferred_username"]
-    
     data = retrieve_admin_data(current_email)
+
+
+    
     name = data['Name']
     age = data['Age']
     gender = data['Gender']
@@ -225,8 +250,11 @@ def chat():
         return redirect(url_for("login"))
     
     current_email = session["user"]["preferred_username"]
-    
     data = retrieve_data(current_email)
+
+    if data is None:
+        return redirect(url_for('user_form'))
+    
     name = data['Name']
     age = data['Age']
     gender = data['Gender']
@@ -424,5 +452,6 @@ def video():
 
 # run the Flask app in debug mode
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=5000, ssl_context=('cert.pem', 'key.pem'), debug=True)
+    app.run(port=5008, ssl_context=('cert.pem', 'key.pem'), debug=True)
+    #app.run(host="0.0.0.0", port=5000, ssl_context=('cert.pem', 'key.pem'), debug=True)
 
