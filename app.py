@@ -399,6 +399,7 @@ def get_config():
 @app.route('/get_audio')
 def get_audio():
     voice_id = "CJvZrj2XERlpMhE9ezgv" 
+    current_email = session["user"]["preferred_username"]
     if session.get("role") == "admin":
         voice_id = retrieve_admin_data(session["user"]["preferred_username"])['voice_id']
     url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream"
@@ -419,7 +420,7 @@ def get_audio():
     response = requests.post(url, headers=headers, json=data)
 
     # Generate a unique filename based on the current time
-    filename = f"audio.mp3"
+    filename = f"audio_{current_email}.mp3"
 
     # Upload to S3
     try:
