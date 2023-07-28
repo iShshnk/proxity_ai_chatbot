@@ -41,6 +41,9 @@ def remove_bg(input_img_path):
     # Make the background white
     bg = Image.new('RGBA', output.size, (255, 255, 255, 255))
     bg.paste(output, mask=output)
+    
+    # Convert the image to 'RGB'
+    bg = bg.convert('RGB')
 
     # Save the output image
     return bg
