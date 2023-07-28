@@ -11,7 +11,7 @@ import requests
 
 
 # modules with various implementations and helper functions
-from db import retrieve_data, update_summary, save_media, save_voice_id, retrieve_admin_data, current_collection2
+from db import retrieve_data, update_summary, save_media, save_voice_id, retrieve_admin_data, current_collection2, get_chat_messages
 from chat import generate_prompts, ask_expert
 from msal_helper import _build_auth_code_flow, _load_cache, _build_msal_app, _save_cache, _get_token_from_cache
 from remove_bg import remove_bg
@@ -130,6 +130,13 @@ def your_convo():
         return redirect(url_for("login"))
     
     return render_template('your_convo.html')
+
+@app.route("/get_chat")
+def get_chat_api():
+    # chat_messages = get_chat_messages("madhu.reddiboina@rediminds.com")
+    # return jsonify(chat_messages)
+    # return get_chat_messages(session.get("user"))
+    return get_chat_messages("madhu.reddiboina@rediminds.com")
 
 
 @app.route('/interact_avatar', methods=['GET', 'POST'])

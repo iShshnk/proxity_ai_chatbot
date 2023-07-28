@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, session, redirect, url_for, s
 from flask_session import Session 
 import pymongo
 from bson.objectid import ObjectId
+from bson import json_util
+import json
 
 # create Flask app
 app = Flask(__name__)
@@ -81,6 +83,16 @@ def add_permission(admin_email, user_email):
   
   current_admin.update_one({ 'Email': admin_email }, {'$push': {'permission': user_email}})
   current_user.update_one({ 'Email':  user_email}, {'$push': {'bot_availabel': admin_email}})
+  
+def get_chat_messages(admin_email):
+  chat_collection = db["ChatDataset"]
+  chats = chat_collection.find({'bot_email': admin_email})
+  res = []
+  for document in chats:
+    print(document)
+    res.append(document)
+
+  return json.loads(json_util.dumps(res))
 
 
 if __name__ == '__main__':

@@ -102,34 +102,8 @@
             </div>
 
             <!-- List of Conversations -->
-            <div class="mt-4">
-                <!-- Dummy Conversation 1 -->
-                <div class="media mb-3">
-                    <img src="{{ url_for('static', filename='img/Madhu.png') }}" alt="User Avatar" class="mr-3 rounded-circle" style="width:60px;">
-                    <div class="media-body">
-                        <h4>Loren Impum <small><i>3 hours ago</i></small></h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac odio eget.</p>
-                    </div>
-                </div>
-
-                <!-- Dummy Conversation 2 -->
-                <div class="media mb-3">
-                    <img src="{{ url_for('static', filename='img/Madhu.png') }}" alt="User Avatar" class="mr-3 rounded-circle" style="width:60px;">
-                    <div class="media-body">
-                        <h4>Loren Impum <small><i>Yesterday</i></small></h4>
-                        <p>Sed ac odio eget, ullamcorper risus. Fusce pulvinar feugiat.</p>
-                    </div>
-                </div>
-
-                <!-- Dummy Conversation 3 -->
-                <div class="media mb-3">
-                    <img src="{{ url_for('static', filename='img/Madhu.png') }}" alt="User Avatar" class="mr-3 rounded-circle" style="width:60px;">
-                    <div class="media-body">
-                        <h4>Loren Impum <small><i>2 days ago</i></small></h4>
-                        <p>Quisque convallis erat nec placerat iaculis. Nam sit amet.</p>
-                    </div>
-                </div>
-            </div>
+            <div class="mt-4" id="chat-log">
+            </div>    
         </main>
         <!-- MAIN -->
     </section>
@@ -137,5 +111,36 @@
 
     <script src="script.js"></script>
     <script src="{{ url_for('static', filename='admin_script.js') }}"></script>
+	<script>
+        // JavaScript code for dynamic updates
+        function updateChatLog(data) {
+            var chatLog = document.getElementById("chat-log");
+            chatLog.innerHTML = "";
+
+            for (var i = 0; i < data.length; i++) {
+                var messages = data[i].messages;
+                var sender = data[i].user_email;
+				var bot = "Bot";
+
+				console.log(sender);
+
+                var messageDiv = document.createElement("div");
+
+				for (var j = 0; j < messages.length; j++) {
+					if(messages[j].role == "user") {
+                		messageDiv.innerHTML = "<strong>" + sender + "</strong>: " + message;
+					}
+					else{
+						messageDiv.innerHTML = "<strong>" + bot + "</strong>: " + message;
+					}
+				}
+                chatLog.appendChild(messageDiv);
+            }
+        }
+
+        // Fetch chat messages when the page loads
+        fetch("/get_chat")
+			.then(data => updateChatLog(data));
+    </script>
 </body>
 </html>
