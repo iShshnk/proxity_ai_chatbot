@@ -71,7 +71,7 @@ def ask_expert(question, name, age, gender, job_role, bio, fun_story, educationa
     response = openai.ChatCompletion.create(
         model="gpt-3.5-turbo-16k-0613",
         messages=chat_log,
-        max_tokens=40
+        max_tokens=100
     )
 
     # Append the AI's response to the chat log.
