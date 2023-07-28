@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Profile Information</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #F3F3F3;
+      color: #333;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    h1 {
+      margin-bottom: 30px;
+      font-size: 2.5em;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      width: 40%;
+      background-color: #FFF;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    input, select {
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #DDD;
+      border-radius: 5px;
+      font-size: 1em;
+    }
+
+    input[type=submit] {
+      color: #FFF;
+      background-color: #3d96c5;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    input[type=submit]:hover {
+      background-color: #82ccdd;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Profile Information</h1>
+
+  <form action="/user_form" method="post">
+    <input type="text" name="Name" placeholder="Full Name" required>
+    <input type="number" name="Age" placeholder="Age" required>
+    <select name="Gender" required>
+      <option value="">Select Gender</option>
+      <option value="Male">Male</option>
+      <option value="Female">Female</option>
+      <option value="Other">Other</option>
+    </select>
+    <input type="text" name="Job Role" placeholder="Job Role" required>
+    <input type="text" name="About" placeholder="About You" required>
+    <input type="text" name="Fun Story" placeholder="Fun Story" required>
+    <input type="text" name="Educational Qualification" placeholder="Educational Qualification" required>
+    <input type="text" name="Skills" placeholder="Skills (Separate with commas)" required>
+    <input type="submit" value="Save">
+  </form>
+</body>
+</html>

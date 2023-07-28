@@ -14,8 +14,11 @@ current_collection2 = db["ChatDataset"]
 avatar_info_collection = db["AvatarInfo"]  # New collection
 
 def retrieve_data(email_id):
-  data = current_collection.find_one({ 'Email': email_id })
-  return data
+    data = current_collection.find_one({ 'Email': email_id })
+    if data is None:
+        return redirect(url_for('user_form'))
+    else:
+        return data
 
 def retrieve_admin_data(email_id):
   collection_name = db["AdminDataset"]
