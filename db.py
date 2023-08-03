@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for, send_from_directory, jsonify, send_file, Response # Flask libraries for creating web application
-from flask_session import Session 
+from flask_session import Session
 import pymongo
 from bson.objectid import ObjectId
 from bson import json_util
@@ -23,7 +23,7 @@ def retrieve_data(email_id):
         return data
 
 def retrieve_admin_data(email_id):
-  collection_name = db["AdminDataset"]
+  collection_name = avatar_info_collection
   data = collection_name.find_one({ 'Email': email_id })
   return data
 
@@ -67,22 +67,17 @@ def update_summary(email_id, summary):
     return 'Summary Updated!'
   
 def save_media(data, email_id):
-  collection_name = db["AdminDataset"]
-  current_data = collection_name.find_one({ 'Email': email_id })
+  current_data = avatar_info_collection.find_one({ 'Email': email_id })
   current_data.setdefault('data', [])
   current_data['data'].append(data)
-  collection_name.update_one({'Email': email_id}, {'$set': current_data}, upsert=True)
+  avatar_info_collection.update_one({'Email': email_id}, {'$set': current_data}, upsert=True)
   
 def save_voice_id(email_id, voice_id):
-  collection_name = db["AdminDataset"]
-  collection_name.update_one({'Email': email_id}, {'$set': {'voice_id': voice_id}}, upsert=True)
+  avatar_info_collection.update_one({'Email': email_id}, {'$set': {'voice_id': voice_id}}, upsert=True)
   
-def add_permission(admin_email, user_email):
-  admin_collection = db["AdminDataset"]
-  user_collection = db["EmpDataset"]
-  
-  current_admin = admin_collection.find_one({ 'Email': admin_email })
-  current_user = user_collection.find_one({ 'Email': user_email })
+def add_permission(admin_email, user_email):  
+  current_admin = avatar_info_collection.find_one({ 'Email': admin_email })
+  current_user = current_collection.find_one({ 'Email': user_email })
   
   current_admin.update_one({ 'Email': admin_email }, {'$push': {'permission': user_email}})
   current_user.update_one({ 'Email':  user_email}, {'$push': {'bot_availabel': admin_email}})
@@ -97,6 +92,12 @@ def get_chat_messages(admin_email):
 
   return json.loads(json_util.dumps(res))
 
+def save_video_url(url, email_id):
+  avatar_info_collection.update_one({'Email': email_id}, {'$set': {'video_url': url}}, upsert=True)
+  
+def save_avatar_image(url, email_id):
+  avatar_info_collection.update_one({'Email': email_id}, {'$set': {'img_url': url}}, upsert=True)
+  
 
 if __name__ == '__main__':
 	app.run()

@@ -41,6 +41,31 @@ def get_holder_video(video_id):
             
     result_url = response_data['result_url']
     download_video_from_uri(result_url, "static/idle.mp4")
+    
+def get_holder_video_url(video_id):
+    url = f"https://api.d-id.com/animations/{video_id}"
+    response = requests.get(url, headers=headers)
+    response_data = response.json()
+
+    if(response_data['status']!='done'):
+        time.sleep(10)
+        
+    response = requests.get(url, headers=headers)
+    response_data = response.json()
+    
+    if(response_data['status']!='done'):
+        time.sleep(10)
+        
+    response = requests.get(url, headers=headers)
+    response_data = response.json()
+    
+    if(response_data['status']!='done'):
+        time.sleep(10)
+        
+    response = requests.get(url, headers=headers)
+    response_data = response.json()
+            
+    return response_data['result_url']
 
 
 def download_video_from_uri(uri, local_file_path):
