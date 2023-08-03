@@ -8,6 +8,7 @@ import openai  # OpenAI's Python client library
 import os
 from datetime import datetime
 import requests
+from uuid import uuid4
 
 
 # modules with various implementations and helper functions
@@ -461,6 +462,6 @@ def video():
 
 # run the Flask app in debug mode
 if __name__ == '__main__':
-    app.run(port=5009, ssl_context=('cert.pem', 'key.pem'), debug=True)
+    app.run(port=5010, ssl_context=('cert.pem', 'key.pem'), debug=True)
     #app.run(host="0.0.0.0", port=5000, ssl_context=('cert.pem', 'key.pem'), debug=True)
 
