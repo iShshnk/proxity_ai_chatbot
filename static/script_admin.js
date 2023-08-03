@@ -95,33 +95,34 @@ async function startSession() {
   const audioResponse = await fetch('/get_audio');
   const audioData = await audioResponse.json();
   const audioUrl = audioData.audio_url;
-
-  // connectionState not supported in firefox
-  if (peerConnection?.signalingState === 'stable' || peerConnection?.iceConnectionState === 'connected') {
-    const talkResponse = await fetchWithRetries(`${DID_API.url}/talks/streams/${streamId}`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Basic ${DID_API.key}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        script: {
-          type: 'audio',
-          audio_url: audioUrl,
-        },
-        driver_url: 'bank://lively/',
-        config: {
-          stitch: true,
-        },
-        session_id: sessionId,
-      }),
-    });
-  } else {
-    // Play the audio automatically if peerConnection is not stable or connected
-    const audio = new Audio(audioUrl);
-    audio.play();
-  }
-}
+  const audio = new Audio(audioUrl);
+  audio.play();
+// // connectionState not supported in firefox
+// if (peerConnection?.signalingState === 'stable' || peerConnection?.iceConnectionState === 'connected') {
+//   const talkResponse = await fetchWithRetries(`${DID_API.url}/talks/streams/${streamId}`, {
+//     method: 'POST',
+//     headers: {
+//       Authorization: `Basic ${DID_API.key}`,
+//       'Content-Type': 'application/json',
+//     },
+//     body: JSON.stringify({
+//       script: {
+//         type: 'audio',
+//         audio_url: audioUrl,
+//       },
+//       driver_url: 'bank://lively/',
+//       config: {
+//         stitch: true,
+//       },
+//       session_id: sessionId,
+//     }),
+//   });
+// } else {
+//   // Play the audio automatically if peerConnection is not stable or connected
+//   const audio = new Audio(audioUrl);
+//   audio.play();
+// }
+ }
 
 function onIceGatheringStateChange() {
   console.log("ICE gathering status: " + peerConnection.iceGatheringState);

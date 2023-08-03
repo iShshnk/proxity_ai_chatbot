@@ -41,6 +41,14 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.utils import secure_filename
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
+import pinecone
+# initialize connection to pinecone (get API key at app.pinecone.io)
+api_key = "e5dbdcd4-be31-476e-b73e-1ffd70cc44c3"
+# find your environment next to the api key in pinecone console
+env = "us-west4-gcp-free"
+pinecone.init(api_key=api_key, environment=env)
+index_name = 'digital-me-rediminds'
+index = pinecone.Index(index_name)
 
 
 # route for landing page
@@ -417,6 +425,7 @@ def get_config():
 @app.route('/get_audio')
 def get_audio():
     voice_id = "CJvZrj2XERlpMhE9ezgv" 
+    current_email = session["user"]["preferred_username"]
     if session.get("role") == "admin":
         voice_id = retrieve_admin_data("madhu.reddiboina@rediminds.com")['voice_id']
         # voice_id = retrieve_admin_data(session["user"]["preferred_username"])['voice_id']
@@ -438,7 +447,7 @@ def get_audio():
     response = requests.post(url, headers=headers, json=data)
 
     # Generate a unique filename based on the current time
-    filename = f"audio.mp3"
+    filename = f"audio_{current_email}.mp3"
 
     # Upload to S3
     try:
@@ -475,6 +484,6 @@ def video():
 
 # run the Flask app in debug mode
 if __name__ == '__main__':
-    app.run(port=5008, ssl_context=('cert.pem', 'key.pem'), debug=True)
+    app.run(port=5009, ssl_context=('cert.pem', 'key.pem'), debug=True)
     #app.run(host="0.0.0.0", port=5000, ssl_context=('cert.pem', 'key.pem'), debug=True)
 
