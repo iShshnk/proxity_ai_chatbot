@@ -41,6 +41,14 @@ from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.utils import secure_filename
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
+import pinecone
+# initialize connection to pinecone (get API key at app.pinecone.io)
+api_key = "e5dbdcd4-be31-476e-b73e-1ffd70cc44c3"
+# find your environment next to the api key in pinecone console
+env = "us-west4-gcp-free"
+pinecone.init(api_key=api_key, environment=env)
+index_name = 'digital-me-rediminds'
+index = pinecone.Index(index_name)
 
 
 # route for landing page
