@@ -11,12 +11,12 @@ import requests
 
 
 # modules with various implementations and helper functions
-from db import update_summary, save_media, save_voice_id, retrieve_admin_data, current_collection, current_collection2, get_chat_messages, get_avatar_info
+from db import update_summary, save_media, save_voice_id, retrieve_admin_data, current_collection, current_collection2, get_chat_messages, save_avatar_image, save_video_url
 from chat import generate_prompts, ask_expert
 from msal_helper import _build_auth_code_flow, _load_cache, _build_msal_app, _save_cache, _get_token_from_cache
 from remove_bg import remove_bg
 from voice_clone import get_voice_clone
-from did import create_holder_video, get_holder_video
+from did import create_holder_video, get_holder_video, get_holder_video_url
 
 import boto3
 from botocore.exceptions import NoCredentialsError
@@ -76,7 +76,7 @@ def my_avatar():
         audio_files = request.files.getlist('audio')
 
         if image_file and allowed_img_file(image_file.filename):
-            filename = secure_filename(image_file.filename)
+            filename = str(session["user"]["preferred_username"]) + secure_filename(image_file.filename)
             image_path = os.path.join(app.root_path, 'static/img', filename)
             image_file.save(image_path)
             image_file = remove_bg(image_path)
@@ -92,14 +92,19 @@ def my_avatar():
             # Return the URL to the audio file
             public_url = f"https://digital-me-rediminds.s3.amazonaws.com/{filename}"
             
-            session['public_url'] = public_url
-
-            # Save image_path to MongoDB
-            save_media({'type': 'image', 'path': image_path}, session["user"]["preferred_username"])
+            save_avatar_image(public_url, "madhu.reddiboina@rediminds.com")
+            # save_avatar_image(public_url, session["user"]["preferred_username"])
             
             video_id = create_holder_video(public_url)
-            get_holder_video(video_id)
+            # get_holder_video(video_id)
             
+            video_url = get_holder_video_url(video_id)
+            
+            # adding email explicitly for testing purposes, must be removed later *********
+            save_video_url(video_url, "madhu.reddiboina@rediminds.com")
+            # save_video_url(video_url, session["user"]["preferred_username"])
+            
+            os.remove(image_path)
             
         audio_samples_path = []
 
@@ -109,9 +114,19 @@ def my_avatar():
                 audio_path = os.path.join(app.root_path, 'static/img', filename)
                 audio_file.save(audio_path)
                 audio_samples_path.append(audio_path)
+            
+            
+        # adding email explicitly for testing purposes, must be removed later *********
+        voice_id = get_voice_clone("madhu.reddiboina@rediminds.com", audio_samples_path)
+        # voice_id = get_voice_clone(session["user"]["preferred_username"], audio_files)
         
-        voice_id = get_voice_clone(session["user"]["preferred_username"], audio_samples_path)
-        save_voice_id(session["user"]["preferred_username"], voice_id)
+        # print(audio_samples_path)
+        for path in audio_samples_path:
+            os.remove(path)
+        
+        # adding email explicitly for testing purposes, must be removed later *********
+        save_voice_id("madhu.reddiboina@rediminds.com", voice_id)
+        # save_voice_id(session["user"]["preferred_username"], voice_id)
                 
         return jsonify({'success': True, 'message': 'Avatar created successfully!'})
 
@@ -168,9 +183,8 @@ def interact_avatar():
         return redirect(url_for("login"))
     
     current_email = session["user"]["preferred_username"]
-    data = retrieve_admin_data(current_email)
-
-
+    
+    data = retrieve_data(current_email)
     
     name = data['Name']
     age = data['Age']
@@ -182,7 +196,11 @@ def interact_avatar():
     educational_qualification = data['Educational Qualification']
     skills = data['Skills']
     company = "RediMinds"
-    image_file_name = os.path.basename(data['data'][0]['path'])
+    
+    bot_data = retrieve_admin_data("madhu.reddiboina@rediminds.com")
+    
+    img_url = bot_data['img_url']
+    video_url = bot_data['video_url']
     
 
      # POST request to start a new conversation
@@ -214,7 +232,7 @@ def interact_avatar():
 
             # Clear the session and render the chat page without any previous conversation.
             session.clear()
-            return render_template('interact_avatar1.html', chat_log=[], image_file_name=image_file_name)
+            return render_template('interact_avatar1.html', chat_log=[], img_url=img_url, video_url = video_url)
 
     elif 'chat_log' not in session:
         # Initialize the chat log with the system message for some edge cases.
@@ -235,9 +253,9 @@ def interact_avatar():
         response, chat_log = ask_expert(question, name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, session.get('chat_log'))
         session['chat_log'] = chat_log
         print(session['chat_log'])
-        return render_template('interact_avatar1.html', response=response, chat_log=session['chat_log'], image_file_name=image_file_name)
+        return render_template('interact_avatar1.html', response=response, chat_log=session['chat_log'], img_url=img_url, video_url = video_url)
     
-    return render_template('interact_avatar1.html', image_file_name=image_file_name)
+    return render_template('interact_avatar1.html', img_url=img_url, video_url = video_url)
 
 # chat route with chatbot integration
 @app.route('/chat', methods=['GET', 'POST'])
@@ -400,7 +418,8 @@ def get_config():
 def get_audio():
     voice_id = "CJvZrj2XERlpMhE9ezgv" 
     if session.get("role") == "admin":
-        voice_id = retrieve_admin_data(session["user"]["preferred_username"])['voice_id']
+        voice_id = retrieve_admin_data("madhu.reddiboina@rediminds.com")['voice_id']
+        # voice_id = retrieve_admin_data(session["user"]["preferred_username"])['voice_id']
     url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream"
     headers = {
         "Accept": "audio/mpeg",
@@ -430,6 +449,10 @@ def get_audio():
     # Return the URL to the audio file
     public_url = f"https://digital-me-rediminds.s3.amazonaws.com/{filename}"
     return {"audio_url": public_url}
+
+
+def get_img_url():
+    voice_id = retrieve_admin_data("madhu.reddiboina@rediminds.com")['img_url']
 
 
 """@app.route('/latest-response')

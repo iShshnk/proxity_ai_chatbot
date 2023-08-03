@@ -41,16 +41,23 @@ talkVideo.setAttribute('playsinline', '');
   stopAllStreams();
   closePC();
 
-  const sessionResponse = await fetchWithRetries(`${DID_API.url}/talks/streams`, {
-    method: 'POST',
-    headers: {
-      Authorization: `Basic ${DID_API.key}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      source_url: "https://digital-me-rediminds.s3.amazonaws.com/me.png",
-    }),
-  });
+  const imgResponse = await fetch("/get_img_url");
+  const imgData = await imgResponse.json();
+  const imgUrl = imgData.img_url;
+
+  const sessionResponse = await fetchWithRetries(
+    `${DID_API.url}/talks/streams`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Basic ${DID_API.key}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        source_url: imgUrl,
+      }),
+    }
+  );
 
   const { id: newStreamId, offer, ice_servers: iceServers, session_id: newSessionId } = await sessionResponse.json();
   streamId = newStreamId;

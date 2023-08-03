@@ -113,34 +113,31 @@
     <script src="{{ url_for('static', filename='admin_script.js') }}"></script>
 	<script>
         // JavaScript code for dynamic updates
-        function updateChatLog(data) {
-            var chatLog = document.getElementById("chat-log");
-            chatLog.innerHTML = "";
+		function updateChatLog(data) {
+		    var chatLog = document.getElementById("chat-log");
+		    chatLog.innerHTML = "";
+		    for (var i = 0; i < data.length; i++) {
+		        var messages = data[i].messages;
+		        var sender = data[i].user_email;
+		        var bot = "Bot";
+			
+		        for (var j = 0; j < messages.length; j++) {
+		            var messageDiv = document.createElement("div");
+		            var messageContent = messages[j].content;
+		            if(messages[j].role == "user") {
+		                messageDiv.innerHTML = "<strong>" + sender + "</strong>: " + messageContent;
+		            } else{
+		                messageDiv.innerHTML = "<strong>" + bot + "</strong>: " + messageContent;
+		            }
+		            chatLog.appendChild(messageDiv);
+		        }
+		    }
+		}
 
-            for (var i = 0; i < data.length; i++) {
-                var messages = data[i].messages;
-                var sender = data[i].user_email;
-				var bot = "Bot";
-
-				console.log(sender);
-
-                var messageDiv = document.createElement("div");
-
-				for (var j = 0; j < messages.length; j++) {
-					if(messages[j].role == "user") {
-                		messageDiv.innerHTML = "<strong>" + sender + "</strong>: " + message;
-					}
-					else{
-						messageDiv.innerHTML = "<strong>" + bot + "</strong>: " + message;
-					}
-				}
-                chatLog.appendChild(messageDiv);
-            }
-        }
-
-        // Fetch chat messages when the page loads
-        fetch("/get_chat")
-			.then(data => updateChatLog(data));
-    </script>
+		// Fetch chat messages when the page loads
+		fetch("/get_chat")
+		    .then(response => response.json())
+		    .then(data => updateChatLog(data));
+	</script>
 </body>
 </html>

@@ -1,41 +1,28 @@
 import app_config
 import openai  # OpenAI's Python client library
 from datetime import datetime  # Python's datetime module
+from db import get_avatar_info
 
 # set OpenAI API key
 openai.api_key = app_config.OPENAI_KEY
 
-def generate_prompts(
-    name, age, gender, job_role, about, fun_story,
-    educational_qualification, skills, company, last_conversation
-):
-    clone_name = "Madhu Reddiboina"
-    clone_personality = "distinguished business and technology executive, known for his knack for entrepreneurship and leadership"
-    clone_experience = "over two decades of experience in various fields including entrepreneurship, management consulting, advanced analytics research, and large-scale systems engineering"
-    clone_birthplace = "India"
-    clone_current_residence = "Michigan, USA"
-    clone_job_info = "President and CEO, RediMinds, Inc., a software engineering firm focused on creating the future with exponential technologies. The clients include Fortune 500 companies from various industries"
-    clone_skills = "applying emerging technologies, developing new software product businesses, leading high-performance teams"
-    clone_educational_qualification = "an undisclosed degree"  # Update this when information is available
-    clone_personal_life = "loves reading, enjoys playing cricket, and is passionate about AI technologies"
-    clone_other_info = "deeply committed to building AI solutions that make a difference in the world"
-    
-    participant_bio = f'{name}, aged {age}, is a {gender} currently working as a {job_role} at {company}. They are known for their {skills} and hold {educational_qualification}. {about}. A fun story about them at {company} is that {fun_story}.'
+def generate_prompts(name, age, gender, job_role, about, fun_story,educational_qualification, skills, company, last_conversation):
 
-    initial_prompt = f"""
-    You are {clone_name}, {clone_personality} with {clone_experience}. Born in {clone_birthplace} and established in {clone_current_residence}, you are a recognized AI and digital engineering entrepreneur. You are {clone_job_info}. Known for your skills in {clone_skills}, you hold {clone_educational_qualification}. 
+    avatar_data_response = get_avatar_info("madhu.reddiboina@rediminds.com")
+    avatar_data = avatar_data_response.json
 
-    In your personal life, you {clone_personal_life}. Furthermore, you are {clone_other_info}. 
+    if "error" in avatar_data:
+        raise ValueError(avatar_data["error"]) 
 
-    Now, you're engaged in a conversation with {name}, who works at {company}. Here's a brief about them: {participant_bio}.
-    
-    {last_conversation}.
+    participant_bio = f'{name}, {age} years old, is a {gender} currently serving as a {job_role} at {company}. {about}. They have a reputation for their {skills} and have an educational background in {educational_qualification}. An interesting fact about them is {fun_story}.'
+
+    initial_prompt = f"""You are {avatar_data["Name"]}, a persona characterized by {avatar_data["Personality"]}. In your personal life, you are known to {avatar_data["Personal life"]}.
+    Your current conversation is with {name}, a representative from {company}. Here's a brief about them: {participant_bio}.
+    Here's a glimpse of your last conversation: {last_conversation}.
     """
-    
-    recurrent_prompt = f"""
-    Today is {datetime.now().strftime("%Y-%m-%d")}. Remember, you are {clone_name}, conversing with {name} from {company}. Keep a balance of casual and professional tone in your responses. Do not reveal your AI identity. Use quotes when fitting and express excitement in relevant contexts. All responses should be less than 20 words. Be respectful of their relationship with you, and do not assume any information not provided.
-    """
-    
+
+    recurrent_prompt = f"""Remember, you are {avatar_data["Name"]}, you are in a conversation with {name} from {company}. Keep your responses balanced between casual and professional tones. Your identity as an AI should not be revealed. Use quotations when appropriate and express excitement in relevant contexts. All responses should be brief, ideally under 20 words. Be respectful and avoid making assumptions about information that hasn't been provided."""
+
     return initial_prompt, recurrent_prompt
 
 def ask_expert(question, name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, chat_log=None):

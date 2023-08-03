@@ -15,11 +15,6 @@ def get_voice_clone(name, samples):
         'labels': '{"accent": "American"}',
         'description': 'Voice description'
     }
-
-    # files = [
-    #     ('files', ('sample1.mp3', open('sample1.mp3', 'rb'), 'audio/mpeg')),
-    #     ('files', ('sample2.mp3', open('sample2.mp3', 'rb'), 'audio/mpeg'))
-    # ]
     
     files = []
     
@@ -33,5 +28,5 @@ def get_voice_clone(name, samples):
     
     response_data = response.json()
     
-    print(response_data)
+    # print(response_data)
     return response_data["voice_id"]
