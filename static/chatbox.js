@@ -11,6 +11,10 @@ document.addEventListener('DOMContentLoaded', function() {
         event.preventDefault();  // prevent the form from reloading the page
 
         var formData = new FormData(this);
+        
+        // Disable form and button
+        form.disabled = true;
+        sendButton.disabled = true;
 
         // send a POST request to the server
         fetch('/chat', {  // update with your Flask route
@@ -28,6 +32,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 var doc = parser.parseFromString(html, 'text/html');
                 chatContainer.innerHTML = doc.getElementById('chat-container').innerHTML;
                 chatContainer.scrollTop = chatContainer.scrollHeight;
+                
+                // Enable form and button after receiving the response
+                form.disabled = false;
+                sendButton.disabled = false;
             });
 
             // clear the textarea
@@ -37,9 +45,13 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .catch(function(error) {
             console.error('Error:', error);
+
+            // Enable form and button in case of error
+            form.disabled = false;
+            sendButton.disabled = false;
         });
     });
-
+    
     var newConversationButton = document.getElementById('new-conversation-button');
     
     newConversationButton.addEventListener('click', function(event) {
