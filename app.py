@@ -113,7 +113,7 @@ def my_avatar():
             save_video_url(video_url, "madhu.reddiboina@rediminds.com")
             # save_video_url(video_url, session["user"]["preferred_username"])
             
-            # os.remove(image_path)
+            os.remove(image_path)
             
         audio_samples_path = []
 
@@ -130,8 +130,8 @@ def my_avatar():
         # voice_id = get_voice_clone(session["user"]["preferred_username"], audio_files)
         
         # print(audio_samples_path)
-        # for path in audio_samples_path:
-        #     os.remove(path)
+        for path in audio_samples_path:
+            os.remove(path)
         
         # adding email explicitly for testing purposes, must be removed later *********
         save_voice_id("madhu.reddiboina@rediminds.com", voice_id)
