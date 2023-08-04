@@ -480,7 +480,7 @@ def favicon():
 @app.route('/idle.mp4')
 def video():
     return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'idle.mp4')
+                               'idle_madhu.mp4')
 
 
 # run the Flask app in debug mode
