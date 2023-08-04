@@ -112,7 +112,7 @@ def my_avatar():
             save_video_url(video_url, "madhu.reddiboina@rediminds.com")
             # save_video_url(video_url, session["user"]["preferred_username"])
             
-            os.remove(image_path)
+            # os.remove(image_path)
             
         audio_samples_path = []
 
