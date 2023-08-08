@@ -1,97 +1,192 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet">
-    <title>Chat with Madhu!</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha/css/bootstrap.css" rel="stylesheet"/>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Mulish:wght@300;400;700&display=swap" rel="stylesheet"/>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/chat.css') }}">
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+    <title>Chat with Madhu</title>
+
+
+    <style>
+
+html, body {
+  height: 100%; /* Ensure the HTML and body take up the full height of the viewport */
+  margin: 0; /* Remove default margin to prevent unwanted spacing */
+}
+      .gradient-custom {
+/* fallback for old browsers */
+background: #54708a;
+
+/* Chrome 10-25, Safari 5.1-6 */
+background: -webkit-linear-gradient(to bottom right, rgb(143, 169, 186), rgb(34, 9, 40));
+
+/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: linear-gradient(to bottom right, rgb(51, 54, 130), rgb(44, 14, 51))
+}
+.chat-column {
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+.mask-custom {
+background: rgba(24, 24, 16, .2);
+border-radius: 2em;
+backdrop-filter: blur(15px);
+border: 2px solid rgba(255, 255, 255, 0.05);
+background-clip: padding-box;
+box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
+}
+#video-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position:sticky
+    
+     /* To give some space between the video and title */
+}
+.chat-column{
+  overflow-y: auto;
+  height: 100vh;
+}
+
+
+    </style>
   </head>
   <body>
-    <div class="container">
-        <div class="justify-content-center"> <!-- Adjusted alignment -->
-
-          <!-- Chat Section -->
-          <div class="card" id="chat1" style="border-radius: 15px; height: 100vh; width: 1000px;">
-            <div
-                class="card-header d-flex justify-content-between align-items-center p-3 text-white border-bottom-0"
-                style="
-                    border-top-left-radius: 15px;
-                    border-top-right-radius: 15px;
-                    background-color: #3d96c5;
-                "
-            >
-                <h2 class="mb-0 fw-bold">Chat with Madhu!</h2>
+    <section class="gradient-custom">
+      <div class="container py-5">
+    
+        <div class="row">
+    
+          <div class="col-md-6 col-lg-5 col-xl-5 mb-4 mb-md-0  chat-column">
+    
+            <h5 class="font-weight-bold mb-3 text-center text-white">Madhu</h5>
+    
+            <div class="card mask-custom">
+              <div class="card-body">
+    
+                
+                  <div class="video-wrapper">
+                      <video id="talk-video" autoplay loop style="max-width: 100%; height: auto;">  
+                          <source src="https://digital-me-rediminds.s3.amazonaws.com/idle_madhu.mp4" type="video/mp4">
+                          Your browser does not support the video tag.
+                      </video>
+                  </div>
+                 
+    
+              </div>
             </div>
-            <!-- Video Section -->
-            <div id="video-wrapper" >
-                <div>
-                    <video id="talk-video" autoplay loop>  
-                        <source src="https://digital-me-rediminds.s3.amazonaws.com/idle_madhu.mp4" type="video/mp4">
-                        Your browser does not support the video tag.
-                    </video>
-                </div>
-            </div>
-            <div class="card-body chat-card-body" id="chat-container" style="overflow-y: auto; height: 55vh;">
-                    <div class="d-flex justify-content-start mb-4">
-                        <div class="img_cont_msg">
-                            <img src="{{ url_for('static', filename='img/Madhu.png') }}" class="rounded-circle user_img_msg">
-                        </div>
-                        <div class="msg_cotainer">
-                            Hi, I am Madhu!
-                        </div>
-                    </div>
-                    {% for message in session['chat_log'] %} 
-                    {% if message['role'] == 'user' %}
-                        <div class="d-flex justify-content-end mb-4">
-                            <div class="msg_cotainer_send">
-                                {{ message['content'] }}
-                            </div>
-                            <div class="img_cont_msg">
-                                <img src="{{ url_for('static', filename='img/user.png') }}" class="rounded-circle user_img_msg">
-                            </div>
-                        </div>
-                    {% elif message['role'] == 'assistant' %}
-                        <div class="d-flex justify-content-start mb-4">
-                            <div class="img_cont_msg">
-                                <img src="{{ url_for('static', filename='img/Madhu.png') }}" class="rounded-circle user_img_msg">
-                            </div>
-                            <div class="msg_cotainer">
-                                {{ message['content'] }}
-                            </div>
-                        </div>
-                    {% endif %} 
-                {% endfor %}
-                </div>
-                <div class="card-footer chat-card-footer" style="border-bottom-left-radius: 15px; border-bottom-right-radius: 15px;">
-                    <form method="POST" id="chat-form" class="d-flex flex-column">
-                        <div class="d-flex justify-content-between align-items-center mb-3">
-                            <textarea class="form-control mr-2 textarea-chat" id="user_msg" name="user_msg" rows="2" placeholder="Type a message"></textarea>
-                            <button type="button" id="start-btn" class="btn btn-dark-orange button-chat">
-                                <i class="fas fa-microphone"></i>
-                            </button>
-                        </div>
-                        <div class="d-flex align-items-center ml-auto">
-                            <button type="submit" id="send-button" class="btn btn-dark-orange mb-3">Send</button>
-                            <button type="button" name="new_conversation" id="new-conversation-button" value="true" class="btn btn-dark-orange mb-3">
-                                End Conversation
-                            </button>
-                            <button type="button" id="hidden-button" class="btn btn-dark-orange mb-3" hidden> Hidden Button </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            <!-- [omitted] -->
+    
           </div>
+    
+          <div class="col-md-6 col-lg-7 col-xl-7">
+    
+            <ul class="list-unstyled text-white">
+              <li class="d-flex justify-content-between mb-4">
+                <img src="{{ url_for('static', filename='img/Madhu.png') }}" alt="avatar"
+                  class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
+                <div class="card mask-custom">
+                  <div class="card-header d-flex justify-content-between p-3"
+                    style="border-bottom: 1px solid rgba(255,255,255,.3);">
+                    <p class="fw-bold mb-0">Madhu</p>
+                    
+                  </div>
+                  <div class="card-body">
+                    <p class="mb-0">
+                     Hi I am Madhu!
+                    </p>
+                  </div>
+                </div>
+              </li>
+
+
+              {% for message in session['chat_log'] %} 
+              {% if message['role'] == 'user' %}
+
+
+              <li class="d-flex justify-content-between mb-4">
+
+                <div class="card mask-custom w-100">
+                  <div class="card-header d-flex justify-content-between p-3"
+                    style="border-bottom: 1px solid rgba(255,255,255,.3);">
+                    <p class="fw-bold mb-0">USER</p>
+                    
+                  </div>
+                  <div class="card-body">
+                    <p class="mb-0">
+                      <div class="msg_cotainer_send">
+                        {{ message['content'] }}
+                    </div>
+                    </p>
+                  </div>
+                </div>
+                <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar"
+                  class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
+              </li>
+
+
+              {% elif message['role'] == 'assistant' %}
+
+              <li class="d-flex justify-content-between mb-4">
+                <img src="{{ url_for('static', filename='img/Madhu.png') }}" alt="avatar"
+                  class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
+                <div class="card mask-custom">
+                  <div class="card-header d-flex justify-content-between p-3"
+                    style="border-bottom: 1px solid rgba(255,255,255,.3);">
+                    <p class="fw-bold mb-0">Madhu</p>
+                    
+                  </div>
+                  <div class="card-body">
+                    <p class="mb-0">
+                      {{ message['content'] }}
+                    </p>
+                  </div>
+                </div>
+              </li>
+
+
+              {% endif %} 
+              {% endfor %}
+
+              <form method="POST" id="chat-form">
+              <li class="mb-3">               
+
+                <div class="form-outline form-white">
+                  <textarea class="form-control" id="user_msg" rows="4" name="user_msg" placeholder="Type your message here"></textarea>
+                  
+                </div>
+                
+              </li>
+              <button type="submit" class="btn btn-light btn-lg btn-rounded float-end" id="send-button">Send</button>
+              <button type="button" name="new_conversation" id="new-conversation-button" value="true" class="btn btn-dark-orange mb-3"> End Conversation
+          
+            </button>
+            </ul>
+          </form>
+    
+          </div>
+    
         </div>
-    </div>
+    
+      </div>
+    </section>
+
+
     <script src="{{ url_for('static', filename='chatbox.js') }}"></script>
     <script src="{{ url_for('static', filename='audio.js') }}"></script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   </body>
 </html>
+
+
+
+
+
+
