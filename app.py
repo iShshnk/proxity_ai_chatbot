@@ -12,7 +12,7 @@ from uuid import uuid4
 
 
 # modules with various implementations and helper functions
-from db import update_summary, save_media, save_voice_id, retrieve_admin_data, current_collection, current_collection2, get_chat_messages, save_avatar_image, save_video_url
+from db import update_summary, save_media, save_voice_id, retrieve_admin_data, current_collection, current_collection2, get_chat_messages, save_avatar_image, save_video_url, save_avatar
 from chat import generate_prompts, ask_expert
 from msal_helper import _build_auth_code_flow, _load_cache, _build_msal_app, _save_cache, _get_token_from_cache
 from remove_bg import remove_bg
@@ -74,6 +74,26 @@ def admin_panel():
     # In this case, it continues to the line below and returns the 'admin_panel.html' page.
     return render_template('admin_panel.html')
 
+@app.route('/avatar_form', methods=['GET','POST'])
+def avatar_form():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        email = request.form.get('email')
+        personality = request.form.get('personality')
+        personal_life = request.form.get('personal_life')
+        profession = request.form.get('profession')
+
+        avatar_data = {
+            'name': name,
+            'email': email,
+            'personality': personality,
+            'personal_life': personal_life,
+            'profession': profession
+        }
+
+        save_avatar(avatar_data)
+
+    return render_template('avatar_form.html')
 
 @app.route('/my_avatar', methods=['GET','POST'])
 def my_avatar():

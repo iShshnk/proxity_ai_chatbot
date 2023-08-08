@@ -98,6 +98,9 @@ def save_video_url(url, email_id):
 def save_avatar_image(url, email_id):
   avatar_info_collection.update_one({'Email': email_id}, {'$set': {'img_url': url}}, upsert=True)
   
+  
+def save_avatar(data):
+  avatar_info_collection.insert_one(data)
 
 if __name__ == '__main__':
 	app.run()

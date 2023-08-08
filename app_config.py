@@ -1,5 +1,3 @@
-import os
-
 OPENAI_KEY = "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" #OpenAI API key
 
 ELEVENLABS_API_KEY = "283236cbabf8d3b1b5c508ac729b735c" #ElevenLabs API key
