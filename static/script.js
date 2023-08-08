@@ -170,7 +170,6 @@ function onVideoStatusChange(videoIsPlaying, stream) {
     setVideoElement(remoteStream);
   } else {
     status = 'empty';
-    playIdleVideo();
   }
   console.log("Streaming status: " + status);
 }
@@ -240,10 +239,11 @@ function setVideoElement(stream) {
 }
 
 function playIdleVideo() {
-    talkVideo.srcObject = undefined;
-    talkVideo.src = '/idle.mp4';
-    talkVideo.loop = true;
-  }
+  talkVideo.srcObject = undefined;
+  talkVideo.src = 'https://digital-me-rediminds.s3.amazonaws.com/idle_madhu.mp4';
+  talkVideo.loop = true;
+  talkVideo.play();
+}
 
 function stopAllStreams() {
   if (talkVideo.srcObject) {

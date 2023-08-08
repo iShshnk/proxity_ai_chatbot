@@ -31,8 +31,10 @@
             <!-- Video Section -->
             <div id="video-wrapper" >
                 <div>
-                    <video id="talk-video" autoplay loop>  <source src="{{ url_for('static', filename='idle.mp4') }}" type="video/mp4">
-                    Your browser does not support the video tag.</video>
+                    <video id="talk-video" autoplay loop>  
+                        <source src="https://digital-me-rediminds.s3.amazonaws.com/idle_madhu.mp4" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
                 </div>
             </div>
             <div class="card-body chat-card-body" id="chat-container" style="overflow-y: auto; height: 55vh;">

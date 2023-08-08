@@ -1,65 +1,119 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8">
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #ffffff;
-        color: black;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #f06, #2c82c9);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      animation: gradientAnimation 5s linear infinite;
+    }
+
+    .logo {
+      width: 400px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      width: 100%;
+      height: auto;
+    }
+
+    h1 {
+      margin: 0;
+      padding: 10px 0;
+      font-size: 2.5em;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    a {
+      text-decoration: none;
+      color: #ffffff;
+      background: #e74c3c;
+      padding: 15px 20px;
+      border-radius: 5px;
+      font-weight: bold;
+      transition: background-color 0.3s ease, transform 0.5s ease-out, opacity 0.5s ease-out;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    a:hover {
+      background-color: #3498db;
+      /* Change to blue */
+      transform: scale(1.05);
+    }
+
+    a::before {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: rotate(45deg);
+      transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+    }
+
+    a:hover::before {
+      transform: translateX(50%) translateY(50%) rotate(45deg);
+      opacity: 0;
+    }
+
+    @keyframes gradientAnimation {
+      0% {
+        background-position: 0% 50%;
       }
-      
-      h1 {
-        margin: 0;
-        padding: 10px 0;
-        font-size: 2.5em;
+
+      50% {
+        background-position: 100% 50%;
       }
-      
-      ul {
-        list-style-type: none;
-        padding: 0;
+
+      100% {
+        background-position: 0% 50%;
       }
-      
-      li {
-        margin-bottom: 20px;
-        text-align: center;
-      }
-      
-      a {
-        text-decoration: none;
-        color: #ffffff;
-        background: #3d96c5;
-        padding: 10px 15px;
-        border-radius: 5px;
-        font-weight: bold;
-        transition: all 0.3s ease;
-      }
-      
-      a:hover {
-        background-color: #82ccdd;
-      }
-    </style>
-  </head>
-  
-  <body>
-    <h1>Digital Me login page</h1>
-    
-    <ul>
-      <li><a href="{{ auth_url }}">Sign In</a></li>
-      <li><a href="admin_login">Sign In as Admin</a></li>
-    
-      {% if config.get("B2C_RESET_PASSWORD_AUTHORITY") %}
-      <li>
-        <a href='{{_build_auth_code_flow(authority=config["B2C_RESET_PASSWORD_AUTHORITY"])["auth_uri"]}}'>Reset Password</a>
-      </li>
-      {% endif %}
-    </ul>
-  </body>
+    }
+  </style>
+</head>
+
+<body>
+  <div class="logo">
+    <img src="{{ url_for('static', filename='img/dm_lgo.png') }}" alt="Logo">
+  </div>
+
+  <ul>
+    <li><a href="{{ auth_url }}">Sign In</a></li>
+    <li><a href="admin_login">Sign In as Admin</a></li>
+
+    {% if config.get("B2C_RESET_PASSWORD_AUTHORITY") %}
+    <li>
+      <a href='{{_build_auth_code_flow(authority=config["B2C_RESET_PASSWORD_AUTHORITY"])["auth_uri"]}}'>Reset
+        Password</a>
+    </li>
+    {% endif %}
+  </ul>
+</body>
+
 </html>

@@ -319,8 +319,9 @@ def chat():
         req = request.get_json()
         if 'new_conversation' in req and req['new_conversation']:
             chat_log = session.get('chat_log')
-            user_and_assistant_msgs = [msg['content'] for msg in chat_log if msg['role'] in ['user', 'assistant']]
+            user_and_assistant_msgs = [msg['content'] for msg in chat_log if msg['role'] in ['user', 'assistant'] and msg['content'] is not None]
             conversation = ' '.join(user_and_assistant_msgs)
+
 
             # Construct a prompt for the summary.
             summary_prompt =  f"Please summarize in detail the following conversation between {name} and Madhu The conversation occured at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} and is as follows: {conversation}. Keep the total word count about 100 words."
@@ -500,7 +501,7 @@ def favicon():
 @app.route('/idle.mp4')
 def video():
     return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'idle.mp4')
+                               'idle_madhu.mp4')
 
 
 # run the Flask app in debug mode
