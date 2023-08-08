@@ -90,6 +90,38 @@ def avatar_form():
             'personal_life': personal_life,
             'profession': profession
         }
+        
+        image_file = request.files['photo']
+        audio_file = request.files['voice_sample']
+        
+        if image_file and allowed_img_file(image_file.filename):
+            filename = str(email) + secure_filename(image_file.filename)
+            image_path = os.path.join(app.root_path, 'static/img', filename)
+            image_file.save(image_path)
+                      
+            try:
+                with open(image_path, 'rb') as image_file:
+                    s3.put_object(Body=image_file, Bucket='digital-me-rediminds', Key=filename)
+
+            except NoCredentialsError:
+                print ({"error": "S3 credentials not found"})
+
+            public_url = f"https://digital-me-rediminds.s3.amazonaws.com/{filename}"
+            
+            avatar_data['img_url'] = public_url
+            
+            os.remove(image_path)
+            
+        if audio_file and allowed_audio_file(audio_file.filename):
+            filename = str(email) + secure_filename(audio_file.filename)
+            audio_path = os.path.join(app.root_path, 'static/img', filename)
+            audio_file.save(audio_path)
+            
+            voice_id = get_voice_clone(email, audio_path)
+
+            os.remove(audio_path)
+
+            avatar_data['voice_id'] = voice_id
 
         save_avatar(avatar_data)
 
