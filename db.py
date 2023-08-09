@@ -92,6 +92,11 @@ def get_chat_messages(admin_email):
 
   return json.loads(json_util.dumps(res))
 
+def get_chat_detail(conversation_id):
+    chat_collection = db["ChatDataset"]
+    chat_detail = chat_collection.find_one({"_id": ObjectId(conversation_id)})
+    return json.loads(json_util.dumps(chat_detail))
+
 def save_video_url(url, email_id):
   avatar_info_collection.update_one({'Email': email_id}, {'$set': {'video_url': url}}, upsert=True)
   

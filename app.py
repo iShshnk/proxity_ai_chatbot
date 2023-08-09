@@ -12,7 +12,7 @@ from uuid import uuid4
 
 
 # modules with various implementations and helper functions
-from db import update_summary, save_media, save_voice_id, retrieve_admin_data, current_collection, current_collection2, get_chat_messages, save_avatar_image, save_video_url, save_avatar
+from db import update_summary, save_media, save_voice_id, retrieve_admin_data, current_collection, current_collection2, get_chat_messages, save_avatar_image, save_video_url, save_avatar, get_chat_detail
 from chat import generate_prompts, ask_expert
 from msal_helper import _build_auth_code_flow, _load_cache, _build_msal_app, _save_cache, _get_token_from_cache
 from remove_bg import remove_bg
@@ -207,12 +207,23 @@ def your_convo():
     
     return render_template('your_convo.html')
 
+@app.route('/conversation_detail/<conversation_id>')
+def conversation_detail(conversation_id):
+    # Fetch conversation detail based on conversation_id from your database
+    # You can pass it to the template to be used in JavaScript
+    return render_template('conversation_detail.html', conversation_id=conversation_id)
+
 @app.route("/get_chat")
 def get_chat_api():
     # chat_messages = get_chat_messages("madhu.reddiboina@rediminds.com")
     # return jsonify(chat_messages)
     # return get_chat_messages(session.get("user"))
     return get_chat_messages("madhu.reddiboina@rediminds.com")
+
+@app.route('/get_chat_detail/<conversation_id>')
+def get_chat_detail_api(conversation_id):
+    print(conversation_id)  # Debugging line
+    return get_chat_detail(conversation_id)
 
 
 @app.route('/user_form', methods=['GET', 'POST'])

@@ -590,3 +590,8 @@ body {
 		min-width: 420px;
 	}
 }
+
+.card {
+    margin-bottom: 20px;
+    padding: 10px;
+}
