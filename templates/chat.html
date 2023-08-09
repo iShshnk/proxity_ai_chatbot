@@ -4,7 +4,10 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
 
+    <!--FONT ROBOTO -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet"/>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
 
@@ -13,11 +16,20 @@
 
     <style>
 
-html, body {
+ body {
   height: 100%; /* Ensure the HTML and body take up the full height of the viewport */
-  margin: 0; /* Remove default margin to prevent unwanted spacing */
+  margin: 0; 
+  overflow-y: hidden;
+  /* Remove default margin to prevent unwanted spacing */
 }
-      .gradient-custom {
+
+h4 {
+  font-family: Roboto;
+  font-weight: bold;
+}
+
+
+.gradient-custom {
 /* fallback for old browsers */
 background: #54708a;
 
@@ -27,11 +39,36 @@ background: -webkit-linear-gradient(to bottom right, rgb(143, 169, 186), rgb(34,
 /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 background: linear-gradient(to bottom right, rgb(51, 54, 130), rgb(44, 14, 51))
 }
+/* ::-webkit-scrollbar{display:none} */
+::-webkit-scrollbar {
+  width: 0px;
+  background-color: grey;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: grey;
+}
 .chat-column {
       height: 100vh;
       overflow-y: auto;
+      scroll-behavior: smooth;
+      
+    color:white;
+    font-size: small;
+      
     }
+#start-btn {
+  margin-right: 0.5rem; 
+  float: none;
+}
 
+#send-button {
+  margin-right: 0;
+}
+
+#new-conversation-button {
+  margin-top: 1rem;
+}
 .mask-custom {
 background: rgba(24, 24, 16, .2);
 border-radius: 2em;
@@ -39,21 +76,118 @@ backdrop-filter: blur(15px);
 border: 2px solid rgba(255, 255, 255, 0.05);
 background-clip: padding-box;
 box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
+align-items: center;
 }
-#video-wrapper {
+.card-video {
     display: flex;
     justify-content: center;
     align-items: center;
-    position:sticky
-    
-     /* To give some space between the video and title */
+    position:sticky;
+    height: 35vh;
 }
-.chat-column{
+
+#chat-container{
   overflow-y: auto;
+  height: 65vh;
+  
+}
+
+#msg-box-send {
+  width: 90%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+
+
+.form-control {
+  flex: 9;
+  margin-right: 5px;
+  background-color: rgba(37, 36, 36, 0.5); /* Adjust the alpha value for transparency */
+  border: 1px solid #ccc; /* Adding a border for better visibility */
+  padding: 5px; /* Adding some padding for better aesthetics */
+}
+
+#start-btn {
+  flex: 1;
+  max-width: 10%;
+  height: 100%; /* Ensure the button matches the height of the textarea */
+}
+
+ 
+
+#new-conversation-button {
+  position: relative;
+  left: 50%;
+  transform: translateX(-50%);
+} 
+
+
+#talk-video{
+  max-width: 100%;
+  height: auto;
+}
+
+.li{
+  width: 200px;
+}
+
+div.form-outline.form-white.id-msg-box-send {
+  border-radius: 10px;
+}
+.row{
   height: 100vh;
 }
 
 
+@media (max-width: 700px) {
+  body {
+  height: 100%; /* Ensure the HTML and body take up the full height of the viewport */
+  margin: 0; 
+  overflow-y: auto;/* Remove default margin to prevent unwanted spacing */
+}
+
+#card-video{
+  display: flex;
+    
+    align-items: center;
+    position:sticky;
+  
+  height:20vh;
+  width:20vh;
+}
+#video-column{
+
+  justify-content: center;
+    align-items: center;
+    position:sticky;
+}
+
+#talk-video{
+  max-height: 17vh;
+}
+#chat-column{
+  height:80vh;
+}
+#chat-container{
+  max-height: 40vh;
+}
+#msg-box-send {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+.msg-box-form{
+  height:30vh;
+}
+.new-conversation-button{
+  float: none;
+
+}
+
+}
     </style>
   </head>
   <body>
@@ -62,16 +196,16 @@ box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
     
         <div class="row">
     
-          <div class="col-md-6 col-lg-5 col-xl-5 mb-4 mb-md-0  chat-column">
+          <div class="col-md-6 col-lg-5 col-xl-5 mb-4 mb-md-0  video-column" id="video-column">
     
-            <h5 class="font-weight-bold mb-3 text-center text-white">Madhu</h5>
+            <h4 class="font-weight-bold mb-1 text-center text-white">Madhu</h4>
     
-            <div class="card mask-custom">
-              <div class="card-body">
+            <div class="card mask-custom" id="card-video">
+              <div class="card-body" id="video-body">
     
                 
                   <div class="video-wrapper">
-                      <video id="talk-video" autoplay loop style="max-width: 100%; height: auto;">  
+                      <video id="talk-video" autoplay loop >  
                           <source src="https://digital-me-rediminds.s3.amazonaws.com/idle_madhu.mp4" type="video/mp4">
                           Your browser does not support the video tag.
                       </video>
@@ -83,18 +217,15 @@ box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
     
           </div>
     
-          <div class="col-md-6 col-lg-7 col-xl-7">
+          <div class="col-md-6 col-lg-7 col-xl-7 chat-column" id="chat-column">
+            <div id="chat-container">
     
             <ul class="list-unstyled text-white">
-              <li class="d-flex justify-content-between mb-4">
+              <li class="d-flex justify-content-between mb-1">
                 <img src="{{ url_for('static', filename='img/Madhu.png') }}" alt="avatar"
                   class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
-                <div class="card mask-custom">
-                  <div class="card-header d-flex justify-content-between p-3"
-                    style="border-bottom: 1px solid rgba(255,255,255,.3);">
-                    <p class="fw-bold mb-0">Madhu</p>
-                    
-                  </div>
+                <div class="card mask-custom w-100" id="msg-card">
+                  
                   <div class="card-body">
                     <p class="mb-0">
                      Hi I am Madhu!
@@ -108,20 +239,17 @@ box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
               {% if message['role'] == 'user' %}
 
 
-              <li class="d-flex justify-content-between mb-4">
+              <li class="d-flex justify-content-between mb-1">
 
-                <div class="card mask-custom w-100">
-                  <div class="card-header d-flex justify-content-between p-3"
-                    style="border-bottom: 1px solid rgba(255,255,255,.3);">
-                    <p class="fw-bold mb-0">USER</p>
-                    
-                  </div>
+                <div class="card mask-custom w-100" id="msg-card">
+                  
                   <div class="card-body">
-                    <p class="mb-0">
+                    
                       <div class="msg_cotainer_send">
-                        {{ message['content'] }}
-                    </div>
+                        <p class="mb-0">
+                        {{ message['content'] }}                    
                     </p>
+                  </div>
                   </div>
                 </div>
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar"
@@ -131,49 +259,90 @@ box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
 
               {% elif message['role'] == 'assistant' %}
 
-              <li class="d-flex justify-content-between mb-4">
+              <li class="d-flex justify-content-between mb-1">
                 <img src="{{ url_for('static', filename='img/Madhu.png') }}" alt="avatar"
                   class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
-                <div class="card mask-custom">
-                  <div class="card-header d-flex justify-content-between p-3"
-                    style="border-bottom: 1px solid rgba(255,255,255,.3);">
-                    <p class="fw-bold mb-0">Madhu</p>
-                    
-                  </div>
-                  <div class="card-body">
+                <div class="card mask-custom w-100" id="msg-card">
+                  
+                <div class="card-body">
+                   <div class="msg_container">
                     <p class="mb-0">
                       {{ message['content'] }}
                     </p>
                   </div>
                 </div>
+              </div>
               </li>
+            </ul>
 
 
               {% endif %} 
               {% endfor %}
 
-              <form method="POST" id="chat-form">
-              <li class="mb-3">               
+              </div>
 
-                <div class="form-outline form-white">
-                  <textarea class="form-control" id="user_msg" rows="4" name="user_msg" placeholder="Type your message here"></textarea>
+
+              <div id="msg-box-form">
+
+                <form method="POST" id="chat-form">
                   
-                </div>
-                
-              </li>
-              <button type="submit" class="btn btn-light btn-lg btn-rounded float-end" id="send-button">Send</button>
-              <button type="button" name="new_conversation" id="new-conversation-button" value="true" class="btn btn-dark-orange mb-3"> End Conversation
-          
-            </button>
-            </ul>
-          </form>
-    
+                  <div class="form-outline form-white" id="msg-box-send">
+                    <textarea class="form-control mb-1" id="user_msg" rows="1" name="user_msg" placeholder="Type your message here"></textarea>
+                    <button type="button" id="start-btn" class="btn btn-outline-light" >
+                      <i class="fas fa-microphone"></i>
+                    </button>                 
+                  </div>
+                  
+                <button type="submit" class="btn btn-light btn-sm btn-rounded float-end" id="send-button" hidden>Send</button>
+                   
+            <button type="button" id="new-conversation-button" value="true" class="btn btn-dark mb-3">
+              End Conversation
+          </button> 
+          <button type="button" id="hidden-button" class="btn btn-dark-orange mb-3" hidden> Hidden Button </button> 
+            </form>
+      
+            </div>
           </div>
-    
         </div>
+        </div>
+            
+       
     
-      </div>
+     
     </section>
+
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function() {
+        const userMsg = document.getElementById("user_msg");
+        const sendButton = document.getElementById("send-button");
+
+    let isTyping = false; // To track if the user is typing
+
+    userMsg.addEventListener("keydown", function(event) {
+        if (event.key === "Enter" && !event.shiftKey) {
+          if (!isTyping || userMsg.value.trim() === "") {
+            sendButton.click();
+          }
+        }
+    
+    // Detect typing when any key is pressed
+        isTyping = true;
+        });
+
+    userMsg.addEventListener("keyup", function(event) {
+      if (event.key === "Enter" && !event.shiftKey) {
+        if (userMsg.value.trim() === "") {
+          // Reset typing status if textarea is empty after pressing Enter
+          isTyping = false;
+        }
+      }
+    });
+  });
+
+
+
+    </script>
 
 
     <script src="{{ url_for('static', filename='chatbox.js') }}"></script>
