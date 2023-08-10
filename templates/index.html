@@ -1,74 +1,120 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8">
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #ffffff;
-        color: black;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-      }
-      
-      h1, h2 {
-        margin: 0;
-        padding: 10px 0;
-      }
-      
-      h1 {
-        font-size: 2.5em;
-      }
-      
-      h2 {
-        font-size: 1.5em;
-      }
-      
-      ul {
-        list-style-type: none;
-        padding: 0;
-      }
-      
-      li {
-        margin-bottom: 20px;
-        text-align: center;
-      }
-      
-      a {
-        text-decoration: none;
-        color: #ffffff;
-        background: #3d96c5;
-        padding: 10px 15px;
-        border-radius: 5px;
-        font-weight: bold;
-        transition: all 0.3s ease;
-      }
-      
-      a:hover {
-        background-color: #82ccdd;
-      }
-    </style>
-  </head>
-  
-  <body>
-    <h1>Digital Me is Ready for You!</h1>
-    <h2>Welcome {{ user.get("name") }}!</h2>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GET STARTED</title>
     
-    <ul>
-      {% if config.get("ENDPOINT") %}
-      <li><a href="/chat">Chat with Madhu!</a></li>
-      {% endif %} 
-      {% if config.get("B2C_PROFILE_AUTHORITY") %}
-      <li>
-        <a href='{{_build_auth_code_flow(authority=config["B2C_PROFILE_AUTHORITY"])["auth_uri"]}}'>Edit Profile</a>
-      </li>
-      {% endif %}
-      <li><a href="/logout">Logout</a></li>
-    </ul>
-  </body>
+    <!-- Link to Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Custom CSS for Theme Toggle -->
+    <style>
+        /* Add your custom styles here */
+        body.dark-mode {
+            background-color: #333;
+            color: #fff;
+        }
+        body{
+          height: 100vh;
+          overflow-y: hidden;
+          overflow-x: hidden;
+          font-family: "Orbitron", sans-serif;
+        }
+        .btn.dark-mode {
+
+            background-color: #c9c9c9;
+            color: #212529;
+            }
+        .navbar{
+          box-shadow: 0 0 10px #044387, 0 0 20px #193c61, 0 0 30px #1b2d40;
+        }
+
+   
+   
+        
+    </style>
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">   <img src="static\img\dm_lgo.png" style="padding-left: 10vh; width: 25vh;" ></a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"> </span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" href="guide.html">Guide</a>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link" href="https://rediminds.com/">Rediminds</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Socials</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="https://www.linkedin.com/company/rediminds">LinkedIn</a>
+                <a class="dropdown-item" href="https://www.instagram.com/rediminds/?hl=en">Instagram</a>
+                <a class="dropdown-item" href="#">Twitter</a>
+                <div class="dropdown-divider"></div>
+                <a class="dropdown-item" href="#">Medium</a>
+              </div>
+            </li>
+            <li class="nav-item">
+                <button class="btn btn-link nav-link" onclick="toggleTheme()">Theme</button>
+            </li>
+
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>
+              <div class="dropdown-menu">
+                {% if config.get("B2C_PROFILE_AUTHORITY") %}
+                <a class="dropdown-item" href='{{_build_auth_code_flow(authority=config["B2C_PROFILE_AUTHORITY"])["auth_uri"]}}'>Edit Profile</a>
+                {% endif %}
+                <a class="dropdown-item" href="/logout">Logout</a>
+               
+              </div>
+             
+              
+          </li>
+        </ul>
+    </div>
+</nav>
+
+<!-- Content -->
+<div class="row d-flex justify-content-center mt-4 mb-4">
+  
+  
+    <div class="container mt-4">
+      <h1 style="text-align: center;">You are now ready to chat with Madhu!</h1>
+    
+    </div>
+</div>
+<div class="row d-flex justify-content-center mt-1">
+
+    {% if config.get("ENDPOINT") %}
+    <div class="center-btn">
+      <a href="/chat">
+      <button type="button" class="btn btn-primary btn-dark">
+        Get Started
+    </button></a>
+    </div>
+    {% endif %} 
+</div>
+
+
+
+
+<!-- Bootstrap JS and Custom Theme Toggle Script -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    function toggleTheme() {
+        const body = document.body;
+        body.classList.toggle('dark-mode');
+    }
+</script>
+</body>
 </html>
+
