@@ -88,11 +88,24 @@ vidButton.onclick = async () => {
 
 async function startSession() {
   
-  const audioResponse = await fetch('/get_audio');
-  const audioData = await audioResponse.json();
-  const audioUrl = audioData.audio_url;
-  const audio = new Audio(audioUrl);
-  audio.play();
+  try {
+    const timeoutDuration = 10000;  // 10 seconds, adjust as needed
+    const timeoutPromise = new Promise((_, reject) => 
+        setTimeout(() => reject(new Error('Request timed out')), timeoutDuration)
+    );
+
+    const audioResponse = await Promise.race([fetch('/get_audio'), timeoutPromise]);
+    if (!audioResponse.ok) {
+        throw new Error('Network response was not ok');
+    }
+    const audioData = await audioResponse.json();
+    const audioUrl = audioData.audio_url;
+    const audio = new Audio(audioUrl);
+    audio.play();
+} catch (error) {
+    console.log("There was a problem:", error.message);
+    // Handle error (e.g. show an error message or retry)
+}
 // // connectionState not supported in firefox
 // if (peerConnection?.signalingState === 'stable' || peerConnection?.iceConnectionState === 'connected') {
 //   const talkResponse = await fetchWithRetries(`${DID_API.url}/talks/streams/${streamId}`, {

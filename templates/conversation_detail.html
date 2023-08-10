@@ -93,55 +93,102 @@
 				<img src="{{ url_for('static', filename='img/Madhu.png') }}" class="rounded-circle user_img_msg">
 			</a>
 		</nav>
-        <main class="mt-5">
-            <div class="text-center">
+        
+		<main class="mt-5 container">
+			<div class="text-center mb-5">
 				<h1>Chat Details</h1>
 				<hr>
 			</div>
 
-            <!-- List of Conversations -->
-				<div class="mt-4" id="chat-detail">
-				</div>   
-        </main>
+			<!-- Conversation Summary -->
+			<div class="mb-4">
+				<h5>Summary:</h5>
+				<p id="chat-summary" class="border p-3 rounded bg-light"></p>
+			</div>
+
+			<!-- List of Conversations -->
+			<div class="mt-4" id="chat-detail"></div>
+
+			<!-- Feedback Section -->
+			<div class="mt-5">
+				<h5>Provide Your Feedback:</h5>
+				<textarea class="form-control mb-2" rows="4" id="feedback-textarea" placeholder="Share your thoughts..."></textarea>
+				<button class="btn btn-primary" id="submit-feedback">Submit Feedback</button>
+			</div>
+		</main>
         <!-- MAIN -->
     </section>
     <!-- CONTENT -->
 	
 		<script>
-			var conversationID = "{{ conversation_id }}"; // You can pass this using Flask's render_template
-	
+			var conversationID = "{{ conversation_id }}";
+
 			function updateChatDetail(data) {
 				var chatDetail = document.getElementById("chat-detail");
+				var chatSummary = document.getElementById("chat-summary");
 				chatDetail.innerHTML = "";
-	
+			
+				// Displaying the conversation summary
+				chatSummary.innerText = data.summary;
+			
 				var card = document.createElement("div");
-				card.className = "card";
-	
+				card.className = "card mb-3";
+			
 				var cardHeader = document.createElement("div");
-				cardHeader.className = "card-header";
+				cardHeader.className = "card-header bg-info text-white";
 				cardHeader.innerHTML = "Conversation with " + data.user_email + " at " + data.timestamp;
 				card.appendChild(cardHeader);
-	
+			
+				var cardBody = document.createElement("div");
+				cardBody.className = "card-body";
+			
 				var messages = data.messages;
-	
 				for (var j = 0; j < messages.length; j++) {
 					var messageDiv = document.createElement("div");
 					var messageContent = messages[j].content;
-	
+			
 					if (messages[j].role == "user") {
 						messageDiv.innerHTML = "<strong>" + data.user_email + "</strong>: " + messageContent;
 					} else {
 						messageDiv.innerHTML = "<strong>Bot</strong>: " + messageContent;
 					}
-					card.appendChild(messageDiv);
+					cardBody.appendChild(messageDiv);
 				}
-	
+			
+				card.appendChild(cardBody);
 				chatDetail.appendChild(card);
 			}
-	
+			
+			// Fetch conversation details and update the UI
 			fetch("/get_chat_detail/" + conversationID)
 				.then(response => response.json())
 				.then(data => updateChatDetail(data));
+			
+			// Add an event listener for feedback submission
+			document.getElementById("submit-feedback").addEventListener("click", function() {
+				var feedback = document.getElementById("feedback-textarea").value;
+				if (feedback) {
+					// Send feedback to your backend
+					// Example: (adjust based on your backend setup)
+					fetch("/submit_feedback", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({ feedback: feedback, conversationId: conversationID })
+					})
+					.then(response => response.json())
+					.then(data => {
+						if (data.success) {
+							alert("Feedback submitted successfully!");
+						} else {
+							alert("There was an error. Please try again.");
+						}
+					});
+				} else {
+					alert("Please enter your feedback.");
+				}
+			});			
 		</script>
 	
 		<script src="{{ url_for('static', filename='admin_script.js') }}"></script>
