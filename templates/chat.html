@@ -314,32 +314,15 @@ div.form-outline.form-white.id-msg-box-send {
 
     <script>
       document.addEventListener("DOMContentLoaded", function() {
-        const userMsg = document.getElementById("user_msg");
-        const sendButton = document.getElementById("send-button");
+      const userMsg = document.getElementById("user_msg");
+      const sendButton = document.getElementById("send-button");
 
-    let isTyping = false; // To track if the user is typing
-
-    userMsg.addEventListener("keydown", function(event) {
+      userMsg.addEventListener("keyup", function(event) {
         if (event.key === "Enter" && !event.shiftKey) {
-          if (!isTyping || userMsg.value.trim() === "") {
-            sendButton.click();
+          sendButton.click();
           }
-        }
-    
-    // Detect typing when any key is pressed
-        isTyping = true;
         });
-
-    userMsg.addEventListener("keyup", function(event) {
-      if (event.key === "Enter" && !event.shiftKey) {
-        if (userMsg.value.trim() === "") {
-          // Reset typing status if textarea is empty after pressing Enter
-          isTyping = false;
-        }
-      }
-    });
-  });
-
+      });
 
 
     </script>
