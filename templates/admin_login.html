@@ -8,7 +8,10 @@
       font-family: Arial, sans-serif;
       margin: 0;
       padding: 0;
-      background: linear-gradient(135deg, #f06, #2c82c9);
+      background-color: #111927;
+      background-image:
+        radial-gradient(at 47% 33%, hsl(162.00, 77%, 40%) 0, transparent 59%),
+        radial-gradient(at 82% 65%, hsl(218.00, 39%, 11%) 0, transparent 55%);
       color: white;
       display: flex;
       flex-direction: column;
@@ -18,8 +21,23 @@
       animation: gradientAnimation 5s linear infinite;
     }
 
+    .glass-frame {
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      background-color: rgba(17, 25, 40, 0.5);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.125);
+      padding: 100px;
+      /* Increase the padding to increase frame size */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
     .logo {
       width: 400px;
+      /* Adjust logo size if needed */
       margin-bottom: 20px;
       display: flex;
       align-items: center;
@@ -30,39 +48,29 @@
       height: auto;
     }
 
-    h1 {
-      margin: 0;
-      padding: 10px 0;
-      font-size: 2.5em;
-    }
-
-    ul {
-      list-style-type: none;
-      padding: 0;
-    }
-
-    li {
-      margin-bottom: 20px;
-      text-align: center;
-    }
-
     a {
       text-decoration: none;
       color: #ffffff;
-      background: #e74c3c;
-      padding: 15px 20px;
+      padding: 10px 15px;
+      /* Reduced button size */
       border-radius: 5px;
       font-weight: bold;
-      transition: background-color 0.3s ease, transform 0.5s ease-out, opacity 0.5s ease-out;
+      transition: transform 0.3s ease-out, background-color 0.3s ease, border-color 0.3s ease;
       display: inline-block;
       position: relative;
       overflow: hidden;
+      backdrop-filter: blur(8px) saturate(180%);
+      -webkit-backdrop-filter: blur(8px) saturate(180%);
+      background-color: rgba(17, 25, 40, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.125);
     }
 
     a:hover {
-      background-color: #3498db;
-      /* Change to blue */
-      transform: scale(1.05);
+      background-color: rgba(52, 152, 219, 0.1);
+      /* Blue color with alpha */
+      transform: scale(1.1) translateY(-5px);
+      /* Bulge out and slightly lift */
+      border-color: rgba(255, 255, 255, 0.3);
     }
 
     a::before {
@@ -99,19 +107,13 @@
 </head>
 
 <body>
-  <div class="logo">
-    <img src="{{ url_for('static', filename='img/dm_admin_logo.png') }}" alt="Logo">
-  </div>
+  <div class="glass-frame">
+    <div class="logo">
+      <img src="{{ url_for('static', filename='img/dm_admin_logo.png') }}" alt="Logo">
+    </div>
 
-   <ul>
-      <li><a href="{{ auth_url }}">Sign In as Admin</a></li>
-    
-      {% if config.get("B2C_RESET_PASSWORD_AUTHORITY") %}
-      <li>
-        <a href='{{_build_auth_code_flow(authority=config["B2C_RESET_PASSWORD_AUTHORITY"])["auth_uri"]}}'>Reset Password</a>
-      </li>
-      {% endif %}
-    </ul>
+    <a href="{{ auth_url }}">Sign In as Admin</a>
+  </div>
 </body>
 
 </html>
