@@ -9,27 +9,16 @@
       margin: 0;
       padding: 0;
       background-color: #111927;
+      background-image:
+        radial-gradient(at 47% 33%, hsl(162.00, 77%, 40%) 0, transparent 59%),
+        radial-gradient(at 82% 65%, hsl(218.00, 39%, 11%) 0, transparent 55%);
       color: white;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
       align-items: center;
-      min-height: 100vh;
-      animation: backgroundAnimation 30s linear infinite;
-      /* Add the background animation */
-    }
-
-    @keyframes backgroundAnimation {
-      0% {
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-
-      100% {
-        background-position: 0% 50%;
-      }
+      justify-content: center;
+      height: 100vh;
+      animation: gradientAnimation 5s linear infinite;
     }
 
     .glass-frame {
@@ -48,7 +37,7 @@
 
     .logo {
       width: 400px;
-      /* Increased logo size */
+      /* Adjust logo size if needed */
       margin-bottom: 20px;
       display: flex;
       align-items: center;
@@ -62,22 +51,18 @@
     a {
       text-decoration: none;
       color: #ffffff;
-      padding: 10px 20px;
+      padding: 10px 15px;
       /* Reduced button size */
       border-radius: 5px;
       font-weight: bold;
       transition: transform 0.3s ease-out, background-color 0.3s ease, border-color 0.3s ease;
-      margin-top: 15px;
-      width: 150px;
       display: inline-block;
       position: relative;
       overflow: hidden;
       backdrop-filter: blur(8px) saturate(180%);
       -webkit-backdrop-filter: blur(8px) saturate(180%);
-      background-color: transparent;
-      /* Changed to transparent */
-      border: 1px solid transparent;
-      /* Changed to transparent */
+      background-color: rgba(17, 25, 40, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.125);
     }
 
     a:hover {
@@ -104,17 +89,30 @@
       transform: translateX(50%) translateY(50%) rotate(45deg);
       opacity: 0;
     }
+
+    @keyframes gradientAnimation {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
   </style>
 </head>
 
 <body>
   <div class="glass-frame">
     <div class="logo">
-      <img src="{{ url_for('static', filename='img/dm_lgo.png') }}" alt="Logo">
+      <img src="{{ url_for('static', filename='img/dm_admin_logo.png') }}" alt="Logo">
     </div>
 
-    <a href="{{ auth_url }}">User</a>
-    <a href="admin_login">Administrator</a>
+    <a href="{{ auth_url }}">Sign In as Admin</a>
   </div>
 </body>
 
