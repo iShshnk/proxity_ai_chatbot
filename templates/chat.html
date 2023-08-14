@@ -66,9 +66,7 @@ background: linear-gradient(to bottom right, rgb(51, 54, 130), rgb(44, 14, 51))
   margin-right: 0;
 }
 
-#new-conversation-button {
-  margin-top: 1rem;
-}
+
 .mask-custom {
 background: rgba(24, 24, 16, .2);
 border-radius: 2em;
@@ -110,19 +108,13 @@ align-items: center;
   padding: 5px; /* Adding some padding for better aesthetics */
 }
 
-#start-btn {
+.btn {
   flex: 1;
   max-width: 10%;
   height: 100%; /* Ensure the button matches the height of the textarea */
 }
 
  
-
-#new-conversation-button {
-  position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-} 
 
 
 #talk-video{
@@ -142,7 +134,7 @@ div.form-outline.form-white.id-msg-box-send {
 }
 
 
-@media (max-width: 700px) {
+@media (max-width: 780px) {
   body {
   height: 100%; /* Ensure the HTML and body take up the full height of the viewport */
   margin: 0; 
@@ -181,10 +173,6 @@ div.form-outline.form-white.id-msg-box-send {
 }
 .msg-box-form{
   height:30vh;
-}
-.new-conversation-button{
-  float: none;
-
 }
 
 }
@@ -283,21 +271,19 @@ div.form-outline.form-white.id-msg-box-send {
 
 
               <div id="msg-box-form">
-
-                <form method="POST" id="chat-form">
-                  
+                <form method="POST" id="chat-form">                  
                   <div class="form-outline form-white" id="msg-box-send">
                     <textarea class="form-control mb-1" id="user_msg" rows="1" name="user_msg" placeholder="Type your message here"></textarea>
                     <button type="button" id="start-btn" class="btn btn-outline-light" >
                       <i class="fas fa-microphone"></i>
-                    </button>                 
+                    </button>    
+                    <button type="button" id="new-conversation-button" value="true" class="btn btn-outline-light">
+                      End
+                  </button>             
                   </div>
                   
                 <button type="submit" class="btn btn-light btn-sm btn-rounded float-end" id="send-button" hidden>Send</button>
-                   
-            <button type="button" id="new-conversation-button" value="true" class="btn btn-dark mb-3">
-              End Conversation
-          </button> 
+             
           <button type="button" id="hidden-button" class="btn btn-dark-orange mb-3" hidden> Hidden Button </button> 
             </form>
       
@@ -317,13 +303,15 @@ div.form-outline.form-white.id-msg-box-send {
       const userMsg = document.getElementById("user_msg");
       const sendButton = document.getElementById("send-button");
 
-      userMsg.addEventListener("keyup", function(event) {
-        if (event.key === "Enter" && !event.shiftKey) {
-          sendButton.click();
+      userMsg.addEventListener("keydown", function(event) {
+          if (event.keyCode === 13 && !event.shiftKey) {
+            sendButton.click();
+            event.preventDefault();
           }
         });
       });
-
+      
+      
 
     </script>
 
