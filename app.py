@@ -8,16 +8,15 @@ import openai  # OpenAI's Python client library
 import os
 from datetime import datetime
 import requests
-from uuid import uuid4
 
 
 # modules with various implementations and helper functions
-from db import update_summary, save_media, save_voice_id, retrieve_admin_data, current_collection, current_collection2, get_chat_messages, save_avatar_image, save_video_url, save_avatar, get_chat_detail
+from db import update_summary, save_voice_id, retrieve_admin_data, current_collection, current_collection2, get_chat_messages, save_avatar_image, save_video_url, save_avatar, get_chat_detail
 from chat import generate_prompts, ask_expert
 from msal_helper import _build_auth_code_flow, _load_cache, _build_msal_app, _save_cache, _get_token_from_cache
 from remove_bg import remove_bg
 from voice_clone import get_voice_clone
-from did import create_holder_video, get_holder_video, get_holder_video_url
+from did import create_holder_video, get_holder_video_url
 
 import boto3
 from botocore.exceptions import NoCredentialsError
@@ -44,7 +43,7 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 import pinecone
 # initialize connection to pinecone (get API key at app.pinecone.io)
-api_key = "e5dbdcd4-be31-476e-b73e-1ffd70cc44c3"
+api_key = app_config.PINECONE_API_KEY
 # find your environment next to the api key in pinecone console
 env = "us-west4-gcp-free"
 pinecone.init(api_key=api_key, environment=env)
@@ -551,4 +550,3 @@ def video():
 if __name__ == '__main__':
     app.run(port=5010, ssl_context=('cert.pem', 'key.pem'), debug=True)
     #app.run(host="0.0.0.0", port=5000, ssl_context=('cert.pem', 'key.pem'), debug=True)
-

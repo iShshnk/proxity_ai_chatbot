@@ -4,6 +4,8 @@ ELEVENLABS_API_KEY = "283236cbabf8d3b1b5c508ac729b735c" #ElevenLabs API key
 
 CLIENT_ID = "e00963f2-823f-4827-9033-ddefc0109d86" # Application (client) ID of app registration
 
+PINECONE_API_KEY = "e5dbdcd4-be31-476e-b73e-1ffd70cc44c3"
+
 CLIENT_SECRET = "XuD8Q~ZwVvmXCO0kg6oVvXUSGXkJXl7P-nRq2dr9" # Placeholder - for use ONLY during testing.
 # In a production app, we recommend you use a more secure method of storing your secret,
 # like Azure Key Vault. Or, use an environment variable as described in Flask's documentation:
