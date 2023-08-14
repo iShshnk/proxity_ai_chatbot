@@ -73,8 +73,125 @@ def admin_panel():
     # In this case, it continues to the line below and returns the 'admin_panel.html' page.
     return render_template('admin_panel.html')
 
-@app.route('/avatar_form', methods=['GET','POST'])
-def avatar_form():
+# @app.route('/avatar_form', methods=['GET','POST'])
+# def avatar_form():
+#     if request.method == 'POST':
+#         name = request.form.get('name')
+#         email = request.form.get('email')
+#         personality = request.form.get('personality')
+#         personal_life = request.form.get('personal_life')
+#         profession = request.form.get('profession')
+
+#         avatar_data = {
+#             'name': name,
+#             'email': email,
+#             'personality': personality,
+#             'personal_life': personal_life,
+#             'profession': profession
+#         }
+        
+#         image_file = request.files['photo']
+#         audio_file = request.files['voice_sample']
+        
+#         if image_file and allowed_img_file(image_file.filename):
+#             filename = str(email) + secure_filename(image_file.filename)
+#             image_path = os.path.join(app.root_path, 'static/img', filename)
+#             image_file.save(image_path)
+                      
+#             try:
+#                 with open(image_path, 'rb') as image_file:
+#                     s3.put_object(Body=image_file, Bucket='digital-me-rediminds', Key=filename)
+
+#             except NoCredentialsError:
+#                 print ({"error": "S3 credentials not found"})
+
+#             public_url = f"https://digital-me-rediminds.s3.amazonaws.com/{filename}"
+            
+#             avatar_data['img_url'] = public_url
+            
+#             os.remove(image_path)
+            
+#         if audio_file and allowed_audio_file(audio_file.filename):
+#             filename = str(email) + secure_filename(audio_file.filename)
+#             audio_path = os.path.join(app.root_path, 'static/img', filename)
+#             audio_file.save(audio_path)
+            
+#             voice_id = get_voice_clone(email, audio_path)
+
+#             os.remove(audio_path)
+
+#             avatar_data['voice_id'] = voice_id
+
+#         save_avatar(avatar_data)
+
+#     return render_template('avatar_form.html')
+
+
+@app.route('/my_avatar', methods=['GET','POST'])
+def my_avatar():
+    if not session.get("user") or session.get("role") != "admin":
+        return redirect(url_for("login"))
+    
+    # if request.method == "POST":
+    #     image_file = request.files['image']
+    #     audio_files = request.files.getlist('audio')
+
+    #     if image_file and allowed_img_file(image_file.filename):
+    #         filename = str(session["user"]["preferred_username"]) + secure_filename(image_file.filename)
+    #         image_path = os.path.join(app.root_path, 'static/img', filename)
+    #         image_file.save(image_path)
+    #         image_file = remove_bg(image_path)
+    #         image_file.save(image_path)
+                      
+    #         try:
+    #             with open(image_path, 'rb') as image_file:
+    #                 s3.put_object(Body=image_file, Bucket='digital-me-rediminds', Key=filename)
+
+    #         except NoCredentialsError:
+    #             print ({"error": "S3 credentials not found"})
+
+    #         # Return the URL to the audio file
+    #         public_url = f"https://digital-me-rediminds.s3.amazonaws.com/{filename}"
+            
+    #         save_avatar_image(public_url, "madhu.reddiboina@rediminds.com")
+    #         # save_avatar_image(public_url, session["user"]["preferred_username"])
+            
+    #         video_id = create_holder_video(public_url)
+    #         # get_holder_video(video_id)
+            
+    #         video_url = get_holder_video_url(video_id)
+            
+    #         # adding email explicitly for testing purposes, must be removed later *********
+    #         save_video_url(video_url, "madhu.reddiboina@rediminds.com")
+    #         # save_video_url(video_url, session["user"]["preferred_username"])
+            
+    #         os.remove(image_path)
+            
+        # audio_samples_path = []
+
+        # for audio_file in audio_files:
+        #     if audio_file and allowed_audio_file(audio_file.filename):
+        #         filename = secure_filename(audio_file.filename)
+        #         audio_path = os.path.join(app.root_path, 'static/img', filename)
+        #         audio_file.save(audio_path)
+        #         audio_samples_path.append(audio_path)
+            
+            
+        # # adding email explicitly for testing purposes, must be removed later *********
+        # voice_id = get_voice_clone("madhu.reddiboina@rediminds.com", audio_samples_path)
+        # # voice_id = get_voice_clone(session["user"]["preferred_username"], audio_files)
+        
+        # # print(audio_samples_path)
+        # for path in audio_samples_path:
+        #     os.remove(path)
+        
+    #     # adding email explicitly for testing purposes, must be removed later *********
+    #     save_voice_id("madhu.reddiboina@rediminds.com", voice_id)
+    #     # save_voice_id(session["user"]["preferred_username"], voice_id)
+                
+    #     return jsonify({'success': True, 'message': 'Avatar created successfully!'})
+    
+    
     if request.method == 'POST':
         name = request.form.get('name')
         email = request.form.get('email')
@@ -91,7 +208,7 @@ def avatar_form():
         }
         
         image_file = request.files['photo']
-        audio_file = request.files['voice_sample']
+        audio_files = request.files.getlist('audio')
         
         if image_file and allowed_img_file(image_file.filename):
             filename = str(email) + secure_filename(image_file.filename)
@@ -111,61 +228,6 @@ def avatar_form():
             
             os.remove(image_path)
             
-        if audio_file and allowed_audio_file(audio_file.filename):
-            filename = str(email) + secure_filename(audio_file.filename)
-            audio_path = os.path.join(app.root_path, 'static/img', filename)
-            audio_file.save(audio_path)
-            
-            voice_id = get_voice_clone(email, audio_path)
-
-            os.remove(audio_path)
-
-            avatar_data['voice_id'] = voice_id
-
-        save_avatar(avatar_data)
-
-    return render_template('avatar_form.html')
-
-@app.route('/my_avatar', methods=['GET','POST'])
-def my_avatar():
-    if not session.get("user") or session.get("role") != "admin":
-        return redirect(url_for("login"))
-    
-    if request.method == "POST":
-        image_file = request.files['image']
-        audio_files = request.files.getlist('audio')
-
-        if image_file and allowed_img_file(image_file.filename):
-            filename = str(session["user"]["preferred_username"]) + secure_filename(image_file.filename)
-            image_path = os.path.join(app.root_path, 'static/img', filename)
-            image_file.save(image_path)
-            image_file = remove_bg(image_path)
-            image_file.save(image_path)
-                      
-            try:
-                with open(image_path, 'rb') as image_file:
-                    s3.put_object(Body=image_file, Bucket='digital-me-rediminds', Key=filename)
-
-            except NoCredentialsError:
-                print ({"error": "S3 credentials not found"})
-
-            # Return the URL to the audio file
-            public_url = f"https://digital-me-rediminds.s3.amazonaws.com/{filename}"
-            
-            save_avatar_image(public_url, "madhu.reddiboina@rediminds.com")
-            # save_avatar_image(public_url, session["user"]["preferred_username"])
-            
-            video_id = create_holder_video(public_url)
-            # get_holder_video(video_id)
-            
-            video_url = get_holder_video_url(video_id)
-            
-            # adding email explicitly for testing purposes, must be removed later *********
-            save_video_url(video_url, "madhu.reddiboina@rediminds.com")
-            # save_video_url(video_url, session["user"]["preferred_username"])
-            
-            os.remove(image_path)
-            
         audio_samples_path = []
 
         for audio_file in audio_files:
@@ -175,20 +237,14 @@ def my_avatar():
                 audio_file.save(audio_path)
                 audio_samples_path.append(audio_path)
             
-            
-        # adding email explicitly for testing purposes, must be removed later *********
-        voice_id = get_voice_clone("madhu.reddiboina@rediminds.com", audio_samples_path)
-        # voice_id = get_voice_clone(session["user"]["preferred_username"], audio_files)
+        voice_id = get_voice_clone(email, audio_samples_path)
         
-        # print(audio_samples_path)
         for path in audio_samples_path:
             os.remove(path)
-        
-        # adding email explicitly for testing purposes, must be removed later *********
-        save_voice_id("madhu.reddiboina@rediminds.com", voice_id)
-        # save_voice_id(session["user"]["preferred_username"], voice_id)
-                
-        return jsonify({'success': True, 'message': 'Avatar created successfully!'})
+
+        avatar_data['voice_id'] = voice_id
+
+        save_avatar(avatar_data)
 
     return render_template('my_avatar.html')
 
