@@ -106,6 +106,10 @@ def save_avatar_image(url, email_id):
   
 def save_avatar(data):
   avatar_info_collection.insert_one(data)
+  
+def get_bot_info(bot_id):
+  current_data = avatar_info_collection.find_one({"_id": ObjectId(bot_id)})
+  return current_data['Name'], current_data['img_url'], current_data['video_url'], current_data['Email']
 
 if __name__ == '__main__':
 	app.run()

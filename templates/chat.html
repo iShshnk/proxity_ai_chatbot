@@ -194,7 +194,7 @@ div.form-outline.form-white.id-msg-box-send {
                 
                   <div class="video-wrapper">
                       <video id="talk-video" autoplay loop >  
-                          <source src="https://digital-me-rediminds.s3.amazonaws.com/idle_madhu.mp4" type="video/mp4">
+                          <source src={{video_url}} type="video/mp4">
                           Your browser does not support the video tag.
                       </video>
                   </div>
@@ -210,13 +210,13 @@ div.form-outline.form-white.id-msg-box-send {
     
             <ul class="list-unstyled text-white">
               <li class="d-flex justify-content-between mb-1">
-                <img src="{{ url_for('static', filename='img/Madhu.png') }}" alt="avatar"
+                <img src={{img_url}} alt="avatar"
                   class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
                 <div class="card mask-custom w-100" id="msg-card">
                   
                   <div class="card-body">
                     <p class="mb-0">
-                     Hi I am Madhu!
+                     Hi I am {{bot_name}}!
                     </p>
                   </div>
                 </div>
@@ -248,7 +248,7 @@ div.form-outline.form-white.id-msg-box-send {
               {% elif message['role'] == 'assistant' %}
 
               <li class="d-flex justify-content-between mb-1">
-                <img src="{{ url_for('static', filename='img/Madhu.png') }}" alt="avatar"
+                <img src= {{img_url}} alt="avatar"
                   class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
                 <div class="card mask-custom w-100" id="msg-card">
                   
