@@ -8,7 +8,7 @@
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-	<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
     <title>Your Conversations</title>
 
 </head>
@@ -24,7 +24,7 @@
 				<source src="static\img\Proxity.ai (2).mp4" type="video/mp4">
 				Your browser does not support the video tag.
 			  </video>
-			<span class="text" style="font-family: Orbitron, sans-serif;">proxity.AI</span>
+			<span class="text" style="font-family: Orbitron, sans-serif;">proxity.AI</span>>
 		</a>
 		<ul class="side-menu top">
 			<li class="active">
@@ -68,116 +68,121 @@
 	</section>
 	<!-- SIDEBAR -->
 
-
-
-	<!-- CONTENT -->
+			<!-- CONTENT -->
 	<section id="content">
 		<!-- NAVBAR -->
 		<nav>
 			<i class='bx bx-menu' ></i>
 			
+			<input type="checkbox" id="switch-mode" hidden>
+			<label for="switch-mode" class="switch-mode"></label>
+			<a href="#" class="notification">
+				<i class='bx bxs-bell' ></i>
+				<span class="num">8</span>
+			</a>
 			<a href="#" class="profile">
 				<img src="{{ url_for('static', filename='img/Madhu.png') }}" class="rounded-circle user_img_msg">
 			</a>
 		</nav>
-        <main class="mt-5">
-            <div class="text-center">
-				<h1>Your Conversations</h1>
+        
+		<main class="mt-5 container">
+			<div class="text-center mb-5">
+				<h1>Chat Details</h1>
 				<hr>
 			</div>
 
-            <!-- List of Conversations -->
-				<div class="mt-4" id="summary-log">
-				</div>   
-        </main>
+			<!-- Conversation Summary -->
+			<div class="mb-4">
+				<h5>Summary:</h5>
+				<p id="chat-summary" class="border p-3 rounded bg-light"></p>
+			</div>
+
+			<!-- List of Conversations -->
+			<div class="mt-4" id="chat-detail"></div>
+
+			<!-- Feedback Section -->
+			<div class="mt-5">
+				<h5>Provide Your Feedback:</h5>
+				<textarea class="form-control mb-2" rows="4" id="feedback-textarea" placeholder="Share your thoughts..."></textarea>
+				<button class="btn btn-primary" id="submit-feedback">Submit Feedback</button>
+			</div>
+		</main>
         <!-- MAIN -->
     </section>
     <!-- CONTENT -->
-	<script>
-		function isToday(date) {
-			const today = new Date();
-			return date.getDate() == today.getDate() &&
-				date.getMonth() == today.getMonth() &&
-				date.getFullYear() == today.getFullYear();
-		}
-		
-		function isYesterday(date) {
-			const yesterday = new Date();
-			yesterday.setDate(yesterday.getDate() - 1);
-			return date.getDate() == yesterday.getDate() &&
-				date.getMonth() == yesterday.getMonth() &&
-				date.getFullYear() == yesterday.getFullYear();
-		}
-		
-		function isInLastWeek(date) {
-			const today = new Date();
-			const lastWeek = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 7);
-			return date > lastWeek;
-		}
-		
-		function updateSummaryLog(data) {
-			var summaryLog = document.getElementById("summary-log");
-			summaryLog.innerHTML = "";
-		
-			let sections = {
-				today: [],
-				yesterday: [],
-				lastWeek: [],
-				earlier: []
-			};
-		
-			for (var i = 0; i < data.length; i++) {
-				const conversationDate = new Date(data[i].timestamp);
-				if (isToday(conversationDate)) {
-					sections.today.push(data[i]);
-				} else if (isYesterday(conversationDate)) {
-					sections.yesterday.push(data[i]);
-				} else if (isInLastWeek(conversationDate)) {
-					sections.lastWeek.push(data[i]);
-				} else {
-					sections.earlier.push(data[i]);
-				}
-			}
-		
-			for (let [key, conversations] of Object.entries(sections)) {
-				if (conversations.length === 0) continue; // Skip if there's no conversation in this section
-			
-				let sectionTitle = document.createElement("h3");
-				sectionTitle.innerText = key.charAt(0).toUpperCase() + key.slice(1); // Convert to Title Case
-				summaryLog.appendChild(sectionTitle);
-			
-				// Reverse the conversations for the latest to appear on top
-				conversations.reverse().forEach(conversation => {
-					const summaryCard = document.createElement("div");
-					summaryCard.className = "card";
-			
-					const summaryHeader = document.createElement("div");
-					summaryHeader.className = "card-header";
-					summaryHeader.innerHTML = "Timestamp: " + new Date(conversation.timestamp).toLocaleString() +
-											  " | User: " + conversation.user_email.split('@')[0];
-					
-					const summaryContent = document.createElement("div");
-					summaryContent.className = "card-body";
-					summaryContent.innerHTML = conversation.summary;
-			
-					const viewDetailButton = document.createElement("a");
-					viewDetailButton.href = "/conversation_detail/" + conversation._id.$oid;
-					viewDetailButton.className = "btn btn-primary";
-					viewDetailButton.innerHTML = "View Detail";
-			
-					summaryCard.appendChild(summaryHeader);
-					summaryCard.appendChild(summaryContent);
-					summaryCard.appendChild(viewDetailButton);
-					summaryLog.appendChild(summaryCard);
-				});
-			}
-		}
-		
-		fetch("/get_chat")
-			.then(response => response.json())
-			.then(data => updateSummaryLog(data));
-	</script>
 	
-	<script src="{{ url_for('static', filename='admin_script.js') }}"></script>
-</body>
-</html>
+		<script>
+			var conversationID = "{{ conversation_id }}";
+
+			function updateChatDetail(data) {
+				var chatDetail = document.getElementById("chat-detail");
+				var chatSummary = document.getElementById("chat-summary");
+				chatDetail.innerHTML = "";
+			
+				// Displaying the conversation summary
+				chatSummary.innerText = data.summary;
+			
+				var card = document.createElement("div");
+				card.className = "card mb-3";
+			
+				var cardHeader = document.createElement("div");
+				cardHeader.className = "card-header bg-info text-white";
+				cardHeader.innerHTML = "Conversation with " + data.user_email + " at " + data.timestamp;
+				card.appendChild(cardHeader);
+			
+				var cardBody = document.createElement("div");
+				cardBody.className = "card-body";
+			
+				var messages = data.messages;
+				for (var j = 0; j < messages.length; j++) {
+					var messageDiv = document.createElement("div");
+					var messageContent = messages[j].content;
+			
+					if (messages[j].role == "user") {
+						messageDiv.innerHTML = "<strong>" + data.user_email + "</strong>: " + messageContent;
+					} else {
+						messageDiv.innerHTML = "<strong>Bot</strong>: " + messageContent;
+					}
+					cardBody.appendChild(messageDiv);
+				}
+			
+				card.appendChild(cardBody);
+				chatDetail.appendChild(card);
+			}
+			
+			// Fetch conversation details and update the UI
+			fetch("/get_chat_detail/" + conversationID)
+				.then(response => response.json())
+				.then(data => updateChatDetail(data));
+			
+			// Add an event listener for feedback submission
+			document.getElementById("submit-feedback").addEventListener("click", function() {
+				var feedback = document.getElementById("feedback-textarea").value;
+				if (feedback) {
+					// Send feedback to your backend
+					// Example: (adjust based on your backend setup)
+					fetch("/submit_feedback", {
+						method: "POST",
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({ feedback: feedback, conversationId: conversationID })
+					})
+					.then(response => response.json())
+					.then(data => {
+						if (data.success) {
+							alert("Feedback submitted successfully!");
+						} else {
+							alert("There was an error. Please try again.");
+						}
+					});
+				} else {
+					alert("Please enter your feedback.");
+				}
+			});			
+		</script>
+	
+		<script src="{{ url_for('static', filename='admin_script.js') }}"></script>
+	</body>
+	
+	</html>
