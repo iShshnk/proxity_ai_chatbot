@@ -9,8 +9,8 @@
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<!-- My CSS -->
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-	
-    <title>DigitalMe</title>
+	<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+    <title>Proxity.AI</title>
 </head>
 <body>
 
@@ -18,8 +18,12 @@
 	<!-- SIDEBAR -->
 	<section id="sidebar">
 		<a href="admin_panel" class="brand">
-			<i class='bx bxs-smile'></i>
-			<span class="text">DigitalMe</span>
+			
+			<video class="circular-video" controls="false" autoplay loop>
+				<source src="static\img\Proxity.ai (2).mp4" type="video/mp4">
+				Your browser does not support the video tag.
+			  </video>
+			<span class="text" style="font-family: Orbitron, sans-serif;">proxity.AI</span>
 		</a>
 		<ul class="side-menu top">
 			<li class="active">
@@ -31,35 +35,28 @@
 			<li>
 				<a href="my_avatar">
 					<i class='bx bxs-face' ></i>
-					<span class="text">Your Avatar</span>
+					<span class="text">Avatar</span>
 				</a>
 			</li>
-			<li>
+			<!-- <li>
 				<a href="#">
 					<i class='bx bx-mail-send' ></i>
 					<span class="text">Send Invite Link</span>
 				</a>
-			</li>
+			</li> -->
 			<li>
 				<a href="your_convo">
 					<i class='bx bxs-message-dots' ></i>
-					<span class="text">Your Conversations</span>
+					<span class="text">Manage</span>
 				</a>
 			</li>
-			<li>
+			<!-- <li>
 				<a href="interact_avatar">
 					<i class='bx bxs-group' ></i>
 					<span class="text">Interact with Avatar</span>
 				</a>
-			</li>
-		</ul>
-		<ul class="side-menu">
-			<li>
-				<a href="#">
-					<i class='bx bxs-cog' ></i>
-					<span class="text">Settings</span>
-				</a>
-			</li>
+			</li> -->
+		<
 			<li>
 				<a href="/logout" class="logout">
 					<i class='bx bxs-log-out-circle' ></i>
@@ -77,19 +74,7 @@
 		<!-- NAVBAR -->
 		<nav>
 			<i class='bx bx-menu' ></i>
-			<a href="#" class="nav-link">Categories</a>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Search...">
-					<button type="submit" class="search-btn"><i class='bx bx-search' ></i></button>
-				</div>
-			</form>
-			<input type="checkbox" id="switch-mode" hidden>
-			<label for="switch-mode" class="switch-mode"></label>
-			<a href="#" class="notification">
-				<i class='bx bxs-bell' ></i>
-				<span class="num">8</span>
-			</a>
+			
 			<a href="#" class="profile">
 				<img src="{{ url_for('static', filename='img/Madhu.png') }}" class="rounded-circle user_img_msg">
 			</a>
