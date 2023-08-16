@@ -1,124 +1,122 @@
+
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GET STARTED</title>
-    
-    <!-- Link to Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <!-- Custom CSS for Theme Toggle -->
-    <style>
-        /* Add your custom styles here */
-        body.dark-mode {
-            background-color: #333;
-            color: #fff;
-        }
-        body{
-          height: 100vh;
-          overflow-y: hidden;
-          overflow-x: hidden;
-          font-family: "Orbitron", sans-serif;
-        }
-        .btn.dark-mode {
-
-            background-color: #c9c9c9;
-            color: #212529;
-            }
-        .navbar{
-          box-shadow: 0 0 10px #044387, 0 0 20px #193c61, 0 0 30px #1b2d40;
-          backdrop-filter: blur(21px) saturate(47%);
-    -webkit-backdrop-filter: blur(21px) saturate(47%);
-    background-color: rgba(17, 25, 40, 0.956);
-    
-    border: 1px solid rgba(255, 255, 255, 0.125);
-        }
-
-   
-   
-        
-    </style>
-</head>
-<body>
-
-<!-- Navbar -->
-<nav class="navbar navbar-expand-lg ">
-    <a class="navbar-brand" href="#">   <img src="static\img\dm_lgo.png" style="padding-left: 10vh; width: 25vh;" ></a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"> </span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="guide.html">Guide</a>
-            </li>
-            <li class="nav-item ">
-                <a class="nav-link" href="https://rediminds.com/">Rediminds</a>
-            </li>
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Socials</a>
-              <div class="dropdown-menu">
-                <a class="dropdown-item" href="https://www.linkedin.com/company/rediminds">LinkedIn</a>
-                <a class="dropdown-item" href="https://www.instagram.com/rediminds/?hl=en">Instagram</a>
-                <a class="dropdown-item" href="#">Twitter</a>
-                <div class="dropdown-divider"></div>
-                <a class="dropdown-item" href="#">Medium</a>
-              </div>
-            </li>
-            <li class="nav-item">
-                <button class="btn btn-link nav-link" onclick="toggleTheme()">Theme</button>
-            </li>
-
-            <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Profile</a>
-              <div class="dropdown-menu">
-                {% if config.get("B2C_PROFILE_AUTHORITY") %}
-                <a class="dropdown-item" href='{{_build_auth_code_flow(authority=config["B2C_PROFILE_AUTHORITY"])["auth_uri"]}}'>Edit Profile</a>
-                {% endif %}
-                <a class="dropdown-item" href="/logout">Logout</a>
-               
-              </div>
-             
-              
-          </li>
-        </ul>
-    </div>
-</nav>
-
-<!-- Content -->
-<div class="row d-flex justify-content-center mt-4 mb-4">
-  
-  
-    <div class="container mt-4">
-      <h1 style="text-align: center;">You are now ready to chat with Madhu!</h1>
-    
-    </div>
-</div>
-<div class="row d-flex justify-content-center mt-1">
-
-    {% if config.get("ENDPOINT") %}
-    <div class="center-btn">
-      <a href="/chat">
-      <button type="button" class="btn btn-primary btn-dark">
-        Get Started
-    </button></a>
-    </div>
-    {% endif %} 
-</div>
-
-
-
-
-<!-- Bootstrap JS and Custom Theme Toggle Script -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script>
-    function toggleTheme() {
-        const body = document.body;
-        body.classList.toggle('dark-mode');
+  <meta charset="UTF-8">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #111927;
+      background-image:
+        radial-gradient(at 47% 33%, hsl(162.00, 77%, 40%) 0, transparent 59%),
+        radial-gradient(at 82% 65%, hsl(218.00, 39%, 11%) 0, transparent 55%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      animation: gradientAnimation 5s linear infinite;
     }
-</script>
+
+    .glass-frame {
+      backdrop-filter: blur(16px) saturate(180%);
+      -webkit-backdrop-filter: blur(16px) saturate(180%);
+      background-color: rgba(17, 25, 40, 0.5);
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.125);
+      padding: 100px;
+      /* Increase the padding to increase frame size */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .logo {
+      width: 400px;
+      /* Adjust logo size if needed */
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+    }
+
+    .logo img {
+      width: 100%;
+      height: auto;
+    }
+
+    a {
+      text-decoration: none;
+      color: #ffffff;
+      padding: 10px 15px;
+      /* Reduced button size */
+      border-radius: 5px;
+      font-weight: bold;
+      transition: transform 0.3s ease-out, background-color 0.3s ease, border-color 0.3s ease;
+      display: inline-block;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(8px) saturate(180%);
+      -webkit-backdrop-filter: blur(8px) saturate(180%);
+      background-color: rgba(17, 25, 40, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.125);
+    }
+
+    a:hover {
+      background-color: rgba(52, 152, 219, 0.1);
+      /* Blue color with alpha */
+      transform: scale(1.1) translateY(-5px);
+      /* Bulge out and slightly lift */
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    a::before {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.1);
+      transform: rotate(45deg);
+      transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+    }
+
+    a:hover::before {
+      transform: translateX(50%) translateY(50%) rotate(45deg);
+      opacity: 0;
+    }
+
+    @keyframes gradientAnimation {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+    {% if config.get("ENDPOINT") %}
+  <div class="glass-frame">
+    <div class="logo">
+      <img src="static\img\dm_lgo.png" alt=" We're all set!">
+    </div>
+
+    <a href="/chat">Get Started</a>
+  </div>
+  {% endif %} 
 </body>
+
 </html>
