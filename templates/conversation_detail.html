@@ -8,6 +8,7 @@
     <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+	<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
     <title>Your Conversations</title>
 
@@ -18,13 +19,14 @@
 
 	<!-- SIDEBAR -->
 	<section id="sidebar">
+		
 		<a href="admin_panel" class="brand">
 			
 			<video class="circular-video" controls="false" autoplay loop>
-				<source src="static\img\Proxity.ai (2).mp4" type="video/mp4">
+				<source src="static\img\Proxity.mp4" type="video/mp4">
 				Your browser does not support the video tag.
 			  </video>
-			<span class="text" style="font-family: Orbitron, sans-serif;">proxity.AI</span>>
+			<span class="text" style="font-family: Orbitron, sans-serif;">proxity.AI</span>
 		</a>
 		<ul class="side-menu top">
 			<li class="active">
@@ -74,12 +76,9 @@
 		<nav>
 			<i class='bx bx-menu' ></i>
 			
-			<input type="checkbox" id="switch-mode" hidden>
-			<label for="switch-mode" class="switch-mode"></label>
-			<a href="#" class="notification">
-				<i class='bx bxs-bell' ></i>
-				<span class="num">8</span>
-			</a>
+			
+			
+				
 			<a href="#" class="profile">
 				<img src="{{ url_for('static', filename='img/Madhu.png') }}" class="rounded-circle user_img_msg">
 			</a>
