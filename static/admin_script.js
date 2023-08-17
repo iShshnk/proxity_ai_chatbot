@@ -14,7 +14,7 @@ allSideMenu.forEach(item=> {
 const menuBar = document.querySelector('#content nav .bx.bx-menu');
 const sidebar = document.getElementById('sidebar');
 
-menuBar.addEventListener('click', function () {
+menuBar.addEventListener('mouseover', function () {
 	sidebar.classList.toggle('hide');
 })
 const searchButton = document.querySelector('#content nav form .form-input button');
@@ -56,3 +56,12 @@ switchMode.addEventListener('change', function () {
 		document.body.classList.remove('dark');
 	}
 })
+
+//video control disabler
+var video = document.querySelector('video');
+video.addEventListener('mouseover', function() {
+  this.setAttribute('controls', 'false');
+});
+video.addEventListener('mouseout', function() {
+  this.removeAttribute('controls');
+});
