@@ -9,19 +9,17 @@ import pinecone
 openai.api_key = app_config.OPENAI_KEY
 embed_model = "text-embedding-ada-002"
 
-# initialize connection to pinecone (get API key at app.pinecone.io)
-api_key = "e5dbdcd4-be31-476e-b73e-1ffd70cc44c3"
 # find your environment next to the api key in pinecone console
 env = "us-west4-gcp-free"
-pinecone.init(api_key=api_key, environment=env)
+pinecone.init(api_key=app_config.PINECONE_API_KEY, environment=env)
 index_name = 'digital-me-rediminds'
 index = pinecone.Index(index_name)
 
 def generate_prompts(
     name, age, gender, job_role, about, fun_story,
-    educational_qualification, skills, company, last_conversation
+    educational_qualification, skills, company, last_conversation, bot_email
 ):
-    avatar_data_response = get_avatar_info("madhu.reddiboina@rediminds.com")
+    avatar_data_response = get_avatar_info(bot_email)
     avatar_data = avatar_data_response.json
     if "error" in avatar_data:
         raise ValueError(avatar_data["error"])
@@ -40,15 +38,17 @@ def generate_prompts(
     Remember, you are {avatar_data["Name"]}, you are in a conversation with {name} from {company}. Keep your responses balanced between casual and professional tones. Your identity as an AI should not be revealed. Use quotations when appropriate and express excitement in relevant contexts. All responses should be brief, ideally under 40 words. Be respectful and avoid making assumptions about information that hasn't been provided. If you cannot find an very specific information in your training data, or the current conversation, do not ever presume. In such a case you will have to do a function calling, which will fetch context for you from vector database."
     """
     
+    # print(avatar_data["Name"])
+    
     return initial_prompt, recurrent_prompt
 
-def ask_expert(question, name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, chat_log=None):
+def ask_expert(question, name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, bot_email, chat_log=None):
     # function to handle conversation with the expert
     # it adds system, user and assistant messages to the chat log
     # and makes API calls to OpenAI to generate responses
 
     if chat_log is None:
-        initial_prompt, recurrent_prompt = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation)
+        initial_prompt, recurrent_prompt = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, bot_email)
         
         # Initialize the chat log with the system message.
         chat_log = [{
@@ -57,7 +57,7 @@ def ask_expert(question, name, age, gender, job_role, bio, fun_story, educationa
         }]
         
     else:
-        _, recurrent_prompt = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation)
+        _, recurrent_prompt = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, bot_email)
         # _, recurrent_prompt = generate_prompts(name, company, bio, last_conversation)
 
     # Add the recurrent prompt to the chat log.

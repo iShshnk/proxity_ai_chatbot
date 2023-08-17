@@ -361,7 +361,7 @@ def interact_avatar():
 
     elif 'chat_log' not in session:
         # Initialize the chat log with the system message for some edge cases.
-        initial_prompt, _ = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation)
+        initial_prompt, _ = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, )
         # initial_prompt, _ = generate_prompts(name, company, bio, last_conversation)
         session['chat_log'] = [{
             'role': 'system',
@@ -409,106 +409,12 @@ def chat():
     skills = data['Skills']
     company = "RediMinds"
     
-
-     # POST request to start a new conversation
-    if request.method == 'POST' and request.is_json:
-        req = request.get_json()
-        if 'new_conversation' in req and req['new_conversation']:
-            chat_log = session.get('chat_log')
-            user_and_assistant_msgs = [msg['content'] for msg in chat_log if msg['role'] in ['user', 'assistant'] and msg['content'] is not None]
-            conversation = ' '.join(user_and_assistant_msgs)
-
-
-            # Construct a prompt for the summary.
-            summary_prompt =  f"Please summarize in detail the following conversation between {name} and Madhu The conversation occured at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} and is as follows: {conversation}. Keep the total word count about 100 words."
-
-            # Generate a summary using the GPT-3.5 model.
-            response = openai.ChatCompletion.create(
-                model="gpt-3.5-turbo-16k-0613",
-                max_tokens=700,
-                messages=[
-                    {"role": "system", "content": "You are an expert conversation summarizer and catch nuances in a conversation in a crisp manner.When writing the summary, do so from the perspective of an objective third party who is recounting the interaction to Madhu (he is essentially one of the people talking, you will need to figure out who). Consider the emotional tone, key points, and conclusions drawn from the conversation."},
-                    {"role": "user", "content": summary_prompt}
-                
-                ]
-            )
-            session['summary'] = response.choices[0].message['content']
-
-            update_summary(current_email, session['summary'])
-            # Extract only user and assistant messages from the chat_log
-            extracted_messages = [
-                {'role': msg['role'], 'content': msg['content']} 
-                for msg in chat_log if msg['role'] in ['user', 'assistant']
-            ]
-
-            # Create a MongoDB document
-            document = {
-                'timestamp': datetime.now().isoformat(),  # Current timestamp
-                'user_email': current_email,  # User email
-                'bot_email': 'madhu.reddiboina@rediminds.com',  # Bot email
-                'summary': session['summary'], #pushing the summary
-                'messages': extracted_messages  # Extracted messages
-            }
-            current_collection2.insert_one(document)
-
-            # Clear the session and render the chat page without any previous conversation.
-            session.clear()
-            return render_template('chat.html', chat_log=[])
-
-    elif 'chat_log' not in session:
-        # Initialize the chat log with the system message for some edge cases.
-        initial_prompt, _ = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation)
-        # initial_prompt, _ = generate_prompts(name, company, bio, last_conversation)
-        session['chat_log'] = [{
-            'role': 'system',
-            'content': initial_prompt
-        }]
-    
-    # POST request to continue the conversation
-    elif request.method == 'POST' and 'user_msg' in request.form:
-        # if the request method is POST and there is a 'user_msg' field in the form,
-        # get the user's question, generate a response from the assistant,
-        # and add the response to the session's chat log.
-        # then, render the chat page with the response and the updated chat log.
-        question = request.form.get('user_msg')
-        response, chat_log = ask_expert(question, name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, session.get('chat_log'))
-        session['chat_log'] = chat_log
-        print(session['chat_log'])
-        return render_template('chat.html', response=response, chat_log=session['chat_log'])
-
-    # GET request to show the chat page with the current chat log
-    return render_template('chat.html', chat_log=session['chat_log'])
-
-
-# chat route with chatbot integration
-@app.route('/chat/<bot_id>', methods=['GET', 'POST'])
-def newchat(bot_id):
-    # define chat endpoint
-    # this is the main entry point of the application
-    # it handles GET and POST requests 
-    
-    if not session.get("user") or session.get("role")!="user":
-        return redirect(url_for("login"))
-    
-    current_email = session["user"]["preferred_username"]
-    data = retrieve_data(current_email)
-
-    if data is None:
-        return redirect(url_for('user_form'))
-    
-    name = data['Name']
-    age = data['Age']
-    gender = data['Gender']
-    job_role = data['Job Role']
-    bio = data['About']
-    fun_story = data['Fun Story']
-    last_conversation = data.get('Last Conversation Summary', 'No prior conversation')
-    educational_qualification = data['Educational Qualification']
-    skills = data['Skills']
-    company = "RediMinds"
-    
-    ######## BOT DATA ########
-    bot_name, bot_img, bot_video, bot_email = get_bot_info(bot_id)
+    bot_id = session['bot_id']
+    bot_data = get_bot_info(bot_id)
+    bot_name = bot_data['Name']
+    bot_img = bot_data['img_url']
+    bot_video = bot_data['video_url']
+    bot_email = bot_data['Email']
     
 
      # POST request to start a new conversation
@@ -554,11 +460,11 @@ def newchat(bot_id):
 
             # Clear the session and render the chat page without any previous conversation.
             session.clear()
-            return render_template('chat.html', chat_log=[], bot_name = bot_name, img_url = bot_img, video_url = bot_video)
+            return render_template('chat.html', chat_log=[], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
 
     elif 'chat_log' not in session:
         # Initialize the chat log with the system message for some edge cases.
-        initial_prompt, _ = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation)
+        initial_prompt, _ = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, bot_email)
         # initial_prompt, _ = generate_prompts(name, company, bio, last_conversation)
         session['chat_log'] = [{
             'role': 'system',
@@ -572,13 +478,121 @@ def newchat(bot_id):
         # and add the response to the session's chat log.
         # then, render the chat page with the response and the updated chat log.
         question = request.form.get('user_msg')
-        response, chat_log = ask_expert(question, name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, session.get('chat_log'))
+        response, chat_log = ask_expert(question, name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, bot_email, session.get('chat_log'))
         session['chat_log'] = chat_log
         print(session['chat_log'])
-        return render_template('chat.html', response=response, chat_log=session['chat_log'], bot_name = bot_name, img_url = bot_img, video_url = bot_video)
+        return render_template('chat.html', response=response, chat_log=session['chat_log'], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
 
     # GET request to show the chat page with the current chat log
-    return render_template('chat.html', chat_log=session['chat_log'], bot_name = bot_name, img_url = bot_img, video_url = bot_video)
+    return render_template('chat.html', chat_log=session['chat_log'], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
+
+
+# chat route with chatbot integration
+@app.route('/chat/<bot_id>', methods=['GET', 'POST'])
+def newchat(bot_id):
+    # define chat endpoint
+    # this is the main entry point of the application
+    # it handles GET and POST requests 
+    
+    if not session.get("user") or session.get("role")!="user":
+        return redirect(url_for("login"))
+    
+    current_email = session["user"]["preferred_username"]
+    data = retrieve_data(current_email)
+
+    if data is None:
+        return redirect(url_for('user_form'))
+    
+    name = data['Name']
+    age = data['Age']
+    gender = data['Gender']
+    job_role = data['Job Role']
+    bio = data['About']
+    fun_story = data['Fun Story']
+    last_conversation = data.get('Last Conversation Summary', 'No prior conversation')
+    educational_qualification = data['Educational Qualification']
+    skills = data['Skills']
+    company = "RediMinds"
+    
+    ######## BOT DATA ########
+    bot_data = get_bot_info(bot_id)
+    bot_name = bot_data['Name']
+    bot_img = bot_data['img_url']
+    bot_video = bot_data['video_url']
+    bot_email = bot_data['Email']
+    
+    session['public_url'] = bot_img
+    session['bot_id'] = bot_id
+    
+
+     # POST request to start a new conversation
+    if request.method == 'POST' and request.is_json:
+        req = request.get_json()
+        if 'new_conversation' in req and req['new_conversation']:
+            chat_log = session.get('chat_log')
+            user_and_assistant_msgs = [msg['content'] for msg in chat_log if msg['role'] in ['user', 'assistant'] and msg['content'] is not None]
+            conversation = ' '.join(user_and_assistant_msgs)
+
+
+            # Construct a prompt for the summary.
+            summary_prompt =  f"Please summarize in detail the following conversation between {name} and {bot_name} The conversation occured at {datetime.now().strftime('%Y-%m-%d %H:%M:%S')} and is as follows: {conversation}. Keep the total word count about 100 words."
+
+            # Generate a summary using the GPT-3.5 model.
+            response = openai.ChatCompletion.create(
+                model="gpt-3.5-turbo-16k-0613",
+                max_tokens=700,
+                messages=[
+                    {"role": "system", "content": "You are an expert conversation summarizer and catch nuances in a conversation in a crisp manner.When writing the summary, do so from the perspective of an objective third party who is recounting the interaction to {bot_name} (he is essentially one of the people talking, you will need to figure out who). Consider the emotional tone, key points, and conclusions drawn from the conversation."},
+                    {"role": "user", "content": summary_prompt}
+                
+                ]
+            )
+            session['summary'] = response.choices[0].message['content']
+
+            update_summary(current_email, session['summary'])
+            # Extract only user and assistant messages from the chat_log
+            extracted_messages = [
+                {'role': msg['role'], 'content': msg['content']} 
+                for msg in chat_log if msg['role'] in ['user', 'assistant']
+            ]
+
+            # Create a MongoDB document
+            document = {
+                'timestamp': datetime.now().isoformat(),  # Current timestamp
+                'user_email': current_email,  # User email
+                'bot_email': bot_email,  # Bot email
+                'summary': session['summary'], #pushing the summary
+                'messages': extracted_messages  # Extracted messages
+            }
+            current_collection2.insert_one(document)
+
+            # Clear the session and render the chat page without any previous conversation.
+            session.clear()
+            return render_template('chat.html', chat_log=[], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
+
+    elif 'chat_log' not in session:
+        # Initialize the chat log with the system message for some edge cases.
+        initial_prompt, _ = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, bot_email)
+        # initial_prompt, _ = generate_prompts(name, company, bio, last_conversation)
+        session['chat_log'] = [{
+            'role': 'system',
+            'content': initial_prompt
+        }]
+    
+    # POST request to continue the conversation
+    elif request.method == 'POST' and 'user_msg' in request.form:
+        # if the request method is POST and there is a 'user_msg' field in the form,
+        # get the user's question, generate a response from the assistant,
+        # and add the response to the session's chat log.
+        # then, render the chat page with the response and the updated chat log.
+        question = request.form.get('user_msg')
+        response, chat_log = ask_expert(question, name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, bot_email, session.get('chat_log'))
+        session['chat_log'] = chat_log
+        print(session['chat_log'])
+        return render_template('chat.html', response=response, chat_log=session['chat_log'], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
+
+    # GET request to show the chat page with the current chat log
+    return render_template('chat.html', chat_log=session['chat_log'], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
 
 
 
@@ -645,10 +659,10 @@ def get_config():
 
 @app.route('/get_audio')
 def get_audio():
-    voice_id = "CJvZrj2XERlpMhE9ezgv" 
-    current_email = session["user"]["preferred_username"]
-    if session.get("role") == "admin":
-        voice_id = retrieve_admin_data("madhu.reddiboina@rediminds.com")['voice_id']
+    bot_data = get_bot_info(session["bot_id"])
+    voice_id = bot_data['voice_id']
+    # if session.get("role") == "admin":
+    #     voice_id = retrieve_admin_data("madhu.reddiboina@rediminds.com")['voice_id']
         # voice_id = retrieve_admin_data(session["user"]["preferred_username"])['voice_id']
     url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream"
     headers = {
@@ -668,7 +682,7 @@ def get_audio():
     response = requests.post(url, headers=headers, json=data)
 
     # Generate a unique filename based on the current time
-    filename = f"audio_{current_email}.mp3"
+    filename = f"audio_{bot_data['Email']}.mp3"
 
     # Upload to S3
     try:
@@ -679,10 +693,6 @@ def get_audio():
     # Return the URL to the audio file
     public_url = f"https://digital-me-rediminds.s3.amazonaws.com/{filename}"
     return {"audio_url": public_url}
-
-
-def get_img_url():
-    voice_id = retrieve_admin_data("madhu.reddiboina@rediminds.com")['img_url']
 
 
 """@app.route('/latest-response')
