@@ -522,6 +522,7 @@ def newchat(bot_id):
     bot_email = bot_data['Email']
     
     session['public_url'] = bot_img
+    session['video_url'] = bot_video
     session['bot_id'] = bot_id
     
 
@@ -655,7 +656,11 @@ def graphcall():
 def get_config():
     if not session.get("user") or session.get("role") != "admin":
         return jsonify({"key": app_config.API_KEY, "url": app_config.API_URL})
-    return jsonify({"key": app_config.API_KEY, "url": app_config.API_URL, "img_url": session['public_url']})
+    return jsonify({"key": app_config.API_KEY, "url": app_config.API_URL})
+
+@app.route("/api/bot_data")
+def get_bot_config():
+    return jsonify({"img_url": session['public_url'], "video_url": session['video_url']})
 
 @app.route('/get_audio')
 def get_audio():

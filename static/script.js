@@ -20,6 +20,9 @@ let lastBytesReceived;
 const talkVideo = document.getElementById('talk-video');
 talkVideo.setAttribute('playsinline', '');
 
+const botConfigResponse = await fetch("/api/bot_data");
+const bot_data = await botConfigResponse.json()
+
 (async function autoConnect() {
 
   // Fetch the config before executing rest of the function
@@ -50,7 +53,7 @@ talkVideo.setAttribute('playsinline', '');
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        source_url: "https://i.ibb.co/Fsp3GcZ/Madhu-2-1.jpg",
+        source_url: bot_data.img_url,
       }),
     }
   );
@@ -253,7 +256,7 @@ function setVideoElement(stream) {
 
 function playIdleVideo() {
   talkVideo.srcObject = undefined;
-  talkVideo.src = 'https://digital-me-rediminds.s3.amazonaws.com/idle_madhu.mp4';
+  talkVideo.src = bot_data.video_url;
   talkVideo.loop = true;
   talkVideo.play();
 }
