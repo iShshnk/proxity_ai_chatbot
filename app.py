@@ -658,9 +658,9 @@ def get_config():
         return jsonify({"key": app_config.API_KEY, "url": app_config.API_URL})
     return jsonify({"key": app_config.API_KEY, "url": app_config.API_URL})
 
-@app.route("/api/bot_data")
-def get_bot_config():
-    return jsonify({"img_url": session['public_url'], "video_url": session['video_url']})
+# @app.route("/api/bot_data")
+# def get_bot_config():
+#     return jsonify({"img_url": session['public_url'], "video_url": session['video_url']})
 
 @app.route('/get_audio')
 def get_audio():

@@ -20,8 +20,8 @@ let lastBytesReceived;
 const talkVideo = document.getElementById('talk-video');
 talkVideo.setAttribute('playsinline', '');
 
-const botConfigResponse = await fetch("/api/bot_data");
-const bot_data = await botConfigResponse.json()
+// const botConfigResponse = await fetch("/api/bot_data");
+// const bot_data = await botConfigResponse.json()
 
 (async function autoConnect() {
 
