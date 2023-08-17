@@ -42,11 +42,9 @@ from werkzeug.utils import secure_filename
 app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 import pinecone
-# initialize connection to pinecone (get API key at app.pinecone.io)
-api_key = app_config.PINECONE_API_KEY
 # find your environment next to the api key in pinecone console
 env = "us-west4-gcp-free"
-pinecone.init(api_key=api_key, environment=env)
+pinecone.init(api_key=app_config.PINECONE_API_KEY, environment=env)
 index_name = 'digital-me-rediminds'
 index = pinecone.Index(index_name)
 
@@ -200,11 +198,11 @@ def my_avatar():
         profession = request.form.get('profession')
 
         avatar_data = {
-            'name': name,
-            'email': email,
-            'personality': personality,
-            'personal_life': personal_life,
-            'profession': profession
+            'Name': name,
+            'Email': email,
+            'Personality': personality,
+            'Personal_life': personal_life,
+            'Profession': profession
         }
         
         image_file = request.files['photo']

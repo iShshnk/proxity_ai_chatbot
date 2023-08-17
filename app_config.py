@@ -1,6 +1,6 @@
 OPENAI_KEY = "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" #OpenAI API key
 
-ELEVENLABS_API_KEY = "283236cbabf8d3b1b5c508ac729b735c" #ElevenLabs API key
+ELEVENLABS_API_KEY = "0a7c17606a969206e92c90c9c68debe4" #ElevenLabs API key
 
 CLIENT_ID = "e00963f2-823f-4827-9033-ddefc0109d86" # Application (client) ID of app registration
 
