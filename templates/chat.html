@@ -299,18 +299,26 @@ div.form-outline.form-white.id-msg-box-send {
 
 
     <script>
-      document.addEventListener("DOMContentLoaded", function() {
-      const userMsg = document.getElementById("user_msg");
-      const sendButton = document.getElementById("send-button");
+       document.addEventListener("DOMContentLoaded", function() {
+    const userMsg = document.getElementById("user_msg");
+    const sendButton = document.getElementById("send-button");
+    const chatContainer = document.getElementById("chat-container");
 
-      userMsg.addEventListener("keydown", function(event) {
-          if (event.keyCode === 13 && !event.shiftKey) {
-            sendButton.click();
-            event.preventDefault();
-          }
-        });
-      });
-      
+    userMsg.addEventListener("keydown", function(event) {
+      if (event.keyCode === 13 && !event.shiftKey) {
+        sendButton.click();
+        userMsg.blur(); // Remove focus from the input field
+        event.preventDefault();
+      }
+    });
+
+    // Listen for when the keyboard opens and adjust the chat container height
+    window.addEventListener('resize', function() {
+      chatContainer.style.height = (window.innerHeight - chatContainer.getBoundingClientRect().top) + "px";
+    });
+  });
+
+
       
 
     </script>
