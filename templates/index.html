@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -49,12 +48,11 @@
       height: auto;
     }
 
-    a {
+    .glass-button {
       text-decoration: none;
       color: #ffffff;
-      padding: 10px 15px;
-      /* Reduced button size */
-      border-radius: 5px;
+      padding: 10px;
+      border-radius: 20px;
       font-weight: bold;
       transition: transform 0.3s ease-out, background-color 0.3s ease, border-color 0.3s ease;
       display: inline-block;
@@ -64,17 +62,25 @@
       -webkit-backdrop-filter: blur(8px) saturate(180%);
       background-color: rgba(17, 25, 40, 0.75);
       border: 1px solid rgba(255, 255, 255, 0.125);
+      margin: 10px;
+      width: 200px;
+      /* Adjust button width as needed */
+      display: flex;
+      flex-direction: column;
+      /* To align image and text vertically */
+      align-items: center;
+      justify-content: center;
     }
 
-    a:hover {
+    .glass-button:hover {
       background-color: rgba(52, 152, 219, 0.1);
       /* Blue color with alpha */
-      transform: scale(1.1) translateY(-5px);
-      /* Bulge out and slightly lift */
+      transform: scale(1.1);
+      /* Bulge out */
       border-color: rgba(255, 255, 255, 0.3);
     }
 
-    a::before {
+    .glass-button::before {
       content: '';
       position: absolute;
       top: -100%;
@@ -86,7 +92,7 @@
       transition: transform 0.5s ease-out, opacity 0.5s ease-out;
     }
 
-    a:hover::before {
+    .glass-button:hover::before {
       transform: translateX(50%) translateY(50%) rotate(45deg);
       opacity: 0;
     }
@@ -104,23 +110,58 @@
         background-position: 0% 50%;
       }
     }
+
+    /* New class for square image containers */
+    .button-image {
+      width: 100px;
+      /* Set width and height to create a square */
+      height: 100px;
+      overflow: hidden;
+      border-radius: 50%;
+      /* Make it a circle */
+      margin-bottom: 10px;
+    }
+
+    .button-image img {
+      width: 100%;
+      /* Make the image fill the container */
+      height: 100%;
+      object-fit: cover;
+      /* Maintain image aspect ratio */
+    }
+
+    /* Change text color to white */
+    .glass-button a {
+      color: white;
+    }
   </style>
 </head>
 
 <body>
-    {% if config.get("ENDPOINT") %}
+  {% if config.get("ENDPOINT") %}
   <div class="glass-frame">
     <div class="logo">
-      <img src="static\img\proxity_user_logo.png" alt=" We're all set!">
+      <img src="static\img\proxity_user_logo.png" alt="We're all set!">
     </div>
 
-    <a href="/chat/64c0fc5c58a91eb5d6ce92e8">Chat with Madhu</a>
-    <br>
-    <a href="/chat/64ddf81dac580c47566ca4a2">Chat with Dr. Bhandari</a>
+    <div class="glass-button">
+      <div class="button-image">
+        <img src="static\img\Madhu.png" alt="Chat with Madhu">
+      </div>
+      <a href="/chat/64c0fc5c58a91eb5d6ce92e8">Chat with Madhu</a>
+    </div>
+
+    <div class="glass-button">
+      <div class="button-image">
+        <img src="static\img\dr_bhandari_avatar.jpeg" alt="Chat with Dr. Bhandari">
+      </div>
+      <a href="/chat/64ddf81dac580c47566ca4a2">Chat with Dr. Bhandari</a>
+    </div>
+
     <br>
     <a href="/logout">Logout</a>
   </div>
-  {% endif %} 
+  {% endif %}
 </body>
 
 </html>
