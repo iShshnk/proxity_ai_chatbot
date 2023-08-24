@@ -19,8 +19,20 @@
     /* *************
     main content for bots
     ************* */
+    .button-image {
+    width: 100px; /* Set the desired width */
+    height: 100px; /* Set the same height as the width for a 1:1 aspect ratio */
+    overflow: hidden;
+    margin: 0 auto;
+    border-radius: 50%;
+    margin-bottom: 10px; /* Adjust spacing as needed */
+}
 
-    
+.button-image img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
 
     .glass-frame {
       backdrop-filter: blur(16px) saturate(180%);
@@ -476,33 +488,37 @@ html { height: 100%;}
          <!-- /#sidebar-wrapper -->
  
          <!-- Page Content -->
-         <div id="page-content-wrapper">
-             <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
-                 <span class="hamb-top"></span>
-                 <span class="hamb-middle"></span>
-                 <span class="hamb-bottom"></span>
-             </button>
-             <div class="container">
-                 <div class="row">
-                     <div class="col-lg-8 col-lg-offset-2">
-                        {% if config.get("ENDPOINT") %}
-                        <div class="glass-frame">
-                          
-                      
-                          <a class="chat-a"href="/chat/64c0fc5c58a91eb5d6ce92e8">Chat with Madhu</a>
-                          <br>
-                          <a class="chat-a"href="/chat/64ddf81dac580c47566ca4a2">Chat with Dr. Bhandari</a>
-                          <br>
-                         
-                        </div>
-                        {% endif %} 
+        <div id="page-content-wrapper">
+          <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
+            <!-- Hamburger icon elements -->
+          </button>
+          <div class="container">
+            <div class="row">
+              <div class="col-lg-8 col-lg-offset-2">
+                {% if config.get("ENDPOINT") %}
+                <div class="glass-frame">
+                  <a class="chat-a" href="/chat/64c0fc5c58a91eb5d6ce92e8">
+                    <div class="button-image">
+                      <img src="static\img\Madhu.png" alt="Chat with Madhu">
+                    </div>
+                    Chat with Madhu
+                  </a>
+                  <br>
+                  <a class="chat-a" href="/chat/64ddf81dac580c47566ca4a2">
+                    <div class="button-image">
+                      <img src="static\img\dr_bhandari_avatar.jpeg" alt="Chat with Dr. Bhandari">
+                    </div>
+                    Chat with Dr. Bhandari
+                  </a>
+                  <br>
+                </div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
 
 
-                        
-                     </div>
-                 </div>
-             </div>
-         </div>
          <!-- /#page-content-wrapper -->
  
      </div>
