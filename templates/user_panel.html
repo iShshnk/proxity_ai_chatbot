@@ -1,129 +1,3 @@
-<!-- 
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #111927;
-      background-image:
-        radial-gradient(at 47% 33%, hsl(273.06, 77%, 40%) 0, transparent 59%),
-        radial-gradient(at 82% 65%, hsl(218.00, 39%, 11%) 0, transparent 55%);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-      animation: gradientAnimation 5s linear infinite;
-    }
-
-    .glass-frame {
-      backdrop-filter: blur(16px) saturate(180%);
-      -webkit-backdrop-filter: blur(16px) saturate(180%);
-      background-color: rgba(17, 25, 40, 0.5);
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.125);
-      padding: 100px;
-      /* Increase the padding to increase frame size */
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .logo {
-      width: 400px;
-      /* Adjust logo size if needed */
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-    }
-
-    .logo img {
-      width: 100%;
-      height: auto;
-    }
-
-    a {
-      text-decoration: none;
-      color: #ffffff;
-      padding: 10px 15px;
-      /* Reduced button size */
-      border-radius: 5px;
-      font-weight: bold;
-      transition: transform 0.3s ease-out, background-color 0.3s ease, border-color 0.3s ease;
-      display: inline-block;
-      position: relative;
-      overflow: hidden;
-      backdrop-filter: blur(8px) saturate(180%);
-      -webkit-backdrop-filter: blur(8px) saturate(180%);
-      background-color: rgba(17, 25, 40, 0.75);
-      border: 1px solid rgba(255, 255, 255, 0.125);
-    }
-
-    a:hover {
-      background-color: rgba(52, 152, 219, 0.1);
-      /* Blue color with alpha */
-      transform: scale(1.1) translateY(-5px);
-      /* Bulge out and slightly lift */
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    a::before {
-      content: '';
-      position: absolute;
-      top: -100%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: rgba(255, 255, 255, 0.1);
-      transform: rotate(45deg);
-      transition: transform 0.5s ease-out, opacity 0.5s ease-out;
-    }
-
-    a:hover::before {
-      transform: translateX(50%) translateY(50%) rotate(45deg);
-      opacity: 0;
-    }
-
-    @keyframes gradientAnimation {
-      0% {
-        background-position: 0% 50%;
-      }
-
-      50% {
-        background-position: 100% 50%;
-      }
-
-      100% {
-        background-position: 0% 50%;
-      }
-    }
-  </style>
-</head>
-
-<body>
-    {% if config.get("ENDPOINT") %}
-  <div class="glass-frame">
-    <div class="logo">
-      <img src="static\img\proxity_user_logo.png" alt=" We're all set!">
-    </div>
-
-    <a href="/chat/64c0fc5c58a91eb5d6ce92e8">Chat with Madhu</a>
-    <br>
-    <a href="/chat/64ddf81dac580c47566ca4a2">Chat with Dr. Bhandari</a>
-    <br>
-    <a href="/logout">Logout</a>
-  </div>
-  {% endif %} 
-</body>
-
-</html> -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -143,16 +17,23 @@
 
 <style>
     .circular-video {
-	width: 6vh;
-	height:6vh;
-	border-radius: 50%;
-  
-	  
-  }
-  
-  video {
-	pointer-events: none;
-  }
+    /* width: 6vh; */
+    height: 6vh;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    margin: 0 auto; /* To center the circular video horizontally */
+}
+
+.circular-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Adjust this based on your preference */
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
     body {
     position: relative;
     overflow-x: hidden;
@@ -494,7 +375,7 @@ a[href*="logout"]::before {
         
         
         </div></div>
-        <li><a href="Bots">Bots</a></li>
+        <li><a href="/Bots">Bots</a></li>
         <li><a href="/Chat_log">Chat Log</a></li>
         <li>
             <a href="/logout" class="logout">
@@ -518,6 +399,7 @@ a[href*="logout"]::before {
                  <div class="row">
                      <div class="col-lg-8 col-lg-offset-2">
                         
+                        
                      </div>
                  </div>
              </div>
@@ -530,12 +412,36 @@ a[href*="logout"]::before {
 
      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
    <script>
-    $(document).ready(function () {
+//     $(document).ready(function () {
+//   var hamburgerButton = $('.hamburger'),
+//       offCanvasToggle = $('[data-toggle="offcanvas"]'),
+//       wrapper = $('#wrapper'),
+//       overlay = $('.overlay'),
+//       isMenuOpen = false;
+
+//   // Toggle hamburger menu
+//   hamburgerButton.click(function () {
+//     toggleHamburgerMenu();
+//   });
+
+//   function toggleHamburgerMenu() {
+//     isMenuOpen = !isMenuOpen;
+//     overlay.toggleClass('overlay-visible', isMenuOpen);
+//     hamburgerButton.toggleClass('is-open', isMenuOpen);
+//     hamburgerButton.toggleClass('is-closed', !isMenuOpen);
+//   }
+
+//   // Toggle offcanvas sidebar
+//   offCanvasToggle.click(function () {
+//     wrapper.toggleClass('toggled');
+//   });
+// });
+
+$(document).ready(function () {
   var hamburgerButton = $('.hamburger'),
-      offCanvasToggle = $('[data-toggle="offcanvas"]'),
       wrapper = $('#wrapper'),
       overlay = $('.overlay'),
-      isMenuOpen = false;
+      isMenuOpen = true // Set initial menu state to closed
 
   // Toggle hamburger menu
   hamburgerButton.click(function () {
@@ -547,12 +453,10 @@ a[href*="logout"]::before {
     overlay.toggleClass('overlay-visible', isMenuOpen);
     hamburgerButton.toggleClass('is-open', isMenuOpen);
     hamburgerButton.toggleClass('is-closed', !isMenuOpen);
+    
+    // Toggle the sidebar based on the menu state
+    wrapper.toggleClass('toggled', isMenuOpen);
   }
-
-  // Toggle offcanvas sidebar
-  offCanvasToggle.click(function () {
-    wrapper.toggleClass('toggled');
-  });
 });
 
 
