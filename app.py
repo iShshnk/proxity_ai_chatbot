@@ -129,7 +129,7 @@ def admin_panel():
 def my_avatar():
     if not session.get("user") or session.get("role") != "admin":
         return redirect(url_for("login"))
-    
+
     # if request.method == "POST":
     #     image_file = request.files['image']
     #     audio_files = request.files.getlist('audio')
@@ -251,6 +251,13 @@ def allowed_img_file(filename):
 
 def allowed_audio_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['mp3']
+    
+@app.route('/Bots', methods=['GET','POST'])
+def Bots():
+   
+    
+     return render_template('Bots.html')
+
 
 
 @app.route('/your_convo', methods=['GET'])
@@ -268,10 +275,13 @@ def conversation_detail(conversation_id):
 
 @app.route("/get_chat")
 def get_chat_api():
+    #return get_chat_messages(session.get("user"))
+
     # chat_messages = get_chat_messages("madhu.reddiboina@rediminds.com")
     # return jsonify(chat_messages)
-    # return get_chat_messages(session.get("user"))
+    
     return get_chat_messages("madhu.reddiboina@rediminds.com")
+
 
 @app.route('/get_chat_detail/<conversation_id>')
 def get_chat_detail_api(conversation_id):
@@ -485,6 +495,23 @@ def chat():
 
     # GET request to show the chat page with the current chat log
     return render_template('chat.html', chat_log=session['chat_log'], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
+
+# ... (existing imports and code)
+
+# Define a route for handling the search request
+@app.route('/search', methods=['POST'])
+def search():
+    search_query = request.form.get('search_query')  # Get user's search input from the form
+    
+    # Query the database for possible matches
+    matched_results = current_collection.find({"bot_id": {"$regex": search_query, "$options": "i"}})
+    
+    # Convert matched results to a list of dictionaries
+    results_list = [result for result in matched_results]
+    
+    return render_template('search_results.html', results_list=results_list)
+
+# ... (existing code)
 
 
 # chat route with chatbot integration
@@ -716,6 +743,17 @@ def favicon():
 def video():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'idle_madhu.mp4')
+
+@app.route('/Chat_log', methods=['GET','POST'])
+def user_chats():
+     user_email = session["user"]["preferred_username"]
+    
+    
+    
+   
+    
+     return render_template('user_chats.html',user_email=user_email,)
+
 
 
 # run the Flask app in debug mode
