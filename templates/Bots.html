@@ -40,13 +40,17 @@
       background-color: rgba(17, 25, 40, 0.5);
       border-radius: 20px;
       border: 1px solid rgba(255, 255, 255, 0.125);
-      padding: 100px;
+      padding: 30px;
       /* Increase the padding to increase frame size */
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
-    }
+      width: 400px; /* Adjust the width */
+      margin: 0 auto; /* Center the element horizontally */
+      margin-top: 50px; /* Adjust margin-top as needed */
+}
+
 
     .logo {
       width: 400px;
@@ -76,6 +80,7 @@
       -webkit-backdrop-filter: blur(8px) saturate(180%);
       background-color: rgba(17, 25, 40, 0.75);
       border: 1px solid rgba(255, 255, 255, 0.125);
+      margin-bottom: 10px;
     }
 
     .chat-a:hover {
@@ -152,10 +157,21 @@
 	pointer-events: none;
   } */
     body {
-    position: relative;
-    overflow-x: hidden;
-    background-color: #CFD8DC;
-}
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #111927;
+      background-image:
+        radial-gradient(at 47% 33%, hsl(273.06, 77%, 40%) 0, transparent 59%),
+        radial-gradient(at 82% 65%, hsl(218.00, 39%, 11%) 0, transparent 55%);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 50vh;
+      animation: gradientAnimation 5s linear infinite;
+    }
 body,
 html { height: 100%;}
 .nav .open > a, 
