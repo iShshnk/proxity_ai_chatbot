@@ -60,9 +60,9 @@ def delete_avatar_info(email_id):
     return 'Avatar information deleted!'
 
 @app.route('/update/<id>', methods=['POST'])
-def update_summary(email_id, summary):
+def update_summary(email_id, bot_id, summary):
     query = {'Email': email_id}
-    new_values = {"$set": {"Last Conversation Summary": summary}}
+    new_values = {"$set": {f"Last Convo Summary with {bot_id}": summary}}
     current_collection.update_one(query, new_values)
     return 'Summary Updated!'
   

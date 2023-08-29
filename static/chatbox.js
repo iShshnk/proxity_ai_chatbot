@@ -2,7 +2,9 @@
 const startButton = document.getElementById("start-btn");
 const sendButton = document.getElementById("send-button");
 const userMsg = document.getElementById("user_msg");
-const vidButton = document.getElementById("hidden-button")
+const vidButton = document.getElementById("hidden-button");
+const bot_id = document.currentScript.getAttribute('data-bot-id');
+console.log(bot_id);
 
 document.addEventListener('DOMContentLoaded', function() {
     var form = document.getElementById('chat-form');
@@ -17,7 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
         sendButton.disabled = true;
 
         // send a POST request to the server
-        fetch('/chat', {  // update with your Flask route
+        fetch(`/chat/${bot_id}`, {  // update with your Flask route
             method: 'POST',
             body: formData
         })
@@ -56,7 +58,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     newConversationButton.addEventListener('click', function(event) {
         // send a POST request to the server
-        fetch('/chat', {
+        fetch(`/chat/${bot_id}`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
