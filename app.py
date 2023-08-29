@@ -392,9 +392,22 @@ def interact_avatar():
     
     return render_template('interact_avatar1.html', img_url=img_url, video_url = video_url)
 
-# chat route with chatbot integration
+
+
+'''# chat route with chatbot integration
 @app.route('/chat', methods=['GET', 'POST'])
 def chat():
+    # Initialize nested dictionary in session for bots
+    if 'bots' not in session:
+        session['bots'] = {}
+
+    # Initialize chat log for this specific bot_id if it doesn't exist yet
+    if bot_id not in session['bots']:
+        session['bots'][bot_id] = {'chat_log': []}
+
+    # Access the chat log for the current bot
+    chat_log = session['bots'][bot_id]['chat_log']
+    
     # define chat endpoint
     # this is the main entry point of the application
     # it handles GET and POST requests 
@@ -431,7 +444,6 @@ def chat():
     if request.method == 'POST' and request.is_json:
         req = request.get_json()
         if 'new_conversation' in req and req['new_conversation']:
-            chat_log = session.get('chat_log')
             user_and_assistant_msgs = [msg['content'] for msg in chat_log if msg['role'] in ['user', 'assistant'] and msg['content'] is not None]
             conversation = ' '.join(user_and_assistant_msgs)
 
@@ -468,15 +480,16 @@ def chat():
             }
             current_collection2.insert_one(document)
 
-            # Clear the session and render the chat page without any previous conversation.
-            session.clear()
-            return render_template('chat.html', chat_log=[], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
+            # Clear the chat log for this bot and update the session
+            chat_log.clear()
+            session['bots'][bot_id]['chat_log'] = chat_log
+            return render_template('chat.html', chat_log=chat_log, bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
 
-    elif 'chat_log' not in session:
+    if not chat_log:
         # Initialize the chat log with the system message for some edge cases.
         initial_prompt, _ = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, bot_email)
         # initial_prompt, _ = generate_prompts(name, company, bio, last_conversation)
-        session['chat_log'] = [{
+        chat_log = [{
             'role': 'system',
             'content': initial_prompt
         }]
@@ -489,14 +502,13 @@ def chat():
         # then, render the chat page with the response and the updated chat log.
         question = request.form.get('user_msg')
         response, chat_log = ask_expert(question, name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, bot_email, session.get('chat_log'))
-        session['chat_log'] = chat_log
-        print(session['chat_log'])
-        return render_template('chat.html', response=response, chat_log=session['chat_log'], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
+        session['bots'][bot_id]['chat_log'] = chat_log
+        print(chat_log)
+        return render_template('chat.html', response=response, chat_log=chat_log, bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
 
     # GET request to show the chat page with the current chat log
-    return render_template('chat.html', chat_log=session['chat_log'], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
+    return render_template('chat.html', chat_log=chat_log, bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)'''
 
-# ... (existing imports and code)
 
 # Define a route for handling the search request
 @app.route('/search', methods=['POST'])
@@ -511,12 +523,22 @@ def search():
     
     return render_template('search_results.html', results_list=results_list)
 
-# ... (existing code)
-
 
 # chat route with chatbot integration
 @app.route('/chat/<bot_id>', methods=['GET', 'POST'])
 def newchat(bot_id):
+    # Initialize nested dictionary in session for bots
+    if 'bots' not in session:
+        session['bots'] = {}
+
+    # Initialize chat log for this specific bot_id if it doesn't exist yet
+    if bot_id not in session['bots']:
+        session['bots'][bot_id] = {'chat_log': []}
+
+    # Access the chat log for the current bot
+    chat_log = session['bots'][bot_id]['chat_log']
+    print(session['bots'])
+    
     # define chat endpoint
     # this is the main entry point of the application
     # it handles GET and POST requests 
@@ -536,7 +558,7 @@ def newchat(bot_id):
     job_role = data['Job Role']
     bio = data['About']
     fun_story = data['Fun Story']
-    last_conversation = data.get('Last Conversation Summary', 'No prior conversation')
+    last_conversation = data.get(f'Last Convo Summary with {bot_id}', 'No prior conversation')
     educational_qualification = data['Educational Qualification']
     skills = data['Skills']
     company = "RediMinds"
@@ -557,7 +579,6 @@ def newchat(bot_id):
     if request.method == 'POST' and request.is_json:
         req = request.get_json()
         if 'new_conversation' in req and req['new_conversation']:
-            chat_log = session.get('chat_log')
             user_and_assistant_msgs = [msg['content'] for msg in chat_log if msg['role'] in ['user', 'assistant'] and msg['content'] is not None]
             conversation = ' '.join(user_and_assistant_msgs)
 
@@ -577,7 +598,7 @@ def newchat(bot_id):
             )
             session['summary'] = response.choices[0].message['content']
 
-            update_summary(current_email, session['summary'])
+            update_summary(current_email, bot_id, session['summary'])
             # Extract only user and assistant messages from the chat_log
             extracted_messages = [
                 {'role': msg['role'], 'content': msg['content']} 
@@ -594,15 +615,16 @@ def newchat(bot_id):
             }
             current_collection2.insert_one(document)
 
-            # Clear the session and render the chat page without any previous conversation.
-            session.clear()
-            return render_template('chat.html', chat_log=[], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
-
-    elif 'chat_log' not in session:
+            # Clear the chat log for this bot and update the session
+            chat_log.clear()
+            session['bots'][bot_id]['chat_log'] = chat_log
+            return render_template('chat.html', chat_log=session['bots'][bot_id]['chat_log'], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
+    
+    elif chat_log==[]:
         # Initialize the chat log with the system message for some edge cases.
         initial_prompt, _ = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, bot_email)
         # initial_prompt, _ = generate_prompts(name, company, bio, last_conversation)
-        session['chat_log'] = [{
+        session['bots'][bot_id]['chat_log'] = [{
             'role': 'system',
             'content': initial_prompt
         }]
@@ -614,13 +636,24 @@ def newchat(bot_id):
         # and add the response to the session's chat log.
         # then, render the chat page with the response and the updated chat log.
         question = request.form.get('user_msg')
-        response, chat_log = ask_expert(question, name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, bot_email, session.get('chat_log'))
-        session['chat_log'] = chat_log
-        print(session['chat_log'])
-        return render_template('chat.html', response=response, chat_log=session['chat_log'], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
-
+        response, chat_log = ask_expert(question, name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, bot_email, chat_log)
+        session['bots'][bot_id]['chat_log'] = chat_log
+        #print(chat_log)
+        return render_template('chat.html', response=response, chat_log=session['bots'][bot_id]['chat_log'], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
+    
+    '''    
+    elif 'chat_log' not in session:
+        # Initialize the chat log with the system message for some edge cases.
+        initial_prompt, _ = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, bot_email)
+        # initial_prompt, _ = generate_prompts(name, company, bio, last_conversation)
+        chat_log = [{
+            'role': 'system',
+            'content': initial_prompt
+        }]
+        '''
+    
     # GET request to show the chat page with the current chat log
-    return render_template('chat.html', chat_log=session['chat_log'], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
+    return render_template('chat.html', chat_log=session['bots'][bot_id]['chat_log'], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
 
 
 
@@ -702,12 +735,17 @@ def get_audio():
         "Content-Type": "application/json",
         "xi-api-key": app_config.ELEVENLABS_API_KEY,
     }
+    bot_id = session.get('bot_id', None)
+
+    # Initialize chat_log based on current bot_id
+    chat_log = session['bots'][bot_id]['chat_log'] if 'bots' in session and bot_id in session['bots'] else []
+    text = chat_log[-1]['content'] if len(chat_log) > 0 else ''
     data = {
-        "text": session['chat_log'][-1]['content'] if 'chat_log' in session and len(session['chat_log']) > 0 else '',
+        "text": text,
         "model_id": "eleven_monolingual_v1",
         "voice_settings": {
             "stability": 0.5,
-            "similarity_boost": 0.7,
+            "similarity_boost": 0.6,
         },
     }
 
@@ -758,5 +796,5 @@ def user_chats():
 
 # run the Flask app in debug mode
 if __name__ == '__main__':
-    app.run(port=5010, ssl_context=('cert.pem', 'key.pem'), debug=True)
+    app.run(port=5012, ssl_context=('cert.pem', 'key.pem'), debug=True)
     #app.run(host="0.0.0.0", port=5000, ssl_context=('cert.pem', 'key.pem'), debug=True)
