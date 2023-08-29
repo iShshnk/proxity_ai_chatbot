@@ -22,6 +22,8 @@ talkVideo.setAttribute('playsinline', '');
 
 // const botConfigResponse = await fetch("/api/bot_data");
 // const bot_data = await botConfigResponse.json()
+const bot_img_url = document.currentScript.getAttribute('bot-img-id');
+const bot_video_url = document.currentScript.getAttribute('bot-vid-id');
 
 (async function autoConnect() {
 
@@ -53,7 +55,7 @@ talkVideo.setAttribute('playsinline', '');
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        source_url: bot_data.img_url,
+        source_url: bot_img_url,
       }),
     }
   );
@@ -90,51 +92,65 @@ vidButton.onclick = async () => {
 };
 
 async function startSession() {
-  
+  let audioUrl;
+
   try {
-    const timeoutDuration = 10000;  // 10 seconds, adjust as needed
+    const timeoutDuration = 20000;  // 20 seconds
     const timeoutPromise = new Promise((_, reject) => 
         setTimeout(() => reject(new Error('Request timed out')), timeoutDuration)
     );
 
     const audioResponse = await Promise.race([fetch('/get_audio'), timeoutPromise]);
+    
     if (!audioResponse.ok) {
-        throw new Error('Network response was not ok');
+      throw new Error('Network response was not ok');
     }
+    
     const audioData = await audioResponse.json();
-    const audioUrl = audioData.audio_url;
-    const audio = new Audio(audioUrl);
-    audio.play();
-} catch (error) {
-    console.log("There was a problem:", error.message);
-    // Handle error (e.g. show an error message or retry)
+    audioUrl = audioData.audio_url;  // Store audioUrl for later use
+  } catch (error) {
+    console.log("Error fetching audio:", error.message);
+  }
+
+  try {
+    if (audioUrl && (peerConnection?.signalingState === 'stable' || peerConnection?.iceConnectionState === 'connected')) {
+      const talkResponse = await fetchWithRetries(`${DID_API.url}/talks/streams/${streamId}`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Basic ${DID_API.key}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          script: {
+            type: 'audio',
+            audio_url: audioUrl,
+          },
+          driver_url: 'bank://lively/',
+          config: {
+            stitch: true,
+          },
+          session_id: sessionId,
+        }),
+      });
+
+      if (!talkResponse.ok) {
+        throw new Error(`API returned status code ${talkResponse.status}`);
+      }
+    } else if (audioUrl) {
+      playAudio(audioUrl);
+    }
+  } catch (error) {
+    console.log("Error in API call or elsewhere:", error.message);
+    if (audioUrl) {
+      playAudio(audioUrl);
+    }
+  }
 }
-// // connectionState not supported in firefox
-// if (peerConnection?.signalingState === 'stable' || peerConnection?.iceConnectionState === 'connected') {
-//   const talkResponse = await fetchWithRetries(`${DID_API.url}/talks/streams/${streamId}`, {
-//     method: 'POST',
-//     headers: {
-//       Authorization: `Basic ${DID_API.key}`,
-//       'Content-Type': 'application/json',
-//     },
-//     body: JSON.stringify({
-//       script: {
-//         type: 'audio',
-//         audio_url: audioUrl,
-//       },
-//       driver_url: 'bank://lively/',
-//       config: {
-//         stitch: true,
-//       },
-//       session_id: sessionId,
-//     }),
-//   });
-// } else {
-//   // Play the audio automatically if peerConnection is not stable or connected
-//   const audio = new Audio(audioUrl);
-//   audio.play();
-// }
- }
+
+function playAudio(audioUrl) {
+  const audio = new Audio(audioUrl);
+  audio.play();
+}
 
 function onIceGatheringStateChange() {
   console.log("ICE gathering status: " + peerConnection.iceGatheringState);
@@ -163,6 +179,7 @@ function onIceConnectionStateChange() {
   console.log("ICE status: " + peerConnection.iceConnectionState);
   if (peerConnection.iceConnectionState === 'failed' || peerConnection.iceConnectionState === 'closed') {
     stopAllStreams();
+    playIdleVideo();
     closePC();
   }
 }
@@ -256,7 +273,7 @@ function setVideoElement(stream) {
 
 function playIdleVideo() {
   talkVideo.srcObject = undefined;
-  talkVideo.src = bot_data.video_url;
+  talkVideo.src = bot_video_url;
   talkVideo.loop = true;
   talkVideo.play();
 }
