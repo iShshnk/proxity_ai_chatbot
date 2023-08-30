@@ -71,123 +71,11 @@ def admin_panel():
     # In this case, it continues to the line below and returns the 'admin_panel.html' page.
     return render_template('admin_panel.html')
 
-# @app.route('/avatar_form', methods=['GET','POST'])
-# def avatar_form():
-#     if request.method == 'POST':
-#         name = request.form.get('name')
-#         email = request.form.get('email')
-#         personality = request.form.get('personality')
-#         personal_life = request.form.get('personal_life')
-#         profession = request.form.get('profession')
-
-#         avatar_data = {
-#             'name': name,
-#             'email': email,
-#             'personality': personality,
-#             'personal_life': personal_life,
-#             'profession': profession
-#         }
-        
-#         image_file = request.files['photo']
-#         audio_file = request.files['voice_sample']
-        
-#         if image_file and allowed_img_file(image_file.filename):
-#             filename = str(email) + secure_filename(image_file.filename)
-#             image_path = os.path.join(app.root_path, 'static/img', filename)
-#             image_file.save(image_path)
-                      
-#             try:
-#                 with open(image_path, 'rb') as image_file:
-#                     s3.put_object(Body=image_file, Bucket='digital-me-rediminds', Key=filename)
-
-#             except NoCredentialsError:
-#                 print ({"error": "S3 credentials not found"})
-
-#             public_url = f"https://digital-me-rediminds.s3.amazonaws.com/{filename}"
-            
-#             avatar_data['img_url'] = public_url
-            
-#             os.remove(image_path)
-            
-#         if audio_file and allowed_audio_file(audio_file.filename):
-#             filename = str(email) + secure_filename(audio_file.filename)
-#             audio_path = os.path.join(app.root_path, 'static/img', filename)
-#             audio_file.save(audio_path)
-            
-#             voice_id = get_voice_clone(email, audio_path)
-
-#             os.remove(audio_path)
-
-#             avatar_data['voice_id'] = voice_id
-
-#         save_avatar(avatar_data)
-
-#     return render_template('avatar_form.html')
-
 
 @app.route('/my_avatar', methods=['GET','POST'])
 def my_avatar():
     if not session.get("user") or session.get("role") != "admin":
         return redirect(url_for("login"))
-
-    # if request.method == "POST":
-    #     image_file = request.files['image']
-    #     audio_files = request.files.getlist('audio')
-
-    #     if image_file and allowed_img_file(image_file.filename):
-    #         filename = str(session["user"]["preferred_username"]) + secure_filename(image_file.filename)
-    #         image_path = os.path.join(app.root_path, 'static/img', filename)
-    #         image_file.save(image_path)
-    #         image_file = remove_bg(image_path)
-    #         image_file.save(image_path)
-                      
-    #         try:
-    #             with open(image_path, 'rb') as image_file:
-    #                 s3.put_object(Body=image_file, Bucket='digital-me-rediminds', Key=filename)
-
-    #         except NoCredentialsError:
-    #             print ({"error": "S3 credentials not found"})
-
-    #         # Return the URL to the audio file
-    #         public_url = f"https://digital-me-rediminds.s3.amazonaws.com/{filename}"
-            
-    #         save_avatar_image(public_url, "madhu.reddiboina@rediminds.com")
-    #         # save_avatar_image(public_url, session["user"]["preferred_username"])
-            
-    #         video_id = create_holder_video(public_url)
-    #         # get_holder_video(video_id)
-            
-    #         video_url = get_holder_video_url(video_id)
-            
-    #         # adding email explicitly for testing purposes, must be removed later *********
-    #         save_video_url(video_url, "madhu.reddiboina@rediminds.com")
-    #         # save_video_url(video_url, session["user"]["preferred_username"])
-            
-    #         os.remove(image_path)
-            
-        # audio_samples_path = []
-
-        # for audio_file in audio_files:
-        #     if audio_file and allowed_audio_file(audio_file.filename):
-        #         filename = secure_filename(audio_file.filename)
-        #         audio_path = os.path.join(app.root_path, 'static/img', filename)
-        #         audio_file.save(audio_path)
-        #         audio_samples_path.append(audio_path)
-            
-            
-        # # adding email explicitly for testing purposes, must be removed later *********
-        # voice_id = get_voice_clone("madhu.reddiboina@rediminds.com", audio_samples_path)
-        # # voice_id = get_voice_clone(session["user"]["preferred_username"], audio_files)
-        
-        # # print(audio_samples_path)
-        # for path in audio_samples_path:
-        #     os.remove(path)
-        
-    #     # adding email explicitly for testing purposes, must be removed later *********
-    #     save_voice_id("madhu.reddiboina@rediminds.com", voice_id)
-    #     # save_voice_id(session["user"]["preferred_username"], voice_id)
-                
-    #     return jsonify({'success': True, 'message': 'Avatar created successfully!'})
     
     
     if request.method == 'POST':
@@ -251,13 +139,11 @@ def allowed_img_file(filename):
 
 def allowed_audio_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['mp3']
-    
-@app.route('/Bots', methods=['GET','POST'])
-def Bots():
-   
-    
-     return render_template('Bots.html')
 
+
+@app.route('/Bots', methods=['GET','POST'])
+def Bots():    
+     return render_template('Bots.html')
 
 
 @app.route('/your_convo', methods=['GET'])
@@ -267,11 +153,13 @@ def your_convo():
     
     return render_template('your_convo.html')
 
+
 @app.route('/conversation_detail/<conversation_id>')
 def conversation_detail(conversation_id):
     # Fetch conversation detail based on conversation_id from your database
     # You can pass it to the template to be used in JavaScript
     return render_template('conversation_detail.html', conversation_id=conversation_id)
+
 
 @app.route("/get_chat")
 def get_chat_api():
@@ -311,6 +199,7 @@ def user_form():
 def retrieve_data(email_id):
     data = current_collection.find_one({ 'Email': email_id })
     return data
+
 
 @app.route('/interact_avatar', methods=['GET', 'POST'])
 def interact_avatar():
@@ -773,23 +662,21 @@ def latest_response():
     # Return the response as JSON
     return jsonify(last_response)"""
 
+
 @app.route('/favicon.ico')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
+
 @app.route('/idle.mp4')
 def video():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'idle_madhu.mp4')
+    return send_from_directory(os.path.join(app.root_path, 'static'),'idle_madhu.mp4')
+
 
 @app.route('/Chat_log', methods=['GET','POST'])
 def user_chats():
      user_email = session["user"]["preferred_username"]
-    
-    
-    
-   
-    
      return render_template('user_chats.html',user_email=user_email,)
 
 
