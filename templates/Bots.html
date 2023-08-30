@@ -19,19 +19,52 @@
     /* *************
     main content for bots
     ************* */
+.square-video {
+    width: 100px; /* Set the desired width for the square container */
+    height: 100px; /* Set the same height as the width for a 1:1 aspect ratio */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    margin: 0 auto; /* Center the square container horizontally */
+    background-color: rgb(255, 255, 255); /* Add background color */
+    overflow: hidden; /* Ensure videos are fully contained within the frame */
+}
+
+.square-video video {
+    width: 100%; /* Make the video fill the container */
+    height: 100%; /* Make the video fill the container */
+    object-fit: cover; /* Maintain aspect ratio and cover the container */
+    position: absolute;
+    top: 100%; /* Center the video vertically */
+    left: 100%; /* Center the video horizontally */
+    transform: translate(20%, 20%); /* Adjust for perfect centering */
+}
+
+
+
+    .button-row {
+        display: flex; /* Display children in a row */
+        justify-content: center; /* Center content horizontally */
+        align-items: center; /* Center content vertically */
+    }
+
     .button-image {
-    width: 100px; /* Set the desired width */
+    width: 100px; /* Increase the width for larger circular videos */
     height: 100px; /* Set the same height as the width for a 1:1 aspect ratio */
     overflow: hidden;
     margin: 0 auto;
     border-radius: 50%;
-    margin-bottom: 10px; /* Adjust spacing as needed */
+    margin-bottom: 10px;
 }
 
-.button-image img {
-    width: 100%;
-    height: auto;
-    display: block;
+.button-image video {
+    width: 75%;
+    height: 75%;
+    object-fit: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
     .glass-frame {
@@ -46,12 +79,10 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      width: 400px; /* Adjust the width */
+      width: 600px; /* Adjust the width */
       margin: 0 auto; /* Center the element horizontally */
       margin-top: 50px; /* Adjust margin-top as needed */
 }
-
-
     .logo {
       width: 400px;
       /* Adjust logo size if needed */
@@ -73,7 +104,7 @@
       border-radius: 5px;
       font-weight: bold;
       transition: transform 0.3s ease-out, background-color 0.3s ease, border-color 0.3s ease;
-      display: inline-block;
+      display: block;
       position: relative;
       overflow: hidden;
       backdrop-filter: blur(8px) saturate(180%);
@@ -81,6 +112,7 @@
       background-color: rgba(17, 25, 40, 0.75);
       border: 1px solid rgba(255, 255, 255, 0.125);
       margin-bottom: 10px;
+      margin: 0 10px;
     }
 
     .chat-a:hover {
@@ -161,9 +193,8 @@
       margin: 0;
       padding: 0;
       background-color: #111927;
-      background-image:
-        radial-gradient(at 47% 33%, hsl(273.06, 77%, 40%) 0, transparent 59%),
-        radial-gradient(at 82% 65%, hsl(218.00, 39%, 11%) 0, transparent 55%);
+      background: url('https://img.freepik.com/free-vector/winter-blue-pink-gradient-background-vector_53876-117276.jpg?size=626&ext=jpg') no-repeat center center fixed; /* Replace with the actual path to your image */
+      background-size: cover; /* Adjust to your preference */
       color: white;
       display: flex;
       flex-direction: column;
@@ -513,21 +544,31 @@ html { height: 100%;}
               <div class="col-lg-8 col-lg-offset-2">
                 {% if config.get("ENDPOINT") %}
                 <div class="glass-frame">
-                  <a class="chat-a" href="/chat/64c0fc5c58a91eb5d6ce92e8">
-                    <div class="button-image">
-                      <img src="static\img\Madhu.png" alt="Chat with Madhu">
-                    </div>
-                    Chat with Madhu
-                  </a>
-                  <br>
-                  <a class="chat-a" href="/chat/64ddf81dac580c47566ca4a2">
-                    <div class="button-image">
-                      <img src="static\img\dr_bhandari_avatar.jpeg" alt="Chat with Dr. Bhandari">
-                    </div>
-                    Chat with Dr. Bhandari
-                  </a>
-                  <br>
+              <div class="button-row">
+            <a class="chat-a" href="/chat/64c0fc5c58a91eb5d6ce92e8">
+              <div class="button-image">
+                <div class="square-video">
+                  <video controls autoplay loop>
+                    <source src="static\img\Madhu.MP4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
                 </div>
+              </div>
+              Chat with Madhu
+            </a>
+            
+            <a class="chat-a" href="/chat/64ddf81dac580c47566ca4a2">
+              <div class="button-image">
+                <div class="square-video">
+                  <video controls autoplay loop>
+                    <source src="static\img\DrB.MP4" type="video/mp4">
+                    Your browser does not support the video tag.
+                  </video>
+                </div>
+              </div>
+              Chat with Dr. Bhandari
+            </a>
+        </div>
                 {% endif %}
               </div>
             </div>
