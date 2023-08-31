@@ -13,169 +13,151 @@
 
     <title>Chat with {{bot_name}}</title>
 
-
-    <style>
-
- body {
-  height: 100%; /* Ensure the HTML and body take up the full height of the viewport */
-  margin: 0; 
-  overflow-y: hidden;
-  /* Remove default margin to prevent unwanted spacing */
-}
-
-h4 {
-  font-family: Roboto;
-  font-weight: bold;
-}
-
-
-.gradient-custom {
-/* fallback for old browsers */
-background: #54708a;
-
-/* Chrome 10-25, Safari 5.1-6 */
-background: -webkit-linear-gradient(to bottom right, rgb(143, 169, 186), rgb(34, 9, 40));
-
-/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-background: linear-gradient(to bottom right, rgb(51, 54, 130), rgb(44, 14, 51))
-}
-/* ::-webkit-scrollbar{display:none} */
-::-webkit-scrollbar {
-  width: 0px;
-  background-color: grey;
-}
-
-::-webkit-scrollbar-thumb {
-  background-color: grey;
-}
-.chat-column {
-      height: 100vh;
-      overflow-y: auto;
-      scroll-behavior: smooth;
+<style>
+      body {
+        height: 100%;
+        margin: 0;
+        /* Removed overflow-y: hidden; */
+      }
       
-    color:white;
-    font-size: small;
+      h4 {
+        font-family: Roboto;
+        font-weight: bold;
+      }
       
-    }
-#start-btn {
-  margin-right: 0.5rem; 
-  float: none;
-}
-
-#send-button {
-  margin-right: 0;
-}
-
-
-.mask-custom {
-background: rgba(24, 24, 16, .2);
-border-radius: 2em;
-backdrop-filter: blur(15px);
-border: 2px solid rgba(255, 255, 255, 0.05);
-background-clip: padding-box;
-box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
-align-items: center;
-}
-.card-video {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position:sticky;
-    height: 35vh;
-}
-
-#chat-container{
-  overflow-y: auto;
-  height: 65vh;
-  
-}
-
-#msg-box-send {
-  width: 90%;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-
-
-.form-control {
-  flex: 9;
-  margin-right: 5px;
-  background-color: rgba(37, 36, 36, 0.5); /* Adjust the alpha value for transparency */
-  border: 1px solid #ccc; /* Adding a border for better visibility */
-  padding: 5px; /* Adding some padding for better aesthetics */
-}
-
-.btn {
-  flex: 1;
-  max-width: 10%;
-  height: 100%; /* Ensure the button matches the height of the textarea */
-}
-
- 
-
-
-#talk-video{
-  max-width: 100%;
-  height: auto;
-}
-
-.li{
-  width: 200px;
-}
-
-div.form-outline.form-white.id-msg-box-send {
-  border-radius: 10px;
-}
-.row{
-  height: 100vh;
-}
-
-
-@media (max-width: 780px) {
-  body {
-  height: 100%; /* Ensure the HTML and body take up the full height of the viewport */
-  margin: 0; 
-  overflow-y: hidden;/* Remove default margin to prevent unwanted spacing */
-}
-
-#card-video{
-  display: flex;
-    
-    align-items: center;
-    position:sticky;
-  
-  height:20vh;
-  width:20vh;
-}
-#video-column{
-
-  justify-content: center;
-    align-items: center;
-    position:sticky;
-}
-
-#talk-video{
-  max-height: 17vh;
-}
-#chat-column{
-  height:80vh;
-}
-#chat-container{
-  max-height: 40vh;
-}
-#msg-box-send {
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-}
-.msg-box-form{
-  height:30vh;
-}
-
-}
+      .gradient-custom {
+        background: linear-gradient(to bottom right, rgb(51, 54, 130), rgb(44, 14, 51));
+      }
+      
+      ::-webkit-scrollbar {
+        width: 0px;
+        background-color: grey;
+      }
+      
+      ::-webkit-scrollbar-thumb {
+        background-color: grey;
+      }
+      
+      .chat-column {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow-y: auto;
+        scroll-behavior: smooth;
+        color: white;
+        font-size: small;
+      }
+      
+      #start-btn {
+        margin-right: 0.5rem;
+        float: none;
+      }
+      
+      #send-button {
+        margin-right: 0;
+      }
+      
+      .mask-custom {
+        background: rgba(24, 24, 16, .2);
+        border-radius: 2em;
+        backdrop-filter: blur(15px);
+        border: 2px solid rgba(255, 255, 255, 0.05);
+        background-clip: padding-box;
+        box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
+        align-items: center;
+      }
+      
+      .card-video {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: sticky;
+        height: 35vh;
+      }
+      
+      #chat-container {
+        flex: 1;
+        max-height: 65vh;
+        overflow-y: auto;
+      }
+      
+      #msg-box-send {
+        width: 90%;
+        margin: 0 auto;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+      
+      .form-control {
+        flex: 9;
+        margin-right: 5px;
+        background-color: rgba(37, 36, 36, 0.5);
+        border: 1px solid #ccc;
+        padding: 5px;
+      }
+      
+      .btn {
+        flex: 1;
+        max-width: 10%;
+        height: 100%;
+      }
+      
+      #talk-video {
+        max-width: 100%;
+        height: auto;
+      }
+      
+      div.form-outline.form-white.id-msg-box-send {
+        border-radius: 10px;
+      }
+      
+      .row {
+        height: 100vh;
+      }
+      
+      @media (max-width: 780px) {
+        body {
+          height: 100%;
+          margin: 0;
+        }
+      
+        #card-video {
+          display: flex;
+          align-items: center;
+          position: sticky;
+          height: 20vh;
+          width: 20vh;
+        }
+      
+        #video-column {
+          justify-content: center;
+          align-items: center;
+          position: sticky;
+        }
+      
+        #talk-video {
+          max-height: 17vh;
+        }
+      
+        #chat-column {
+          height: 80vh;
+        }
+      
+        #chat-container {
+          max-height: 40vh;
+        }
+      
+        #msg-box-send {
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+        }
+      
+        .msg-box-form {
+          height: 30vh;
+        }
+      }
     </style>
   </head>
   <body>

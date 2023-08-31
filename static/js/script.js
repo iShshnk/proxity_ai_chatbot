@@ -179,7 +179,6 @@ function onIceConnectionStateChange() {
   console.log("ICE status: " + peerConnection.iceConnectionState);
   if (peerConnection.iceConnectionState === 'failed' || peerConnection.iceConnectionState === 'closed') {
     stopAllStreams();
-    playIdleVideo();
     closePC();
   }
 }
@@ -203,6 +202,7 @@ function onVideoStatusChange(videoIsPlaying, stream) {
     setVideoElement(remoteStream);
   } else {
     status = 'empty';
+    playIdleVideo();
   }
   console.log("Streaming status: " + status);
 }
