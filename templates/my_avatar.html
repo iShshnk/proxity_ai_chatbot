@@ -16,22 +16,23 @@
 
 
 <style>
+	.social-icon{
+		padding:5%;
+		
+	}
+	.social-icons{
+		display: flex;
+		align-items: center;
+	}
+	.sidebar-footer{
+		
+		margin-top: 85vh;
+		
+		
+		align-items: center;
+	}
 
-table {
-				width: 100%;
-				border-collapse: collapse;
-			}
-			th, td {
-				padding: 10px;
-				text-align: left;
-				border-bottom: 1px solid #ddd;
-			}
-			th {
-				background-color: #f2f2f2;
-			}
-
-
-    .circular-video {
+.circular-video {
     /* width: 6vh; */
     height: 6vh;
     border-radius: 50%;
@@ -48,6 +49,15 @@ table {
     top: 0;
     left: 0;
     pointer-events: none;
+}
+
+.form-control{
+	border-radius:9px;
+	transition: transform 0.3s ease-in-out;
+}
+input:hover  {
+	transition: transform 0.3s ease-in-out;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
 }
     body {
     position: relative;
@@ -80,7 +90,7 @@ html { height: 100%;}
     z-index: 1000;
     left: 220px;
     width: 0;
-    height: 100%;
+    height: 100vh;
     margin-left: -220px;
     overflow-y: auto;
     overflow-x: hidden;
@@ -409,6 +419,18 @@ a[href*="logout"]::before {
         </li>
         
        </ul>
+
+	   <div class="sidebar-footer">
+        <a href="https://www.rediminds.com" target="_blank">
+            <img src="static\img\rediminds.png" alt="Company Logo">
+        </a>
+        <div class="social-icons">
+            <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <!-- Add more social icons as needed -->
+        </div>
+    </div>
    </nav>
          <!-- /#sidebar-wrapper -->
  
@@ -420,57 +442,58 @@ a[href*="logout"]::before {
                  <span class="hamb-bottom"></span>
              </button>
              <div class="container">
-                 <div class="row">
-                     <div class="col-lg-8 col-lg-offset-2">
+                
+
+                     
 						<main>
 							<div class="content">
-								<h1>Submit your details</h1>
+								<h1 style="font-family: Orbitron;">Submit your details</h1>
 								<form method="POST" action="/my_avatar" enctype="multipart/form-data" class="form-horizontal">
 									
 									<div class="form-group">
-										<label class="control-label col-sm-2" for="text">Name:</label>
+										<label class="control-label" for="text">Name:</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" name="name">
 										</div>
 									</div>
 				
 									<div class="form-group">
-										<label class="control-label col-sm-2" for="email">Email:</label>
+										<label class="control-label " for="email">Email:</label>
 										<div class="col-sm-10">
 											<input type="email" class="form-control" name="email">
 										</div>
 									</div>
 				
 									<div class="form-group">
-										<label class="control-label col-sm-2" for="text">About Your Personality:</label>
+										<label class="control-label " for="text">About Your Personality:</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" name="personality">
 										</div>
 									</div>
 				
 									<div class="form-group">
-										<label class="control-label col-sm-2" for="text">About Your Personal Life:</label>
+										<label class="control-label " for="text">About Your Personal Life:</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" name="personal_life">
 										</div>
 									</div>
 				
 									<div class="form-group">
-										<label class="control-label col-sm-2" for="text">About Your Profession:</label>
+										<label class="control-label " for="text">About Your Profession:</label>
 										<div class="col-sm-10">
 											<input type="text" class="form-control" name="profession">
 										</div>
 									</div>
 				
 									<div class="form-group">
-										<label class="control-label col-sm-2">Upload Image:</label>
+										<label class="control-label ">Upload Image:</label>
 										<div class="col-sm-10">
 											<input type="file" class="form-control" name="photo">
 										</div>
 									</div>
 									
 									<div class="form-group">
-										<label class="control-label col-sm-2">Upload Audio:</label>
+										<label class="control-label ">Upload Audio:</label>
 										<div class="col-sm-10">
 											<input type="file" class="form-control" name="voice_sample">
 										</div>
@@ -484,13 +507,11 @@ a[href*="logout"]::before {
 										</div>
 									</div>
 								</form>
-							</div>
+							
 						</main>
                         
-                        <div id="footer"><a href="">
-    RediMinds Inc
-</div>
-                     </div>
+                        
+                     
                  </div>
              </div>
          </div>
