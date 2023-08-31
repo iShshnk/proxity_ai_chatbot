@@ -141,7 +141,7 @@ def allowed_audio_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ['mp3']
 
 
-@app.route('/Bots', methods=['GET','POST'])
+@app.route('/Bots', methods=['GET'])
 def Bots():    
      return render_template('Bots.html')
 
@@ -406,7 +406,7 @@ def get_audio():
     text = chat_log[-1]['content'] if len(chat_log) > 0 else ''
     data = {
         "text": text,
-        "model_id": "eleven_monolingual_v1",
+        "model_id": "eleven_multilingual_v2",
         "voice_settings": {
             "stability": 0.5,
             "similarity_boost": 0.6,
@@ -440,10 +440,10 @@ def video():
     return send_from_directory(os.path.join(app.root_path, 'static'),'idle_madhu.mp4')
 
 
-@app.route('/Chat_log', methods=['GET','POST'])
+@app.route('/Chat_log', methods=['GET'])
 def user_chats():
      user_email = session["user"]["preferred_username"]
-     return render_template('user_chats.html',user_email=user_email,)
+     return render_template('user_chats.html',user_email=user_email)
 
 
 
