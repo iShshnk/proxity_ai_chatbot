@@ -16,61 +16,55 @@
 
 
 <style>
-    /* *************
-    main content for bots
-    ************* */
-.square-video {
-    width: 100px; /* Set the desired width for the square container */
-    height: 100px; /* Set the same height as the width for a 1:1 aspect ratio */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    margin: 0 auto; /* Center the square container horizontally */
-    background-color: rgb(255, 255, 255); /* Add background color */
-    overflow: hidden; /* Ensure videos are fully contained within the frame */
-}
+  	.social-icon{
+		padding:5%;
+		
+	}
+	.social-icons{
+		display: flex;
+		align-items: center;
+	}
+	.sidebar-footer{
+		
+		margin-top: 85vh;
+		
+		
+		align-items: center;
+	}
 
-.square-video video {
-    width: 100%; /* Make the video fill the container */
-    height: 100%; /* Make the video fill the container */
-    object-fit: cover; /* Maintain aspect ratio and cover the container */
-    position: absolute;
-    top: 100%; /* Center the video vertically */
-    left: 100%; /* Center the video horizontally */
-    transform: translate(20%, 20%); /* Adjust for perfect centering */
-}
+  .button-row{
+    display:flex;
 
 
+  }
+  .bots-video{
+    height:20vh;
+    border-radius: 50%;
+    padding:20px;
+  
 
-    .button-row {
-        display: flex; /* Display children in a row */
-        justify-content: center; /* Center content horizontally */
-        align-items: center; /* Center content vertically */
+  }
+  .bot{
+    padding:7vh;
+
+  }
+  .bot:hover  {
+	transition: transform 0.3s ease-in-out;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}  
+
+.chat-a:hover {
+      background-color: rgba(52, 152, 219, 0.1);
+      /* Blue color with alpha */
+      transform: scale(1.1) translateY(-5px);
+      /* Bulge out and slightly lift */
+      border-color: rgba(255, 255, 255, 0.3);
     }
 
-    .button-image {
-    width: 100px; /* Increase the width for larger circular videos */
-    height: 100px; /* Set the same height as the width for a 1:1 aspect ratio */
-    overflow: hidden;
-    margin: 0 auto;
-    border-radius: 50%;
-    margin-bottom: 10px;
-}
-
-.button-image video {
-    width: 75%;
-    height: 75%;
-    object-fit: cover;
-    position: absolute;
-    top: 0;
-    left: 0;
-}
-
-    .glass-frame {
+  .glass-frame {
       backdrop-filter: blur(16px) saturate(180%);
       -webkit-backdrop-filter: blur(16px) saturate(180%);
-      background-color: rgba(17, 25, 40, 0.5);
+      background-color: rgba(17, 25, 40, 0.714);
       border-radius: 20px;
       border: 1px solid rgba(255, 255, 255, 0.125);
       padding: 30px;
@@ -83,48 +77,9 @@
       margin: 0 auto; /* Center the element horizontally */
       margin-top: 50px; /* Adjust margin-top as needed */
 }
-    .logo {
-      width: 400px;
-      /* Adjust logo size if needed */
-      margin-bottom: 20px;
-      display: flex;
-      align-items: center;
-    }
-
-    .logo img {
-      width: 100%;
-      height: auto;
-    }
-
-    .chat-a {
-      text-decoration: none;
-      color: #ffffff;
-      padding: 10px 15px;
-      /* Reduced button size */
-      border-radius: 5px;
-      font-weight: bold;
-      transition: transform 0.3s ease-out, background-color 0.3s ease, border-color 0.3s ease;
-      display: block;
-      position: relative;
-      overflow: hidden;
-      backdrop-filter: blur(8px) saturate(180%);
-      -webkit-backdrop-filter: blur(8px) saturate(180%);
-      background-color: rgba(17, 25, 40, 0.75);
-      border: 1px solid rgba(255, 255, 255, 0.125);
-      margin-bottom: 10px;
-      margin: 0 10px;
-    }
-
-    .chat-a:hover {
-      background-color: rgba(52, 152, 219, 0.1);
-      /* Blue color with alpha */
-      transform: scale(1.1) translateY(-5px);
-      /* Bulge out and slightly lift */
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .chat-a::before {
-      content: '';
+.chat-a::before {
+      content:' ';
+      
       position: absolute;
       top: -100%;
       left: -50%;
@@ -133,6 +88,7 @@
       background: rgba(255, 255, 255, 0.1);
       transform: rotate(45deg);
       transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+      overflow: hidden;
     }
 
     .chat-a:hover::before {
@@ -153,10 +109,6 @@
         background-position: 0% 50%;
       }
     }
-  /* *************
-    main content for bots ends
-    ************* */
-
     .circular-video {
     /* width: 6vh; */
     height: 6vh;
@@ -175,34 +127,11 @@
     left: 0;
     pointer-events: none;
 }
-
-/* 
-    .circular-video {
-	width: 6vh;
-	height:6vh;
-	border-radius: 50%;
-    left: 2vh;
-	  
-  }
-  
-  video {
-	pointer-events: none;
-  } */
     body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-color: #111927;
-      background: url('https://img.freepik.com/free-vector/winter-blue-pink-gradient-background-vector_53876-117276.jpg?size=626&ext=jpg') no-repeat center center fixed; /* Replace with the actual path to your image */
-      background-size: cover; /* Adjust to your preference */
-      color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      height: 50vh;
-      animation: gradientAnimation 5s linear infinite;
-    }
+    position: relative;
+    overflow-x: hidden;
+    background-color: #CFD8DC;
+}
 body,
 html { height: 100%;}
 .nav .open > a, 
@@ -251,6 +180,7 @@ html { height: 100%;}
 #page-content-wrapper {
     width: 100%;
     padding-top: 70px;
+    
 }
 
 #wrapper.toggled #page-content-wrapper {
@@ -332,7 +262,7 @@ html { height: 100%;}
 }
 .sidebar-header {
     text-align: center;
-    font-size: 25px;
+    font-size: 20px;
     position: relative;
     width: 100%;
     display: inline-block;
@@ -353,6 +283,24 @@ html { height: 100%;}
 }
 
 
+
+/*Fontawesome icons*/
+/* .nav.sidebar-nav li a::before {
+   
+    content: "\f12e";
+    vertical-align: baseline;
+    display: inline-block;
+    padding-right: 5px;
+}
+a[href*="bots"]::before {
+  content: "\f015" !important;
+}
+a[href*="chat_log"]::before {
+  content: "\f129" !important;
+}
+a[href*="logout"]::before {
+  content: "\f073" !important;
+} */
 
 
 /*-------------------------------*/
@@ -521,7 +469,7 @@ html { height: 100%;}
         
         
         </div></div>
-        <li><a href="Bots">Bots</a></li>
+        <li><a href="/Bots">Bots</a></li>
         <li><a href="/Chat_log">Chat Log</a></li>
         <li>
             <a href="/logout" class="logout">
@@ -531,51 +479,71 @@ html { height: 100%;}
         </li>
         
        </ul>
+       <div class="sidebar-footer">
+        <a href="https://www.rediminds.com" target="_blank">
+            <img src="static\img\rediminds.png" alt="Company Logo">
+        </a>
+        <div class="social-icons">
+            <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <!-- Add more social icons as needed -->
+        </div>
+    </div>
    </nav>
          <!-- /#sidebar-wrapper -->
  
          <!-- Page Content -->
-        <div id="page-content-wrapper">
-          <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
-            <!-- Hamburger icon elements -->
-          </button>
-          <div class="container">
-            <div class="row">
-              <div class="col-lg-8 col-lg-offset-2">
-                {% if config.get("ENDPOINT") %}
-                <div class="glass-frame">
-              <div class="button-row">
-            <a class="chat-a" href="/chat/64c0fc5c58a91eb5d6ce92e8">
-              <div class="button-image">
-                <div class="square-video">
-                  <video controls autoplay loop>
-                    <source src="static\img\Madhu.MP4" type="video/mp4">
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              </div>
-              Chat with Madhu
-            </a>
-            
-            <a class="chat-a" href="/chat/64ddf81dac580c47566ca4a2">
-              <div class="button-image">
-                <div class="square-video">
-                  <video controls autoplay loop>
-                    <source src="static\img\DrB.MP4" type="video/mp4">
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              </div>
-              Chat with Dr. Bhandari
-            </a>
-        </div>
-                {% endif %}
-              </div>
-            </div>
-          </div>
-        </div>
+         <div id="page-content-wrapper">
+             <button type="button" class="hamburger animated fadeInLeft is-closed" data-toggle="offcanvas">
+                 <span class="hamb-top"></span>
+                 <span class="hamb-middle"></span>
+                 <span class="hamb-bottom"></span>
+             </button>
+             <div class="container">
+                 <div class="row">
+                     
+                      
 
+                      {% if config.get("ENDPOINT") %}
+                      <div class="glass-frame">
+                    <div class="button-row">
+                      <button class="Bot">
+                  <a class="chat-a" href="/chat/64c0fc5c58a91eb5d6ce92e8">
+                    
+                      <div class="bot-video">
+                        <video class="bots-video"  autoplay loop>
+                          <source src="static\img\Madhu.MP4" type="video/mp4">
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                    
+                    Chat with Madhu
+                  </a>
+                </button>
+                  <button class="Bot">
+                  <a class="chat-a" href="/chat/64ddf81dac580c47566ca4a2">
+                    <div class="bot-video">
+                        <video class="bots-video"autoplay loop>
+                          <source src="static\img\DrB.MP4" type="video/mp4">
+                          Your browser does not support the video tag.
+                        </video>
+                      </div>
+                   
+                    Chat with Dr. Bhandari
+                  </a>
+                  </button>
+                
+                  </div>
+              </div>
+                      {% endif %}
 
+                        
+                        
+                     </div>
+                 </div>
+             
+         </div>
          <!-- /#page-content-wrapper -->
  
      </div>
@@ -613,7 +581,7 @@ $(document).ready(function () {
   var hamburgerButton = $('.hamburger'),
       wrapper = $('#wrapper'),
       overlay = $('.overlay'),
-      isMenuOpen = false; // Set initial menu state to closed
+      isMenuOpen = true // Set initial menu state to closed
 
   // Toggle hamburger menu
   hamburgerButton.click(function () {
@@ -636,7 +604,7 @@ $(document).ready(function () {
    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>     
-
+</body>
 
 <script>
     var video = document.querySelector('video');
@@ -648,5 +616,5 @@ video.addEventListener('mouseout', function() {
 });
 
 </script>
-</body>
+
 </html>
