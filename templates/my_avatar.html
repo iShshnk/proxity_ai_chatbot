@@ -31,6 +31,46 @@
 		
 		align-items: center;
 	}
+  .glass-button {
+    padding: 8px 16px; /* Adjust padding for smaller size */
+    margin: 10px auto; /* Center-align the buttons and add vertical margin */
+    display: block; /* Make the buttons block-level elements */
+    width: 80%; /* Set a specific width for the buttons */
+    max-width: 200px; /* Limit the maximum width of the buttons */
+    position: relative; /* Needed for the shadow effect */
+    z-index: 1; /* Bring the button above the shining effect */
+    transition: transform 0.3s, box-shadow 0.3s; /* Add transitions */
+    border: 0;
+    text-decoration: none;
+    border-radius: 15px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 14px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    text-transform: uppercase;
+}
+
+
+.glass-button::before {
+    /* ... Your existing pseudo-element styles ... */
+    top: -100%; /* Increase the position above the button for shining effect */
+    left: -100%; /* Increase the position to the left of the button */
+    width: 300%; /* Wider than the button for better coverage */
+    height: 300%; /* Taller than the button */
+    /* ... Rest of your pseudo-element styles ... */
+}
+
+.glass-button:hover {
+    transform: scale(1.05); /* Slight bulging effect */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
+}
+
+.glass-button:hover::before {
+    opacity: 1; /* Shining effect on hover */
+}
 
 .circular-video {
     /* width: 6vh; */
