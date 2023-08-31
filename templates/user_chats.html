@@ -649,7 +649,7 @@ video.addEventListener('mouseout', function() {
         
 
     
-    fetch("/get_chat")
+    fetch("/get_chat_user")
         .then(response => response.json())
         .then(data => updateSummaryLog(data));
 </script>
