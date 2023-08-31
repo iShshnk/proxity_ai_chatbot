@@ -22,6 +22,22 @@
 
 
 <style>
+  .social-icon{
+		padding:5%;
+		
+	}
+	.social-icons{
+		display: flex;
+		align-items: center;
+	}
+	.sidebar-footer{
+		
+		margin-top: 85vh;
+		
+		
+		align-items: center;
+	}
+
 
 table {
 				width: 100%;
@@ -396,16 +412,27 @@ a[href*="logout"]::before {
         
         
         </div></div>
-        <li><a href="my_avatar">Avatar</a></li>
-        <li><a href="your_convo">Manage</a></li>
+        <li><a href="my_avatar" class="glass-button">Avatar</a></li>
+        <li><a href="your_convo" class="glass-button">Manage</a></li>
         <li>
-            <a href="/logout" class="logout">
+            <a href="/logout" class="glass-button logout>
                 <i class='bx bxs-log-out-circle' ></i>
-                <span class="text">Logout</span>
+                <span class="text" class="glass-button logout">Logout</span>
             </a>
         </li>
         
        </ul>
+       <div class="sidebar-footer">
+        <a href="https://www.rediminds.com" target="_blank">
+            <img src="static\img\rediminds.png" alt="Company Logo">
+        </a>
+        <div class="social-icons">
+            <a href="#" class="social-icon"><i class="fab fa-facebook"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+            <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+            <!-- Add more social icons as needed -->
+        </div>
+    </div>
    </nav>
          <!-- /#sidebar-wrapper -->
  
