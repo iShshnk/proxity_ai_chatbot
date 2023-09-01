@@ -11,7 +11,7 @@ import requests
 
 
 # modules with various implementations and helper functions
-from db import update_summary, save_voice_id, retrieve_admin_data, current_collection, current_collection2, get_chat_messages, save_avatar_image, save_video_url, save_avatar, get_chat_detail, get_bot_info
+from db import update_summary, save_voice_id, retrieve_admin_data, current_collection, current_collection2, get_chat_messages, save_avatar_image, save_video_url, save_avatar, get_chat_detail, get_bot_info, get_chat_messages_user
 from chat import generate_prompts, ask_expert
 from msal_helper import _build_auth_code_flow, _load_cache, _build_msal_app, _save_cache, _get_token_from_cache
 from remove_bg import remove_bg
@@ -169,6 +169,16 @@ def get_chat_api():
     # return jsonify(chat_messages)
     
     return get_chat_messages("madhu.reddiboina@rediminds.com")
+
+@app.route("/get_chat_user")
+def get_chat_user_api():
+    #return get_chat_messages(session.get("user"))
+
+    # chat_messages = get_chat_messages("madhu.reddiboina@rediminds.com")
+    # return jsonify(chat_messages)
+    current_email = session["user"]["preferred_username"]
+    
+    return get_chat_messages_user(current_email)
 
 
 @app.route('/get_chat_detail/<conversation_id>')
@@ -336,6 +346,7 @@ def newchat(bot_id):
     return render_template('chat.html', chat_log=session['bots'][bot_id]['chat_log'], bot_name = bot_name, img_url = bot_img, video_url = bot_video, bot_id=bot_id)
 
 
+
 # route for login page
 @app.route("/login")
 def login():
@@ -345,7 +356,6 @@ def login():
     session["role"] = "user"
     return render_template("login.html", auth_url=session["flow"]["auth_uri"],admin_dashboard="admin_login", version=msal.__version__)
 
-
 @app.route("/admin_login")
 def admin_login():
     # Technically we could use empty list [] as scopes to do just sign in,
@@ -354,13 +364,11 @@ def admin_login():
     session["role"] = "admin"
     return render_template("admin_login.html", auth_url=session["flow"]["auth_uri"], version=msal.__version__)
 
-
 # route for logout
 @app.route("/logout")
 def logout():
     session.clear()  # Wipe out user and its token cache from session
     return redirect(url_for("index", _external=True))
-
 
 # auth config
 @app.route(app_config.REDIRECT_PATH)  # Its absolute URL must match your app's redirect_uri set in AAD

@@ -92,6 +92,15 @@ def get_chat_messages(admin_email):
 
   return json.loads(json_util.dumps(res))
 
+def get_chat_messages_user(user_email):
+  chat_collection = db["ChatDataset"]
+  chats = chat_collection.find({'user_email': user_email})
+  res = []
+  for document in chats:
+    res.append(document)
+
+  return json.loads(json_util.dumps(res))
+
 def get_chat_detail(conversation_id):
     chat_collection = db["ChatDataset"]
     chat_detail = chat_collection.find_one({"_id": ObjectId(conversation_id)})
