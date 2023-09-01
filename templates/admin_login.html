@@ -9,18 +9,15 @@
       margin: 0;
       padding: 0;
       background-color: #111927;
-      background-image:
-        radial-gradient(at 47% 33%, hsl(273.06, 77%, 40%) 0, transparent 59%),
-        radial-gradient(at 82% 65%, hsl(218.00, 39%, 11%) 0, transparent 55%);
+      background-image: url("https://i.ibb.co/GHnTLPs/c8a3c630-af4d-44d1-b590-340b582d1edf.jpg");
+      background-repeat: no-repeat; /* Add this line to prevent image repetition */
+      background-size: cover; /* Add this line to cover the entire viewport */
       color: white;
       display: flex;
-      flex-direction: column;
-      align-items: center;
       justify-content: center;
-      height: 100vh;
-      animation: gradientAnimation 5s linear infinite;
+      align-items: center;
+      min-height: 100vh;
     }
-
     .glass-frame {
       backdrop-filter: blur(16px) saturate(180%);
       -webkit-backdrop-filter: blur(16px) saturate(180%);
