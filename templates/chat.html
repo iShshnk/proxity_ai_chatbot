@@ -1,3 +1,13 @@
+
+<!-- 
+/* SCSS RGB */
+$cambridge-blue: rgba(124, 188, 175, 1);
+$gunmetal: rgba(26, 36, 46, 1);
+$dark-cyan: rgba(93, 147, 144, 1);
+$verdigris: rgba(90, 167, 166, 1);
+$gunmetal-2: rgba(24, 37, 49, 1); -->
+
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -27,8 +37,8 @@
       }
       
       .gradient-custom {
-        background: rgb(70,98,234);
-background: radial-gradient(circle, rgb(35, 56, 163) 0%, rgb(2, 5, 30) 52%, rgb(32, 21, 148) 100%);
+        background: rgb(230, 234, 236);
+
       }
       
       ::-webkit-scrollbar {
@@ -46,7 +56,7 @@ background: radial-gradient(circle, rgb(35, 56, 163) 0%, rgb(2, 5, 30) 52%, rgb(
         height: 100vh;
         overflow-y: auto;
         scroll-behavior: smooth;
-        color: white;
+        color: rgba(207, 216, 220, 1);
         font-size: small;
       }
       
@@ -60,12 +70,12 @@ background: radial-gradient(circle, rgb(35, 56, 163) 0%, rgb(2, 5, 30) 52%, rgb(
       }
       
       .mask-custom {
-        background: rgba(24, 24, 16, .2);
+        background: rgba(17, 25, 39, 0.8);
         border-radius: 2em;
-        backdrop-filter: blur(15px);
-        border: 2px solid rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(15px); 
+        /* border: 2px solid rgba(255, 255, 255, 0.05); */
         background-clip: padding-box;
-        box-shadow: 10px 10px 10px rgba(46, 54, 68, 0.03);
+        box-shadow: 2px 2px 2px 2px rgba(141, 157, 187, 0.6);
         align-items: center;
       }
       
@@ -94,9 +104,10 @@ background: radial-gradient(circle, rgb(35, 56, 163) 0%, rgb(2, 5, 30) 52%, rgb(
       .form-control {
         flex: 9;
         margin-right: 5px;
-        background-color: rgba(37, 36, 36, 0.5);
+        background-color: rgba(17, 25, 39, 0.048);
         border: 1px solid #ccc;
         padding: 5px;
+        color:blanchedalmond;
       }
       
       .btn {
@@ -108,6 +119,8 @@ background: radial-gradient(circle, rgb(35, 56, 163) 0%, rgb(2, 5, 30) 52%, rgb(
       #talk-video {
         max-width: 100%;
         height: auto;
+        border-radius:10px ;
+        margin:auto;
       }
       
       div.form-outline.form-white.id-msg-box-send {
@@ -170,7 +183,7 @@ background: radial-gradient(circle, rgb(35, 56, 163) 0%, rgb(2, 5, 30) 52%, rgb(
     
           <div class="col-md-6 col-lg-5 col-xl-5 mb-4 mb-md-0  video-column" id="video-column">
     
-            <h4 class="font-weight-bold mb-1 text-center text-white" style="font-family:Orbitron">{{bot_name}}</h4>
+            <h4 class="font-weight-bold mb-1 text-center " style="font-family:Orbitron; color:rgba(17, 25, 39, 1)">{{bot_name}}</h4>
     
             <div class="card mask-custom" id="card-video">
               <div class="card-body" id="video-body">
@@ -193,9 +206,9 @@ background: radial-gradient(circle, rgb(35, 56, 163) 0%, rgb(2, 5, 30) 52%, rgb(
             <div id="chat-container">
     
             <ul class="list-unstyled text-white">
-              <li class="d-flex justify-content-between mb-1">
+              <li class="d-flex justify-content-between mb-3">
                 <img src={{img_url}} alt="avatar"
-                  class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
+                  class="rounded-circle d-flex align-self-start me-3 shadow-1-strong border border-dark" width="60">
                 <div class="card mask-custom w-100" id="msg-card">
                   
                   <div class="card-body">
@@ -211,7 +224,7 @@ background: radial-gradient(circle, rgb(35, 56, 163) 0%, rgb(2, 5, 30) 52%, rgb(
               {% if message['role'] == 'user' %}
 
 
-              <li class="d-flex justify-content-between mb-1">
+              <li class="d-flex justify-content-between mb-3">
 
                 <div class="card mask-custom w-100" id="msg-card">
                   
@@ -225,15 +238,15 @@ background: radial-gradient(circle, rgb(35, 56, 163) 0%, rgb(2, 5, 30) 52%, rgb(
                   </div>
                 </div>
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/avatar-5.webp" alt="avatar"
-                  class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong" width="60">
+                  class="rounded-circle d-flex align-self-start ms-3 shadow-1-strong border border-dark" width="60">
               </li>
 
 
               {% elif message['role'] == 'assistant' %}
 
-              <li class="d-flex justify-content-between mb-1">
+              <li class="d-flex justify-content-between mb-3">
                 <img src= {{img_url}} alt="avatar"
-                  class="rounded-circle d-flex align-self-start me-3 shadow-1-strong" width="60">
+                  class="rounded-circle d-flex align-self-start me-3 shadow-1-strong border border-dark" width="60">
                 <div class="card mask-custom w-100" id="msg-card">
                   
                 <div class="card-body">
@@ -258,10 +271,10 @@ background: radial-gradient(circle, rgb(35, 56, 163) 0%, rgb(2, 5, 30) 52%, rgb(
                 <form method="POST" id="chat-form" action="/chat/{{ bot_id }}">                  
                   <div class="form-outline form-white" id="msg-box-send">
                     <textarea class="form-control mb-1" id="user_msg" rows="1" name="user_msg" placeholder="Type your message here"></textarea>
-                    <button type="button" id="start-btn" class="btn btn-outline-light" >
+                    <button type="button" id="start-btn" class="btn btn-outline-dark" >
                       <i class="fas fa-microphone"></i>
                     </button>    
-                    <button type="button" id="new-conversation-button" value="true" class="btn btn-outline-light">
+                    <button type="button " id="new-conversation-button" value="true" class="btn btn-outline-dark">
                       X
                   </button>             
                   </div>
