@@ -53,10 +53,12 @@ index = pinecone.Index(index_name)
 @app.route("/")
 def landing():
     return render_template('landing.html')
-"""def index():
+
+@app.route("/dashboard")
+def index():
     if not session.get("user") or session.get("role")!="user":
         return redirect(url_for("login"))
-    return render_template('Bots.html', user=session["user"], version=msal.__version__)"""
+    return render_template('Bots.html', user=session["user"], version=msal.__version__)
 
 # This is defining a route for '/admin_panel' in the Flask web application.
 @app.route('/admin_panel')
