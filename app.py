@@ -51,10 +51,12 @@ index = pinecone.Index(index_name)
 
 # route for landing page
 @app.route("/")
-def index():
+def landing():
+    return render_template('landing.html')
+"""def index():
     if not session.get("user") or session.get("role")!="user":
         return redirect(url_for("login"))
-    return render_template('Bots.html', user=session["user"], version=msal.__version__)
+    return render_template('Bots.html', user=session["user"], version=msal.__version__)"""
 
 # This is defining a route for '/admin_panel' in the Flask web application.
 @app.route('/admin_panel')
@@ -412,6 +414,7 @@ def get_audio():
     # Initialize chat_log based on current bot_id
     chat_log = session['bots'][bot_id]['chat_log'] if 'bots' in session and bot_id in session['bots'] else []
     text = chat_log[-1]['content'] if len(chat_log) > 0 else ''
+    print(text)
     data = {
         "text": text,
         "model_id": "eleven_multilingual_v2",
@@ -424,7 +427,7 @@ def get_audio():
     response = requests.post(url, headers=headers, json=data)
 
     # Generate a unique filename based on the current time
-    filename = f"audio_{bot_data['Email']}.mp3"
+    filename = f"audio1_{bot_data['Email']}.mp3"
 
     # Upload to S3
     try:

@@ -49,7 +49,6 @@ def ask_expert(question, name, age, gender, job_role, bio, fun_story, educationa
     print("ask expert")
     print(chat_log)
     if chat_log is None:
-        print("ask expert \n  \n")
         initial_prompt, recurrent_prompt = generate_prompts(name, age, gender, job_role, bio, fun_story, educational_qualification, skills, company, last_conversation, bot_email)
         
         # Initialize the chat log with the system message.
@@ -90,7 +89,7 @@ def ask_expert(question, name, age, gender, job_role, bio, fun_story, educationa
         },
     ]
     response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo-16k-0613",
+        model="gpt-3.5-turbo-0613",
         messages=chat_log,
         functions=functions,
         function_call="auto",
