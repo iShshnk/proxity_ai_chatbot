@@ -56,13 +56,13 @@ body {
 }
 
 a {
-  color: var(--primary-color);
+  color: rgba(255, 255, 255, 0.6);
   text-decoration: none;
   transition: 0.3s;
 }
 
 a:hover {
-  color: rgba(var(--primary-color-rgb), 0.7);
+  color: rgb(255, 255, 255);
   text-decoration: none;
 }
 
@@ -195,19 +195,20 @@ section {
 
 .header .btn-getstarted,
 .header .btn-getstarted:focus {
-  color: var(--contrast-color);
-  background: var(--primary-color);
+  color: #fff;
+  background: rgba(128, 128, 128, 0.4);
   font-size: 14px;
-  padding: 8px 26px;
   margin: 0;
-  border-radius: 4px;
-  transition: 0.3s;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 20px;
+  transition: background 0.3s ease;
 }
 
 .header .btn-getstarted:hover,
 .header .btn-getstarted:focus:hover {
-  color: var(--contrast-color);
-  background: rgba(var(--primary-color-rgb), 0.85);
+  background: rgba(128, 128, 128, 0.6);
+    /* Darker gray on hover */
 }
 
 @media (max-width: 1200px) {
@@ -260,10 +261,10 @@ section {
 /* Home Page Custom Header on page scroll
 ------------------------------*/
 .index-page.scrolled .header {
-  --background-color: #ffffff;
+  --background-color: #040303;
   --secondary-color: #444444;
   --nav-color: #444444;
-  --nav-hover-color: #d83535;
+  --nav-hover-color: #ffffff;
 }
 
 /*--------------------------------------------------------------
@@ -866,15 +867,15 @@ section {
 
 .hero .sign-up-form input[type=submit] {
   box-shadow: 0 15px 30px 0 rgba(0, 0, 0, 0.2);
-  background-color: var(--primary-color);
-  border-color: var(--primary-color);
+  background: rgba(21, 14, 14, 0.6);
+  border-color: rgba(65, 59, 59, 0.6);
   padding: 8px 20px 10px 20px;
   border-radius: 7px;
   color: var(--contrast-color);
 }
 
 .hero .sign-up-form input[type=submit]:hover {
-  background-color: rgba(var(--primary-color-rgb), 0.9);
+  background-color: rgba(55, 51, 51, 0.6);
 }
 
 @media (max-width: 768px) {
@@ -946,8 +947,7 @@ section {
 }
 
 .about .content .read-more {
-  background: #4bbab9;
-  color: var(--contrast-color);
+  background: rgba(21, 14, 14, 0.6);
   font-family: var(--heading-font);
   font-weight: 500;
   font-size: 16px;
@@ -968,7 +968,7 @@ section {
 }
 
 .about .content .read-more:hover {
-  background: rgba(var(--primary-color-rgb), 0.8);
+  background-color: rgba(55, 51, 51, 0.6);
   padding-right: 19px;
 }
 
@@ -1184,14 +1184,14 @@ section {
 }
 
 .features .features-item .btn-get-started {
-  background-color: var(--primary-color);
+  background: rgba(21, 14, 14, 0.6);
   color: var(--contrast-color);
   padding: 8px 30px 10px 30px;
   border-radius: 4px;
 }
 
 .features .features-item .btn-get-started:hover {
-  background-color: rgba(var(--primary-color-rgb), 0.9);
+  background-color: rgba(55, 51, 51, 0.6);
 }
 
 .features .features-item ul {
