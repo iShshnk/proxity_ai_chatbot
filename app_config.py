@@ -2,6 +2,14 @@ OPENAI_KEY = "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" #OpenAI API k
 
 ELEVENLABS_API_KEY = "283236cbabf8d3b1b5c508ac729b735c" #ElevenLabs API key
 
+API_KEY = "amFpLmRlc2FpQHJlZGltaW5kcy5jb20:rs0aZ3q30eReIokNwrDdI" #Please change this to your own API key
+API_URL = "https://api.d-id.com"
+
+aws_access_key_id='AKIAQHA26W4T6P4OEAWH'
+aws_secret_access_key='tQ23TIQr5lSO9PrJ2KZD7ovknn3QJIvVRRU0DUi6'
+
+### MSAL Configurations
+
 CLIENT_ID = "e00963f2-823f-4827-9033-ddefc0109d86" # Application (client) ID of app registration
 
 PINECONE_API_KEY = "e5dbdcd4-be31-476e-b73e-1ffd70cc44c3"
@@ -30,9 +38,3 @@ ENDPOINT = 'https://graph.microsoft.com/v1.0/users'  # This resource requires no
 SCOPE = ["User.ReadBasic.All"]
 
 SESSION_TYPE = "filesystem"  # Specifies the token cache should be stored in server-side session
-
-API_KEY = "amFpLmRlc2FpQHJlZGltaW5kcy5jb20:rs0aZ3q30eReIokNwrDdI" #Please change this to your own API key
-API_URL = "https://api.d-id.com"
-
-aws_access_key_id='AKIAQHA26W4T6P4OEAWH'
-aws_secret_access_key='tQ23TIQr5lSO9PrJ2KZD7ovknn3QJIvVRRU0DUi6'

@@ -54,6 +54,15 @@ index = pinecone.Index(index_name)
 def landing():
     return render_template('landing.html')
 
+# route for login page
+@app.route("/login")
+def login():
+    # Technically we could use empty list [] as scopes to do just sign in,
+    # here we choose to also collect end user consent upfront
+    session["flow"] = _build_auth_code_flow(scopes=app_config.SCOPE)
+    session["role"] = "user"
+    return render_template("login.html", auth_url=session["flow"]["auth_uri"],admin_dashboard="admin_login", version=msal.__version__)
+
 @app.route("/dashboard")
 def index():
     if not session.get("user") or session.get("role")!="user":
@@ -351,14 +360,7 @@ def newchat(bot_id):
 
 
 
-# route for login page
-@app.route("/login")
-def login():
-    # Technically we could use empty list [] as scopes to do just sign in,
-    # here we choose to also collect end user consent upfront
-    session["flow"] = _build_auth_code_flow(scopes=app_config.SCOPE)
-    session["role"] = "user"
-    return render_template("login.html", auth_url=session["flow"]["auth_uri"],admin_dashboard="admin_login", version=msal.__version__)
+
 
 @app.route("/admin_login")
 def admin_login():
